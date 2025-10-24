@@ -1,0 +1,19 @@
+{
+  "name": "anime-cosplay-store",
+  "version": "1.0.0",
+  "description": "Premium Anime Cosplay Costumes E-commerce Store",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s",
+    "build": "echo 'No build process needed for static site'"
+  },
+  "dependencies": {
+    "serve": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["anime", "cosplay", "ecommerce", "costumes"],
+  "author": "Your Name",
+  "license": "MIT"
+}
