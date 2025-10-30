@@ -254,10 +254,41 @@ def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
     return User.query.get(identity)
 
-# Routes
+from flask import Flask
+
+app = Flask(__name__)
+
 @app.route('/')
 def home():
-    return jsonify({"message": "AnimeCosplay India API is running!"})
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anime Cosplay</title>
+        <style>
+            body {
+                background-color: #f8f8f8;
+                font-family: Arial, sans-serif;
+                text-align: center;
+                padding: 50px;
+            }
+            h1 {
+                color: #ff4081;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome to Anime Cosplay!</h1>
+        <p>Your anime costume store.</p>
+        <script>
+            console.log("Anime Cosplay loaded!");
+        </script>
+    </body>
+    </html>
+    """
+
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
