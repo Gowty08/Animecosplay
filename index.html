@@ -453,6 +453,24 @@
             color: white;
         }
 
+        .view-details {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            flex: 1;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .view-details:hover {
+            background: #2d0a8a;
+        }
+
         /* Anime Section */
         .anime-section {
             margin-bottom: 70px;
@@ -926,24 +944,56 @@
             margin-bottom: 25px;
         }
 
-        /* Product Details */
-        .product-details-modal {
-            max-width: 1100px;
+        /* Product Details Page Styles */
+        .product-details-page {
+            padding: 40px 0;
+            background: white;
+            min-height: 80vh;
         }
 
-        .product-details {
+        .product-details-container {
             display: flex;
             gap: 40px;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
         }
 
-        .product-details-img {
+        .product-gallery {
             flex: 0 0 45%;
-            height: 400px;
+        }
+
+        .product-main-img {
+            height: 500px;
             background-size: cover;
             background-position: center;
             border-radius: 12px;
+            margin-bottom: 20px;
             box-shadow: var(--shadow);
+        }
+
+        .product-thumbnails {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .product-thumbnail {
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .product-thumbnail.active {
+            border-color: var(--primary);
+        }
+
+        .product-thumbnail:hover {
+            transform: scale(1.05);
         }
 
         .product-details-info {
@@ -951,13 +1001,13 @@
         }
 
         .product-details-title {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             margin-bottom: 15px;
             color: var(--dark);
         }
 
         .product-details-price {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: var(--primary);
             font-weight: 700;
             margin-bottom: 20px;
@@ -978,6 +1028,7 @@
             margin-bottom: 25px;
             line-height: 1.7;
             color: var(--dark);
+            font-size: 1.1rem;
         }
 
         .size-selector {
@@ -988,6 +1039,7 @@
             display: block;
             margin-bottom: 12px;
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .size-options {
@@ -1037,6 +1089,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
 
         .add-to-cart-large:hover {
@@ -1057,6 +1110,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            font-size: 1.1rem;
         }
 
         .buy-now:hover {
@@ -1086,6 +1140,8 @@
 
         .reviews-section {
             margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid #eee;
         }
 
         .reviews-header {
@@ -1098,7 +1154,7 @@
         }
 
         .reviews-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--secondary);
         }
 
@@ -1239,13 +1295,12 @@
                 flex: 0 0 50%;
             }
             
-            .product-details {
+            .product-details-container {
                 flex-direction: column;
             }
             
-            .product-details-img {
+            .product-gallery {
                 flex: 0 0 100%;
-                height: 350px;
             }
             
             .hero h1 {
@@ -1291,6 +1346,10 @@
             .footer-content {
                 grid-template-columns: 1fr 1fr;
             }
+            
+            .product-details-actions {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 576px) {
@@ -1314,10 +1373,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .product-details-actions {
-                flex-direction: column;
-            }
-            
             .modal-content {
                 padding: 25px;
             }
@@ -1326,6 +1381,11 @@
                 right: 15px;
                 left: 15px;
                 max-width: none;
+            }
+            
+            .product-meta {
+                flex-direction: column;
+                gap: 15px;
             }
         }
 
@@ -1426,210 +1486,538 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #e02e5a;
         }
+
         /* Search Results Styles */
-.search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    z-index: 1000;
-    max-height: 400px;
-    overflow-y: auto;
-    display: none;
-}
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
 
-.search-results.active {
-    display: block;
-}
+        .search-results.active {
+            display: block;
+        }
 
-.search-result-item {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-}
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
 
-.search-result-item:hover {
-    background: #f8f9fa;
-}
+        .search-result-item:hover {
+            background: #f8f9fa;
+        }
 
-.search-result-img {
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 6px;
-    margin-right: 15px;
-}
+        .search-result-img {
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
 
-.search-result-info {
-    flex: 1;
-}
+        .search-result-info {
+            flex: 1;
+        }
 
-.search-result-name {
-    font-weight: 600;
-    margin-bottom: 5px;
-}
+        .search-result-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
 
-.search-result-price {
-    color: var(--primary);
-    font-weight: 700;
-}
+        .search-result-price {
+            color: var(--primary);
+            font-weight: 700;
+        }
 
-.search-result-category {
-    color: var(--gray);
-    font-size: 0.9rem;
-}
+        .search-result-category {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
 
-.no-results {
-    padding: 20px;
-    text-align: center;
-    color: var(--gray);
-}
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--gray);
+        }
 
-/* Product Zoom Styles */
-.product-zoom-container {
-    position: relative;
-    overflow: hidden;
-    cursor: zoom-in;
-}
+        /* User Profile Styles */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.product-zoom-img {
-    transition: transform 0.3s ease;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-}
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
 
-.product-zoom-container.zoomed {
-    cursor: zoom-out;
-}
+        /* Order History Styles */
+        .order-history {
+            margin-top: 40px;
+        }
 
-.product-zoom-container.zoomed .product-zoom-img {
-    transform: scale(1.5);
-}
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
 
-/* Product Gallery Styles */
-.product-gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
 
-.product-main-img {
-    height: 400px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
+        .order-id {
+            font-weight: 600;
+            color: var(--secondary);
+        }
 
-.product-thumbnails {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-}
+        .order-date {
+            color: var(--gray);
+        }
 
-.product-thumbnail {
-    width: 80px;
-    height: 80px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: var(--transition);
-}
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
 
-.product-thumbnail.active {
-    border-color: var(--primary);
-}
+        .status-delivered {
+            background: #e7f7ef;
+            color: var(--success);
+        }
 
-.product-thumbnail:hover {
-    transform: scale(1.05);
-}
+        .status-pending {
+            background: #fff3cd;
+            color: var(--warning);
+        }
 
-/* Search Modal Styles */
-.search-modal {
-    max-width: 800px;
-}
+        .status-cancelled {
+            background: #f8d7da;
+            color: var(--danger);
+        }
 
-.search-results-container {
-    max-height: 500px;
-    overflow-y: auto;
-    margin-top: 20px;
-}
+        .order-items {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
 
-.search-results-title {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: var(--secondary);
-}
+        .order-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+        }
 
-.search-results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-}
+        .order-item-img {
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
 
-.search-result-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    cursor: pointer;
-}
+        .order-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 5px;
+        }
 
-.search-result-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
+        .order-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
 
-.search-result-card-img {
-    height: 150px;
-    background-size: cover;
-    background-position: center;
-}
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-weight: 600;
+        }
 
-.search-result-card-info {
-    padding: 15px;
-}
+        /* Checkout Styles */
+        .checkout-page {
+            padding: 40px 0;
+            background: #f8f9fa;
+            min-height: 80vh;
+        }
 
-.search-result-card-name {
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 1rem;
-    line-height: 1.4;
-}
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+        }
 
-.search-result-card-price {
-    color: var(--primary);
-    font-weight: 700;
-    font-size: 1.1rem;
-}
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
 
-.search-result-card-category {
-    color: var(--gray);
-    font-size: 0.8rem;
-    margin-top: 5px;
-}
+        .checkout-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-method.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .place-order-btn {
+            background: var(--success);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: var(--transition);
+        }
+
+        .place-order-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Success Page Styles */
+        .success-page {
+            padding: 80px 0;
+            text-align: center;
+            background: white;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: var(--success);
+            margin-bottom: 30px;
+        }
+
+        .success-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        /* Account Page Styles */
+        .account-page {
+            padding: 40px 0;
+            background: #f8f9fa;
+            min-height: 80vh;
+        }
+
+        .account-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+        }
+
+        .account-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .account-menu {
+            list-style: none;
+        }
+
+        .account-menu li {
+            margin-bottom: 10px;
+        }
+
+        .account-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            color: var(--dark);
+        }
+
+        .account-menu a:hover, .account-menu a.active {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--accent);
+        }
+
+        .account-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .account-section {
+            margin-bottom: 40px;
+        }
+
+        .account-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .account-section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .save-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .save-btn:hover {
+            background: #e02e5a;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-   <script type="text/babel">
+    <script type="text/babel">
         // React Components
         const { useState, useEffect, useRef } = React;
+
+        // User Authentication System
+        const AuthService = {
+            // In a real app, this would be API calls to a backend
+            users: JSON.parse(localStorage.getItem('animeCosplayUsers')) || [],
+            currentUser: JSON.parse(localStorage.getItem('animeCosplayCurrentUser')) || null,
+            
+            signup: function(userData) {
+                // Check if user already exists
+                const existingUser = this.users.find(user => user.email === userData.email);
+                if (existingUser) {
+                    return { success: false, message: 'User with this email already exists' };
+                }
+                
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    ...userData,
+                    createdAt: new Date().toISOString(),
+                    orders: []
+                };
+                
+                this.users.push(newUser);
+                localStorage.setItem('animeCosplayUsers', JSON.stringify(this.users));
+                
+                return { success: true, user: newUser };
+            },
+            
+            login: function(email, password) {
+                const user = this.users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    this.currentUser = user;
+                    localStorage.setItem('animeCosplayCurrentUser', JSON.stringify(user));
+                    return { success: true, user };
+                } else {
+                    return { success: false, message: 'Invalid email or password' };
+                }
+            },
+            
+            logout: function() {
+                this.currentUser = null;
+                localStorage.removeItem('animeCosplayCurrentUser');
+            },
+            
+            updateProfile: function(userId, updates) {
+                const userIndex = this.users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    this.users[userIndex] = { ...this.users[userIndex], ...updates };
+                    localStorage.setItem('animeCosplayUsers', JSON.stringify(this.users));
+                    
+                    if (this.currentUser && this.currentUser.id === userId) {
+                        this.currentUser = this.users[userIndex];
+                        localStorage.setItem('animeCosplayCurrentUser', JSON.stringify(this.currentUser));
+                    }
+                    
+                    return { success: true, user: this.users[userIndex] };
+                }
+                return { success: false, message: 'User not found' };
+            },
+            
+            addOrder: function(userId, order) {
+                const userIndex = this.users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    const newOrder = {
+                        id: `ORD${Date.now()}`,
+                        ...order,
+                        date: new Date().toISOString(),
+                        status: 'pending'
+                    };
+                    
+                    this.users[userIndex].orders.unshift(newOrder);
+                    localStorage.setItem('animeCosplayUsers', JSON.stringify(this.users));
+                    
+                    if (this.currentUser && this.currentUser.id === userId) {
+                        this.currentUser.orders.unshift(newOrder);
+                        localStorage.setItem('animeCosplayCurrentUser', JSON.stringify(this.currentUser));
+                    }
+                    
+                    return { success: true, order: newOrder };
+                }
+                return { success: false, message: 'User not found' };
+            }
+        };
 
         // Extensive Product Database with ALL requested anime
         const productDatabase = {
@@ -1680,120 +2068,7 @@
                     { id: 29, name: "Bertolt Hoover Costume", price: 2499, rating: 4.2, reviews: 41, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Bertolt's colossal titan inspired uniform with black hair. The Colossal Titan!", category: "attack-on-titan", sizes: ["M", "L", "XL"], inStock: true, featured: false },
                     { id: 30, name: "Sasha Blouse Costume", price: 2399, rating: 4.6, reviews: 67, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Sasha's Survey Corps uniform with brown ponytail and potato. The potato girl!", category: "attack-on-titan", sizes: ["S", "M"], inStock: true, featured: false }
                 ]
-            },
-            "my-hero-academia": {
-                title: "My Hero Academia Costumes",
-                description: "Become a hero with these amazing costumes!",
-                products: [
-                    { id: 31, name: "Izuku Midoriya Costume", price: 2399, rating: 4.5, reviews: 87, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Deku's UA High School uniform with green wig and red shoes. Plus Ultra!", category: "my-hero-academia", sizes: ["S", "M", "L"], inStock: true, featured: true },
-                    { id: 32, name: "Katsuki Bakugo Costume", price: 2499, rating: 4.7, reviews: 79, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Bakugo's hero costume with grenade gauntlets and blonde spiky hair. Die!", category: "my-hero-academia", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 33, name: "Shoto Todoroki Costume", price: 2599, rating: 4.8, reviews: 94, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Popular", description: "Todoroki's ice and fire hero costume with dual-colored hair. Half-cold half-hot!", category: "my-hero-academia", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 34, name: "Ochaco Uraraka Costume", price: 2299, rating: 4.4, reviews: 68, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Uraraka's pink and black hero costume with brown bob cut. Zero gravity!", category: "my-hero-academia", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 35, name: "All Might Costume", price: 3199, rating: 4.9, reviews: 112, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "All Might's silver age costume with blonde hair and signature smile. I AM HERE!", category: "my-hero-academia", sizes: ["L", "XL", "XXL"], inStock: true, featured: true },
-                    { id: 36, name: "Tenya Iida Costume", price: 2799, rating: 4.3, reviews: 57, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Iida's engine hero costume with glasses and blue hair. Recipro Burst!", category: "my-hero-academia", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 37, name: "Tsuyu Asui Costume", price: 2399, rating: 4.5, reviews: 63, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Froppy's green hero costume with long tongue and big eyes. Ribbit!", category: "my-hero-academia", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 38, name: "Eijiro Kirishima Costume", price: 2699, rating: 4.6, reviews: 71, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Red Riot's unbreakable hero costume with red spiky hair. Manly!", category: "my-hero-academia", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 39, name: "Momo Yaoyorozu Costume", price: 2899, rating: 4.4, reviews: 52, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Creati's hero costume with black ponytail and creation quirk accessories. Everything hero!", category: "my-hero-academia", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 40, name: "Denki Kaminari Costume", price: 2499, rating: 4.3, reviews: 48, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Chargebolt's black and yellow hero costume with lightning bolt hair. Whey!", category: "my-hero-academia", sizes: ["M", "L"], inStock: true, featured: false }
-                ]
-            },
-            "one-punch-man": {
-                title: "One Punch Man Costumes",
-                description: "Become the hero who can defeat any enemy with a single punch!",
-                products: [
-                    { id: 41, name: "Saitama Costume", price: 1999, rating: 4.7, reviews: 156, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Saitama's iconic yellow suit with red gloves and cape. For when you need to finish things in one punch!", category: "one-punch-man", sizes: ["S", "M", "L", "XL"], inStock: true, featured: true },
-                    { id: 42, name: "Genos Costume", price: 2899, rating: 4.6, reviews: 124, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Genos's cyborg body with mechanical arms and blonde hair. The Demon Cyborg!", category: "one-punch-man", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 43, name: "Speed-o'-Sound Sonic Costume", price: 2399, rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Sonic's ninja outfit with long purple hair and shurikens. The self-proclaimed rival!", category: "one-punch-man", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 44, name: "Tatsumaki Costume", price: 2699, rating: 4.8, reviews: 112, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Tatsumaki's black dress with green wig and psychic powers. The Tornado of Terror!", category: "one-punch-man", sizes: ["XS", "S"], inStock: true, featured: true },
-                    { id: 45, name: "Fubuki Costume", price: 2599, rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Fubuki's white coat and dress with black hair. The Blizzard of Hell!", category: "one-punch-man", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 46, name: "Mumen Rider Costume", price: 2199, rating: 4.7, reviews: 134, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Mumen Rider's bicycle helmet and green jumpsuit. Justice Crash!", category: "one-punch-man", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 47, name: "Bang Costume", price: 2799, rating: 4.3, reviews: 76, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Bang's martial arts gi with white hair and beard. The Silver Fang!", category: "one-punch-man", sizes: ["L", "XL"], inStock: true, featured: false },
-                    { id: 48, name: "Atomic Samurai Costume", price: 2999, rating: 4.5, reviews: 89, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Atomic Samurai's traditional Japanese clothing with katana. Atomic Slash!", category: "one-punch-man", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 49, name: "King Costume", price: 2699, rating: 4.6, reviews: 101, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "King's casual clothing with scarred face and intimidating presence. The strongest man on Earth!", category: "one-punch-man", sizes: ["L", "XL"], inStock: true, featured: false },
-                    { id: 50, name: "Drive Knight Costume", price: 3299, rating: 4.4, reviews: 67, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Drive Knight's transforming robotic armor with various weapons. The mysterious S-Class!", category: "one-punch-man", sizes: ["M", "L", "XL"], inStock: true, featured: false }
-                ]
-            },
-            "demon-slayer": {
-                title: "Demon Slayer Costumes",
-                description: "Join the Demon Slayer Corps and defeat demons!",
-                products: [
-                    { id: 51, name: "Tanjiro Kamado Uniform", price: 2599, rating: 4.8, reviews: 203, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Tanjiro's Demon Slayer uniform with checkered haori and nichirin sword. Water Breathing!", category: "demon-slayer", sizes: ["S", "M", "L"], inStock: true, featured: true },
-                    { id: 52, name: "Nezuko Kamado Costume", price: 2499, rating: 4.7, reviews: 178, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Nezuko's pink kimono with bamboo muzzle and demon eyes. Protect your brother!", category: "demon-slayer", sizes: ["XS", "S", "M"], inStock: true, featured: true },
-                    { id: 53, name: "Zenitsu Agatsuma Costume", price: 2399, rating: 4.5, reviews: 142, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Zenitsu's yellow haori and Demon Slayer uniform with blonde wig. Thunder Breathing!", category: "demon-slayer", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 54, name: "Inosuke Hashibira Costume", price: 2699, rating: 4.6, reviews: 156, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Inosuke's boar head and muscular torso with dual nichirin swords. Beast Breathing!", category: "demon-slayer", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 55, name: "Giyu Tomioka Costume", price: 2799, rating: 4.7, reviews: 124, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Giyu's water hashira uniform with mismatched haori and serious expression. Water Hashira!", category: "demon-slayer", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 56, name: "Shinobu Kocho Costume", price: 2699, rating: 4.8, reviews: 138, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Shinobu's insect hashira uniform with butterfly haori and gentle smile. Insect Hashira!", category: "demon-slayer", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 57, name: "Kyojuro Rengoku Costume", price: 2899, rating: 4.9, reviews: 167, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Hot", description: "Rengoku's flame hashira uniform with flame pattern haori and enthusiastic spirit. Flame Hashira!", category: "demon-slayer", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 58, name: "Mitsuri Kanroji Costume", price: 2599, rating: 4.6, reviews: 119, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Mitsuri's love hashira uniform with revealing design and pink-green hair. Love Hashira!", category: "demon-slayer", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 59, name: "Tengen Uzui Costume", price: 2999, rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Tengen's sound hashira uniform with flashy appearance and dual cleavers. Sound Hashira!", category: "demon-slayer", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 60, name: "Muichiro Tokito Costume", price: 2699, rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Muichiro's mist hashira uniform with cloud pattern haori and distant expression. Mist Hashira!", category: "demon-slayer", sizes: ["S", "M", "L"], inStock: true, featured: false }
-                ]
-            },
-            "dragon-ball": {
-                title: "Dragon Ball Costumes",
-                description: "Power up and become the strongest fighter in the universe!",
-                products: [
-                    { id: 61, name: "Goku Costume", price: 2799, rating: 4.9, reviews: 245, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Goku's iconic orange gi with blue undershirt and spiky black hair. Kamehameha!", category: "dragon-ball", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 62, name: "Vegeta Costume", price: 2899, rating: 4.8, reviews: 198, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Vegeta's Saiyan armor with white gloves and spiky black hair. The Prince of all Saiyans!", category: "dragon-ball", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 63, name: "Gohan Costume", price: 2699, rating: 4.7, reviews: 167, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Gohan's Great Saiyaman costume or orange gi with glasses. The scholarly warrior!", category: "dragon-ball", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 64, name: "Piccolo Costume", price: 3299, rating: 4.6, reviews: 134, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Piccolo's Namekian appearance with white cape and antennae. Special Beam Cannon!", category: "dragon-ball", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 65, name: "Trunks Costume", price: 2799, rating: 4.7, reviews: 156, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Trunks' Saiyan armor with purple hair and sword. The time-traveling warrior!", category: "dragon-ball", sizes: ["S", "M", "L"], inStock: true, featured: true },
-                    { id: 66, name: "Frieza Costume", price: 3499, rating: 4.5, reviews: 112, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Frieza's final form with purple and white armor. The galactic emperor!", category: "dragon-ball", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 67, name: "Cell Costume", price: 3599, rating: 4.4, reviews: 98, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Cell's perfect form with green and black spotted armor. The ultimate bio-android!", category: "dragon-ball", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 68, name: "Bulma Costume", price: 2399, rating: 4.3, reviews: 87, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Bulma's various outfits from throughout the series with blue hair. The brilliant scientist!", category: "dragon-ball", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 69, name: "Krillin Costume", price: 2299, rating: 4.2, reviews: 76, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Krillin's orange gi with six dots on forehead. Goku's best friend!", category: "dragon-ball", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 70, name: "Master Roshi Costume", price: 2499, rating: 4.1, reviews: 65, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Master Roshi's Hawaiian shirt with sunglasses and beard. The Turtle Hermit!", category: "dragon-ball", sizes: ["L", "XL"], inStock: true, featured: false }
-                ]
-            },
-            "black-clover": {
-                title: "Black Clover Costumes",
-                description: "Become a magic knight and protect the Clover Kingdom!",
-                products: [
-                    { id: 71, name: "Asta Costume", price: 2699, rating: 4.7, reviews: 178, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Asta's Black Bull robe with anti-magic swords and muscular body. The magicless knight!", category: "black-clover", sizes: ["S", "M", "L"], inStock: true, featured: true },
-                    { id: 72, name: "Yuno Costume", price: 2799, rating: 4.8, reviews: 165, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Yuno's Golden Dawn robe with wind spirit Sylph and graceful appearance. The prodigy!", category: "black-clover", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 73, name: "Noelle Silva Costume", price: 2599, rating: 4.6, reviews: 142, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Noelle's Black Bull robe with water magic staff and royal demeanor. The water mage!", category: "black-clover", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 74, name: "Yami Sukehiro Costume", price: 2999, rating: 4.7, reviews: 134, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Yami's Black Bull captain robe with dark magic katana and sunglasses. The captain!", category: "black-clover", sizes: ["L", "XL", "XXL"], inStock: true, featured: true },
-                    { id: 75, name: "Luck Voltia Costume", price: 2499, rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Luck's Black Bull robe with lightning magic and wild blonde hair. The battle junkie!", category: "black-clover", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 76, name: "Magna Swing Costume", price: 2399, rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Magna's Black Bull robe with fire magic and baseball bat. The commoner mage!", category: "black-clover", sizes: ["M", "L"], inStock: true, featured: false },
-                    { id: 77, name: "Charlotte Roselei Costume", price: 2899, rating: 4.6, reviews: 112, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Charlotte's Blue Rose captain uniform with briar magic and stern expression. The captain in love!", category: "black-clover", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 78, name: "Julius Novachrono Costume", price: 3199, rating: 4.8, reviews: 124, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Julius's Wizard King robe with time magic and eccentric personality. The Wizard King!", category: "black-clover", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 79, name: "Mimosa Vermillion Costume", price: 2699, rating: 4.5, reviews: 96, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Mimosa's Golden Dawn robe with plant magic and gentle nature. The healing mage!", category: "black-clover", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 80, name: "Finral Roulacase Costume", price: 2499, rating: 4.3, reviews: 78, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Finral's Black Bull robe with spatial magic and nervous personality. The transport mage!", category: "black-clover", sizes: ["M", "L"], inStock: true, featured: false }
-                ]
-            },
-            "jujutsu-kaisen": {
-                title: "Jujutsu Kaisen Costumes",
-                description: "Become a jujutsu sorcerer and exorcise curses!",
-                products: [
-                    { id: 81, name: "Yuji Itadori Costume", price: 2499, rating: 4.6, reviews: 134, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Yuji's jujutsu high uniform with pink hair and Sukuna's markings. The vessel of Sukuna!", category: "jujutsu-kaisen", sizes: ["S", "M", "L"], inStock: true, featured: true },
-                    { id: 82, name: "Megumi Fushiguro Costume", price: 2599, rating: 4.7, reviews: 121, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Megumi's jujutsu high uniform with black hair and serious expression. Ten Shadows Technique!", category: "jujutsu-kaisen", sizes: ["M", "L"], inStock: true, featured: true },
-                    { id: 83, name: "Nobara Kugisaki Costume", price: 2399, rating: 4.8, reviews: 145, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Nobara's jujutsu high uniform with hammer and nails. Straw Doll Technique!", category: "jujutsu-kaisen", sizes: ["XS", "S", "M"], inStock: true, featured: true },
-                    { id: 84, name: "Satoru Gojo Costume", price: 2999, rating: 4.9, reviews: 198, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Gojo's blindfold and jujutsu high uniform with white hair. The strongest sorcerer!", category: "jujutsu-kaisen", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 85, name: "Sukuna Costume", price: 3199, rating: 4.7, reviews: 167, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Sukuna's four-armed form with traditional Japanese clothing and markings. King of Curses!", category: "jujutsu-kaisen", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 86, name: "Maki Zenin Costume", price: 2699, rating: 4.6, reviews: 112, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Maki's jujutsu high uniform with glasses and various cursed tools. The weapon master!", category: "jujutsu-kaisen", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 87, name: "Toge Inumaki Costume", price: 2499, rating: 4.5, reviews: 98, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Toge's high collar uniform with mask and cursed speech markings. Cursed Speech!", category: "jujutsu-kaisen", sizes: ["S", "M"], inStock: true, featured: false },
-                    { id: 88, name: "Panda Costume", price: 3299, rating: 4.4, reviews: 87, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Full-body panda costume with cute appearance. The cursed corpse panda!", category: "jujutsu-kaisen", sizes: ["One Size"], inStock: true, featured: false },
-                    { id: 89, name: "Kento Nanami Costume", price: 2799, rating: 4.7, reviews: 124, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Nanami's suit and tie with blindfold and ratio technique. The salaryman sorcerer!", category: "jujutsu-kaisen", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 90, name: "Aoi Todo Costume", price: 2899, rating: 4.5, reviews: 109, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Todo's muscular build with Kyoto school uniform and boogie woogie technique. My besto friendo!", category: "jujutsu-kaisen", sizes: ["L", "XL", "XXL"], inStock: true, featured: false }
-                ]
-            },
-            "solo-leveling": {
-                title: "Solo Leveling Costumes",
-                description: "Rise from the weakest hunter to the Shadow Monarch!",
-                products: [
-                    { id: 91, name: "Sung Jin-Woo Costume", price: 2999, rating: 4.9, reviews: 234, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", badge: "Best Seller", description: "Jin-Woo's black hunter uniform with dual daggers and shadow monarch aura. The Shadow Monarch!", category: "solo-leveling", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 92, name: "Shadow Soldier Costume", price: 3199, rating: 4.7, reviews: 187, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Full-body shadow soldier armor with dark aura and weapon. Arise!", category: "solo-leveling", sizes: ["M", "L", "XL"], inStock: true, featured: true },
-                    { id: 93, name: "Igris Costume", price: 3499, rating: 4.8, reviews: 156, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Igris's red knight armor with massive sword and commanding presence. The Blood-Red Commander!", category: "solo-leveling", sizes: ["L", "XL", "XXL"], inStock: true, featured: true },
-                    { id: 94, name: "Cha Hae-In Costume", price: 2799, rating: 4.6, reviews: 134, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Cha Hae-In's hunter uniform with sword and graceful fighting style. The S-Rank Hunter!", category: "solo-leveling", sizes: ["XS", "S", "M"], inStock: true, featured: false },
-                    { id: 95, name: "Thomas Andre Costume", price: 3299, rating: 4.5, reviews: 112, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Thomas Andre's massive build with titan-like strength and durability. The Goliath!", category: "solo-leveling", sizes: ["XL", "XXL"], inStock: true, featured: false },
-                    { id: 96, name: "System Administrator Costume", price: 2899, rating: 4.4, reviews: 98, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "The System's mysterious blue interface and otherworldly appearance. The Architect!", category: "solo-leveling", sizes: ["M", "L", "XL"], inStock: true, featured: false },
-                    { id: 97, name: "Beru Costume", price: 3599, rating: 4.7, reviews: 145, image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Beru's ant-like appearance with sharp limbs and intimidating presence. The Ant King!", category: "solo-leveling", sizes: ["L", "XL", "XXL"], inStock: true, featured: false },
-                    { id: 98, name: "Kamish Costume", price: 3799, rating: 4.6, reviews: 123, image: "https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Kamish's dragon form with massive wings and destructive power. The Dragon Monarch!", category: "solo-leveling", sizes: ["XL", "XXL"], inStock: true, featured: false },
-                    { id: 99, name: "Yoo Jinho Costume", price: 2399, rating: 4.3, reviews: 87, image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Yoo Jinho's hunter uniform with business-like appearance. The reliable guild master!", category: "solo-leveling", sizes: ["S", "M", "L"], inStock: true, featured: false },
-                    { id: 100, name: "Hunter Association Uniform", price: 2699, rating: 4.5, reviews: 109, image: "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80", description: "Standard hunter association uniform with rank insignia. For aspiring hunters!", category: "solo-leveling", sizes: ["S", "M", "L", "XL"], inStock: true, featured: false }
-            ]
-        },
-            // ... other anime sections remain the same
+            }
         };
 
         // Toast Component
@@ -1838,64 +2113,214 @@
             );
         };
 
-       // Updated Header Component with Search
-const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlistCount, activeCategory, onCategoryChange, onSearch, onSearchResultClick }) => {
-    const categories = [
-        "One Piece", "Naruto", "Attack on Titan", "My Hero Academia", 
-        "One Punch Man", "Demon Slayer", "Black Clover", "Dragon Ball", 
-        "Jujutsu Kaisen", "Solo Leveling", "Accessories"
-    ];
+        // Header Component
+        const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlistCount, activeCategory, onCategoryChange, onSearch, onSearchResultClick, currentUser, onLogout, onAccountClick }) => {
+            const categories = [
+                "One Piece", "Naruto", "Attack on Titan", "My Hero Academia", 
+                "One Punch Man", "Demon Slayer", "Black Clover", "Dragon Ball", 
+                "Jujutsu Kaisen", "Solo Leveling", "Accessories"
+            ];
 
-    const handleCategoryClick = (category) => {
-        onCategoryChange(category);
-    };
+            const handleCategoryClick = (category) => {
+                onCategoryChange(category);
+            };
 
-    return (
-        <header>
-            <div className="container">
-                <div className="header-top">
-                    <div className="logo">
-                        <i className="fas fa-mask"></i>
-                        <span>AnimeCosplay India</span>
+            return (
+                <header>
+                    <div className="container">
+                        <div className="header-top">
+                            <div className="logo">
+                                <i className="fas fa-mask"></i>
+                                <span>AnimeCosplay India</span>
+                            </div>
+                            <SearchBar onSearch={onSearch} onSearchResultClick={onSearchResultClick} />
+                            <div className="header-actions">
+                                {currentUser ? (
+                                    <div className="user-profile">
+                                        <div className="user-avatar">
+                                            {currentUser.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="header-action" onClick={onAccountClick}>
+                                            <i className="fas fa-user"></i>
+                                            <span>{currentUser.name.split(' ')[0]}</span>
+                                        </div>
+                                        <div className="header-action" onClick={onLogout}>
+                                            <i className="fas fa-sign-out-alt"></i>
+                                            <span>Logout</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="header-action" onClick={onLoginClick}>
+                                        <i className="fas fa-user"></i>
+                                        <span>Login</span>
+                                    </div>
+                                )}
+                                <div className="header-action wishlist-icon" onClick={onWishlistClick}>
+                                    <i className="fas fa-heart"></i>
+                                    <span>Wishlist</span>
+                                    <div className="wishlist-count">{wishlistCount}</div>
+                                </div>
+                                <div className="header-action cart-icon" onClick={onCartClick}>
+                                    <i className="fas fa-shopping-cart"></i>
+                                    <span>Cart</span>
+                                    <div className="cart-count">{cartCount}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <nav>
+                            <ul className="nav-links">
+                                <li><a href="#" className={!activeCategory ? 'active' : ''} onClick={() => handleCategoryClick('')}>Home</a></li>
+                                {categories.map(category => (
+                                    <li key={category}>
+                                        <a 
+                                            href="#" 
+                                            className={activeCategory === category.toLowerCase().replace(/ /g, '-') ? 'active' : ''}
+                                            onClick={() => handleCategoryClick(category.toLowerCase().replace(/ /g, '-'))}
+                                        >
+                                            {category}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
                     </div>
-                    <SearchBar onSearch={onSearch} onSearchResultClick={onSearchResultClick} />
-                    <div className="header-actions">
-                        <div className="header-action" onClick={onLoginClick}>
-                            <i className="fas fa-user"></i>
-                            <span>Login</span>
-                        </div>
-                        <div className="header-action wishlist-icon" onClick={onWishlistClick}>
-                            <i className="fas fa-heart"></i>
-                            <span>Wishlist</span>
-                            <div className="wishlist-count">{wishlistCount}</div>
-                        </div>
-                        <div className="header-action cart-icon" onClick={onCartClick}>
-                            <i className="fas fa-shopping-cart"></i>
-                            <span>Cart</span>
-                            <div className="cart-count">{cartCount}</div>
-                        </div>
-                    </div>
-                </div>
-                <nav>
-                    <ul className="nav-links">
-                        <li><a href="#" className={!activeCategory ? 'active' : ''} onClick={() => handleCategoryClick('')}>Home</a></li>
-                        {categories.map(category => (
-                            <li key={category}>
-                                <a 
-                                    href="#" 
-                                    className={activeCategory === category.toLowerCase().replace(/ /g, '-') ? 'active' : ''}
-                                    onClick={() => handleCategoryClick(category.toLowerCase().replace(/ /g, '-'))}
+                </header>
+            );
+        };
+
+        // Search Component
+        const SearchBar = ({ onSearch, onSearchResultClick }) => {
+            const [searchQuery, setSearchQuery] = useState('');
+            const [searchResults, setSearchResults] = useState([]);
+            const [showResults, setShowResults] = useState(false);
+            const searchRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (searchRef.current && !searchRef.current.contains(event.target)) {
+                        setShowResults(false);
+                    }
+                };
+
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                };
+            }, []);
+
+            const handleSearch = (query) => {
+                setSearchQuery(query);
+                
+                if (query.trim() === '') {
+                    setSearchResults([]);
+                    setShowResults(false);
+                    return;
+                }
+
+                const results = [];
+                const lowerCaseQuery = query.toLowerCase();
+
+                // Search through all anime and products
+                Object.keys(productDatabase).forEach(animeKey => {
+                    const anime = productDatabase[animeKey];
+                    
+                    // Check if anime title matches
+                    if (anime.title.toLowerCase().includes(lowerCaseQuery)) {
+                        results.push({
+                            type: 'anime',
+                            title: anime.title,
+                            description: anime.description,
+                            key: animeKey
+                        });
+                    }
+                    
+                    // Check if any product matches
+                    anime.products.forEach(product => {
+                        if (product.name.toLowerCase().includes(lowerCaseQuery)) {
+                            results.push({
+                                type: 'product',
+                                ...product,
+                                animeTitle: anime.title,
+                                animeKey: animeKey
+                            });
+                        }
+                    });
+                });
+
+                setSearchResults(results);
+                setShowResults(results.length > 0);
+            };
+
+            const handleResultClick = (result) => {
+                if (result.type === 'anime') {
+                    onSearchResultClick(result.key);
+                } else {
+                    onSearchResultClick(result.animeKey, result);
+                }
+                setShowResults(false);
+                setSearchQuery('');
+            };
+
+            const handleViewAllResults = () => {
+                onSearch(searchQuery);
+                setShowResults(false);
+            };
+
+            return (
+                <div className="search-bar" ref={searchRef}>
+                    <input 
+                        type="text" 
+                        placeholder="Search for costumes, accessories..." 
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        onFocus={() => searchQuery && setShowResults(true)}
+                    />
+                    <button onClick={() => onSearch(searchQuery)}><i className="fas fa-search"></i></button>
+                    
+                    {showResults && (
+                        <div className="search-results active">
+                            {searchResults.slice(0, 5).map((result, index) => (
+                                <div 
+                                    key={index} 
+                                    className="search-result-item"
+                                    onClick={() => handleResultClick(result)}
                                 >
-                                    {category}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            </div>
-        </header>
-    );
-};
+                                    {result.type === 'product' && (
+                                        <div 
+                                            className="search-result-img" 
+                                            style={{ backgroundImage: `url(${result.image})` }}
+                                        ></div>
+                                    )}
+                                    <div className="search-result-info">
+                                        <div className="search-result-name">
+                                            {result.type === 'anime' ? result.title : result.name}
+                                        </div>
+                                        {result.type === 'product' && (
+                                            <div className="search-result-price">₹{result.price.toLocaleString()}</div>
+                                        )}
+                                        <div className="search-result-category">
+                                            {result.type === 'anime' ? 'Anime Category' : result.animeTitle}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {searchResults.length > 5 && (
+                                <div 
+                                    className="search-result-item text-center" 
+                                    style={{ justifyContent: 'center', fontWeight: '600', color: 'var(--primary)' }}
+                                    onClick={handleViewAllResults}
+                                >
+                                    View all {searchResults.length} results
+                                </div>
+                            )}
+                            {searchResults.length === 0 && (
+                                <div className="no-results">No results found for "{searchQuery}"</div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
 
         // Hero Component
         const Hero = () => {
@@ -1946,7 +2371,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
         };
 
         // Product Card Component
-        const ProductCard = ({ product, onProductClick, onAddToCart, onWishlist, isWishlisted }) => {
+        const ProductCard = ({ product, onProductClick, onAddToCart, onWishlist, isWishlisted, onViewDetails }) => {
             const renderStars = (rating) => {
                 const stars = [];
                 const fullStars = Math.floor(rating);
@@ -1991,13 +2416,16 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
                                 <i className={isWishlisted ? "fas fa-heart" : "far fa-heart"}></i>
                             </button>
                         </div>
+                        <button className="view-details" onClick={(e) => { e.stopPropagation(); onViewDetails(product); }}>
+                            <i className="fas fa-eye"></i> View Details
+                        </button>
                     </div>
                 </div>
             );
         };
 
         // Products Section Component
-        const ProductsSection = ({ title, products, onProductClick, onAddToCart, onWishlist, wishlist }) => {
+        const ProductsSection = ({ title, products, onProductClick, onAddToCart, onWishlist, wishlist, onViewDetails }) => {
             return (
                 <section className="container">
                     <h2 className="section-title">{title}</h2>
@@ -2010,6 +2438,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
                                 onAddToCart={onAddToCart}
                                 onWishlist={onWishlist}
                                 isWishlisted={wishlist.some(item => item.id === product.id)}
+                                onViewDetails={onViewDetails}
                             />
                         ))}
                     </div>
@@ -2018,7 +2447,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
         };
 
         // Anime Section Component
-        const AnimeSection = ({ anime, onProductClick, onAddToCart, onWishlist, wishlist }) => {
+        const AnimeSection = ({ anime, onProductClick, onAddToCart, onWishlist, wishlist, onViewDetails }) => {
             if (!anime) return null;
 
             return (
@@ -2041,6 +2470,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
                                 onAddToCart={onAddToCart}
                                 onWishlist={onWishlist}
                                 isWishlisted={wishlist.some(item => item.id === product.id)}
+                                onViewDetails={onViewDetails}
                             />
                         ))}
                     </div>
@@ -2126,7 +2556,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
         };
 
         // Login Modal Component
-        const LoginModal = ({ isOpen, onClose, onSwitchToSignup }) => {
+        const LoginModal = ({ isOpen, onClose, onSwitchToSignup, onLoginSuccess }) => {
             const [formData, setFormData] = useState({
                 email: '',
                 password: ''
@@ -2141,10 +2571,13 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
 
             const handleSubmit = (e) => {
                 e.preventDefault();
-                // In a real app, this would be an API call
-                console.log('Login attempt:', formData);
-                alert('Login functionality would be implemented with backend integration');
-                onClose();
+                const result = AuthService.login(formData.email, formData.password);
+                if (result.success) {
+                    onLoginSuccess(result.user);
+                    onClose();
+                } else {
+                    alert(result.message);
+                }
             };
 
             return (
@@ -2187,7 +2620,7 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
         };
 
         // Signup Modal Component
-        const SignupModal = ({ isOpen, onClose, onSwitchToLogin }) => {
+        const SignupModal = ({ isOpen, onClose, onSwitchToLogin, onSignupSuccess }) => {
             const [formData, setFormData] = useState({
                 name: '',
                 email: '',
@@ -2208,10 +2641,14 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
                     alert('Passwords do not match');
                     return;
                 }
-                // In a real app, this would be an API call
-                console.log('Signup attempt:', formData);
-                alert('Signup functionality would be implemented with backend integration');
-                onClose();
+                
+                const result = AuthService.signup(formData);
+                if (result.success) {
+                    onSignupSuccess(result.user);
+                    onClose();
+                } else {
+                    alert(result.message);
+                }
             };
 
             return (
@@ -2363,170 +2800,6 @@ const Header = ({ onLoginClick, onCartClick, onWishlistClick, cartCount, wishlis
             );
         };
 
-       // Updated Product Details Modal with Gallery
-const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }) => {
-    const [selectedSize, setSelectedSize] = useState('M');
-    const [quantity, setQuantity] = useState(1);
-
-    if (!product) return null;
-
-    const renderStars = (rating) => {
-        const stars = [];
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-
-        for (let i = 0; i < fullStars; i++) {
-            stars.push(<i key={i} className="fas fa-star"></i>);
-        }
-
-        if (hasHalfStar) {
-            stars.push(<i key="half" className="fas fa-star-half-alt"></i>);
-        }
-
-        const emptyStars = 5 - stars.length;
-        for (let i = 0; i < emptyStars; i++) {
-            stars.push(<i key={`empty-${i}`} className="far fa-star"></i>);
-        }
-
-        return stars;
-    };
-
-    const handleAddToCart = () => {
-        onAddToCart(product, selectedSize, quantity);
-        onClose();
-    };
-
-    const handleBuyNow = () => {
-        onBuyNow(product, selectedSize, quantity);
-        onClose();
-    };
-
-    // Generate additional product images for the gallery
-    const productImages = [
-        product.image,
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-        "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-    ];
-
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="product-details-modal">
-            <div className="product-details">
-                <div className="product-details-img">
-                    <ProductGallery product={product} images={productImages} />
-                </div>
-                <div className="product-details-info">
-                    <h2 className="product-details-title">{product.name}</h2>
-                    <div className="product-details-price">₹{product.price.toLocaleString()}</div>
-                    <div className="product-details-rating">
-                        {renderStars(product.rating)}
-                        <span>{product.rating} ({product.reviews} Reviews)</span>
-                    </div>
-                    <p className="product-details-description">
-                        {product.description}
-                    </p>
-                    
-                    <div className="product-meta">
-                        <div className="meta-item">
-                            <i className="fas fa-box"></i>
-                            <span>Free Shipping</span>
-                        </div>
-                        <div className="meta-item">
-                            <i className="fas fa-undo"></i>
-                            <span>30 Day Returns</span>
-                        </div>
-                        <div className="meta-item">
-                            <i className="fas fa-shield-alt"></i>
-                            <span>1 Year Warranty</span>
-                        </div>
-                    </div>
-
-                    <div className="size-selector">
-                        <label>Select Size:</label>
-                        <div className="size-options">
-                            {["M", "L", "XL"].map(size => (
-                                <div 
-                                    key={size} 
-                                    className={`size-option ${selectedSize === size ? 'active' : ''}`}
-                                    onClick={() => setSelectedSize(size)}
-                                >
-                                    {size}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="quantity-control" style={{ marginBottom: '20px', display: 'inline-flex' }}>
-                        <label style={{ marginRight: '15px', fontWeight: '600', display: 'flex', alignItems: 'center' }}>Quantity:</label>
-                        <div className="quantity-control" style={{ display: 'flex', alignItems: 'center' }}>
-                            <button 
-                                className="quantity-btn" 
-                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                            >-</button>
-                            <input 
-                                type="text" 
-                                className="quantity-input" 
-                                value={quantity} 
-                                readOnly
-                                style={{ width: '60px' }}
-                            />
-                            <button 
-                                className="quantity-btn" 
-                                onClick={() => setQuantity(quantity + 1)}
-                            >+</button>
-                        </div>
-                    </div>
-
-                    <div className="product-details-actions">
-                        <button 
-                            className="add-to-cart-large" 
-                            onClick={handleAddToCart}
-                        >
-                            <i className="fas fa-shopping-cart"></i> Add to Cart
-                        </button>
-                        <button className="buy-now" onClick={handleBuyNow}>
-                            <i className="fas fa-bolt"></i> Buy Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div className="reviews-section">
-                <div className="reviews-header">
-                    <h3 className="reviews-title">Customer Reviews</h3>
-                    <button className="view-all">Write a Review</button>
-                </div>
-                <div className="review-item">
-                    <div className="review-header">
-                        <div className="review-author">Rahul Sharma</div>
-                        <div className="review-rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div className="review-date">Posted on October 12, 2023</div>
-                    <p className="review-text">Amazing quality! The costume looks exactly like in the anime. Got so many compliments at the convention. Definitely worth the price!</p>
-                </div>
-                <div className="review-item">
-                    <div className="review-header">
-                        <div className="review-author">Priya Patel</div>
-                        <div className="review-rating">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="far fa-star"></i>
-                        </div>
-                    </div>
-                    <div className="review-date">Posted on September 28, 2023</div>
-                    <p className="review-text">The material is good quality and comfortable to wear. The sizing was accurate. The straw hat is a bit flimsy but overall a great product.</p>
-                </div>
-            </div>
-        </Modal>
-    );
-};
         // Wishlist Modal Component
         const WishlistModal = ({ isOpen, onClose, wishlistItems, onRemoveItem, onAddToCart }) => {
             return (
@@ -2570,14 +2843,664 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
             );
         };
 
+        // Product Details Page Component
+        const ProductDetailsPage = ({ product, onAddToCart, onBuyNow, onBack }) => {
+            const [selectedSize, setSelectedSize] = useState('M');
+            const [quantity, setQuantity] = useState(1);
+            const [selectedImage, setSelectedImage] = useState(product.image);
+
+            if (!product) return null;
+
+            const renderStars = (rating) => {
+                const stars = [];
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 !== 0;
+
+                for (let i = 0; i < fullStars; i++) {
+                    stars.push(<i key={i} className="fas fa-star"></i>);
+                }
+
+                if (hasHalfStar) {
+                    stars.push(<i key="half" className="fas fa-star-half-alt"></i>);
+                }
+
+                const emptyStars = 5 - stars.length;
+                for (let i = 0; i < emptyStars; i++) {
+                    stars.push(<i key={`empty-${i}`} className="far fa-star"></i>);
+                }
+
+                return stars;
+            };
+
+            const handleAddToCart = () => {
+                onAddToCart(product, selectedSize, quantity);
+            };
+
+            const handleBuyNow = () => {
+                onBuyNow(product, selectedSize, quantity);
+            };
+
+            // Generate additional product images for the gallery
+            const productImages = [
+                product.image,
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+            ];
+
+            return (
+                <div className="product-details-page">
+                    <div className="container">
+                        <button className="view-all" onClick={onBack} style={{ marginBottom: '30px' }}>
+                            <i className="fas fa-arrow-left"></i> Back to Products
+                        </button>
+                        <div className="product-details-container">
+                            <div className="product-gallery">
+                                <div 
+                                    className="product-main-img"
+                                    style={{ backgroundImage: `url(${selectedImage})` }}
+                                ></div>
+                                <div className="product-thumbnails">
+                                    {productImages.map((image, index) => (
+                                        <div 
+                                            key={index}
+                                            className={`product-thumbnail ${selectedImage === image ? 'active' : ''}`}
+                                            style={{ backgroundImage: `url(${image})` }}
+                                            onClick={() => setSelectedImage(image)}
+                                        ></div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="product-details-info">
+                                <h1 className="product-details-title">{product.name}</h1>
+                                <div className="product-details-price">₹{product.price.toLocaleString()}</div>
+                                <div className="product-details-rating">
+                                    {renderStars(product.rating)}
+                                    <span>{product.rating} ({product.reviews} Reviews)</span>
+                                </div>
+                                <p className="product-details-description">
+                                    {product.description}
+                                </p>
+                                
+                                <div className="product-meta">
+                                    <div className="meta-item">
+                                        <i className="fas fa-box"></i>
+                                        <span>Free Shipping</span>
+                                    </div>
+                                    <div className="meta-item">
+                                        <i className="fas fa-undo"></i>
+                                        <span>30 Day Returns</span>
+                                    </div>
+                                    <div className="meta-item">
+                                        <i className="fas fa-shield-alt"></i>
+                                        <span>1 Year Warranty</span>
+                                    </div>
+                                </div>
+
+                                <div className="size-selector">
+                                    <label>Select Size:</label>
+                                    <div className="size-options">
+                                        {product.sizes.map(size => (
+                                            <div 
+                                                key={size} 
+                                                className={`size-option ${selectedSize === size ? 'active' : ''}`}
+                                                onClick={() => setSelectedSize(size)}
+                                            >
+                                                {size}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
+                                    <label style={{ marginRight: '15px', fontWeight: '600' }}>Quantity:</label>
+                                    <div className="quantity-control" style={{ display: 'flex', alignItems: 'center' }}>
+                                        <button 
+                                            className="quantity-btn" 
+                                            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                        >-</button>
+                                        <input 
+                                            type="text" 
+                                            className="quantity-input" 
+                                            value={quantity} 
+                                            readOnly
+                                            style={{ width: '60px' }}
+                                        />
+                                        <button 
+                                            className="quantity-btn" 
+                                            onClick={() => setQuantity(quantity + 1)}
+                                        >+</button>
+                                    </div>
+                                </div>
+
+                                <div className="product-details-actions">
+                                    <button 
+                                        className="add-to-cart-large" 
+                                        onClick={handleAddToCart}
+                                    >
+                                        <i className="fas fa-shopping-cart"></i> Add to Cart
+                                    </button>
+                                    <button className="buy-now" onClick={handleBuyNow}>
+                                        <i className="fas fa-bolt"></i> Buy Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="reviews-section">
+                            <div className="reviews-header">
+                                <h3 className="reviews-title">Customer Reviews</h3>
+                                <button className="view-all">Write a Review</button>
+                            </div>
+                            <div className="review-item">
+                                <div className="review-header">
+                                    <div className="review-author">Rahul Sharma</div>
+                                    <div className="review-rating">
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div className="review-date">Posted on October 12, 2023</div>
+                                <p className="review-text">Amazing quality! The costume looks exactly like in the anime. Got so many compliments at the convention. Definitely worth the price!</p>
+                            </div>
+                            <div className="review-item">
+                                <div className="review-header">
+                                    <div className="review-author">Priya Patel</div>
+                                    <div className="review-rating">
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="fas fa-star"></i>
+                                        <i className="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div className="review-date">Posted on September 28, 2023</div>
+                                <p className="review-text">The material is good quality and comfortable to wear. The sizing was accurate. The straw hat is a bit flimsy but overall a great product.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Checkout Page Component
+        const CheckoutPage = ({ cartItems, onPlaceOrder, onBack }) => {
+            const [formData, setFormData] = useState({
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                address: '',
+                city: '',
+                state: '',
+                pincode: '',
+                paymentMethod: 'card'
+            });
+
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? 99 : 0;
+            const tax = subtotal * 0.18;
+            const total = subtotal + shipping + tax;
+
+            const handleChange = (e) => {
+                setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value
+                });
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onPlaceOrder({
+                    ...formData,
+                    items: cartItems,
+                    total: total
+                });
+            };
+
+            return (
+                <div className="checkout-page">
+                    <div className="container">
+                        <button className="view-all" onClick={onBack} style={{ marginBottom: '30px' }}>
+                            <i className="fas fa-arrow-left"></i> Back to Cart
+                        </button>
+                        <h1 className="section-title">Checkout</h1>
+                        <div className="checkout-container">
+                            <div className="checkout-form">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Shipping Information</h3>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="firstName">First Name</label>
+                                                <input 
+                                                    type="text" 
+                                                    id="firstName" 
+                                                    name="firstName"
+                                                    className="form-control" 
+                                                    value={formData.firstName}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="lastName">Last Name</label>
+                                                <input 
+                                                    type="text" 
+                                                    id="lastName" 
+                                                    name="lastName"
+                                                    className="form-control" 
+                                                    value={formData.lastName}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="email">Email</label>
+                                                <input 
+                                                    type="email" 
+                                                    id="email" 
+                                                    name="email"
+                                                    className="form-control" 
+                                                    value={formData.email}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="phone">Phone</label>
+                                                <input 
+                                                    type="tel" 
+                                                    id="phone" 
+                                                    name="phone"
+                                                    className="form-control" 
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="address">Address</label>
+                                            <input 
+                                                type="text" 
+                                                id="address" 
+                                                name="address"
+                                                className="form-control" 
+                                                value={formData.address}
+                                                onChange={handleChange}
+                                                required 
+                                            />
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="city">City</label>
+                                                <input 
+                                                    type="text" 
+                                                    id="city" 
+                                                    name="city"
+                                                    className="form-control" 
+                                                    value={formData.city}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="state">State</label>
+                                                <input 
+                                                    type="text" 
+                                                    id="state" 
+                                                    name="state"
+                                                    className="form-control" 
+                                                    value={formData.state}
+                                                    onChange={handleChange}
+                                                    required 
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="pincode">PIN Code</label>
+                                            <input 
+                                                type="text" 
+                                                id="pincode" 
+                                                name="pincode"
+                                                className="form-control" 
+                                                value={formData.pincode}
+                                                onChange={handleChange}
+                                                required 
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="form-section">
+                                        <h3 className="form-section-title">Payment Method</h3>
+                                        <div className="payment-methods">
+                                            <div 
+                                                className={`payment-method ${formData.paymentMethod === 'card' ? 'active' : ''}`}
+                                                onClick={() => setFormData({...formData, paymentMethod: 'card'})}
+                                            >
+                                                <div className="payment-icon">
+                                                    <i className="far fa-credit-card"></i>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontWeight: '600' }}>Credit/Debit Card</div>
+                                                    <div style={{ fontSize: '0.9rem', color: 'var(--gray)' }}>Pay securely with your card</div>
+                                                </div>
+                                            </div>
+                                            <div 
+                                                className={`payment-method ${formData.paymentMethod === 'upi' ? 'active' : ''}`}
+                                                onClick={() => setFormData({...formData, paymentMethod: 'upi'})}
+                                            >
+                                                <div className="payment-icon">
+                                                    <i className="fas fa-mobile-alt"></i>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontWeight: '600' }}>UPI</div>
+                                                    <div style={{ fontSize: '0.9rem', color: 'var(--gray)' }}>Pay using UPI apps</div>
+                                                </div>
+                                            </div>
+                                            <div 
+                                                className={`payment-method ${formData.paymentMethod === 'cod' ? 'active' : ''}`}
+                                                onClick={() => setFormData({...formData, paymentMethod: 'cod'})}
+                                            >
+                                                <div className="payment-icon">
+                                                    <i className="fas fa-money-bill-wave"></i>
+                                                </div>
+                                                <div>
+                                                    <div style={{ fontWeight: '600' }}>Cash on Delivery</div>
+                                                    <div style={{ fontSize: '0.9rem', color: 'var(--gray)' }}>Pay when you receive the order</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" className="place-order-btn">
+                                        Place Order
+                                    </button>
+                                </form>
+                            </div>
+                            <div className="checkout-summary">
+                                <h3 style={{ marginBottom: '20px', color: 'var(--secondary)' }}>Order Summary</h3>
+                                {cartItems.map(item => (
+                                    <div key={item.id} className="summary-item">
+                                        <div>
+                                            <div style={{ fontWeight: '600' }}>{item.name}</div>
+                                            <div style={{ fontSize: '0.9rem', color: 'var(--gray)' }}>Qty: {item.quantity}</div>
+                                        </div>
+                                        <div>₹{(item.price * item.quantity).toLocaleString()}</div>
+                                    </div>
+                                ))}
+                                <div className="summary-item">
+                                    <div>Subtotal</div>
+                                    <div>₹{subtotal.toLocaleString()}</div>
+                                </div>
+                                <div className="summary-item">
+                                    <div>Shipping</div>
+                                    <div>{shipping > 0 ? `₹${shipping}` : 'FREE'}</div>
+                                </div>
+                                <div className="summary-item">
+                                    <div>Tax</div>
+                                    <div>₹{tax.toFixed(0)}</div>
+                                </div>
+                                <div className="summary-total">
+                                    <div>Total</div>
+                                    <div>₹{total.toFixed(0)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Order Success Page Component
+        const OrderSuccessPage = ({ order, onContinueShopping, onViewOrders }) => {
+            return (
+                <div className="success-page">
+                    <div className="container">
+                        <div className="success-icon">
+                            <i className="fas fa-check-circle"></i>
+                        </div>
+                        <h1 className="success-title">Order Placed Successfully!</h1>
+                        <p className="success-message">
+                            Thank you for your order! Your order has been confirmed and will be shipped within 3-5 business days. 
+                            You will receive a confirmation email shortly with your order details.
+                        </p>
+                        <div className="success-actions">
+                            <button className="cta-button" onClick={onContinueShopping}>
+                                Continue Shopping
+                            </button>
+                            <button className="view-details" onClick={onViewOrders}>
+                                View My Orders
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Account Page Component
+        const AccountPage = ({ currentUser, onUpdateProfile, onBack, onViewOrders }) => {
+            const [activeTab, setActiveTab] = useState('profile');
+            const [profileData, setProfileData] = useState({
+                name: currentUser?.name || '',
+                email: currentUser?.email || '',
+                phone: currentUser?.phone || '',
+                address: currentUser?.address || ''
+            });
+
+            const handleProfileChange = (e) => {
+                setProfileData({
+                    ...profileData,
+                    [e.target.name]: e.target.value
+                });
+            };
+
+            const handleProfileSubmit = (e) => {
+                e.preventDefault();
+                const result = AuthService.updateProfile(currentUser.id, profileData);
+                if (result.success) {
+                    onUpdateProfile(result.user);
+                    alert('Profile updated successfully!');
+                } else {
+                    alert(result.message);
+                }
+            };
+
+            return (
+                <div className="account-page">
+                    <div className="container">
+                        <button className="view-all" onClick={onBack} style={{ marginBottom: '30px' }}>
+                            <i className="fas fa-arrow-left"></i> Back to Store
+                        </button>
+                        <h1 className="section-title">My Account</h1>
+                        <div className="account-container">
+                            <div className="account-sidebar">
+                                <ul className="account-menu">
+                                    <li>
+                                        <a 
+                                            href="#" 
+                                            className={activeTab === 'profile' ? 'active' : ''}
+                                            onClick={(e) => { e.preventDefault(); setActiveTab('profile'); }}
+                                        >
+                                            <i className="fas fa-user"></i> Profile
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a 
+                                            href="#" 
+                                            className={activeTab === 'orders' ? 'active' : ''}
+                                            onClick={(e) => { e.preventDefault(); setActiveTab('orders'); }}
+                                        >
+                                            <i className="fas fa-shopping-bag"></i> Orders
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a 
+                                            href="#" 
+                                            className={activeTab === 'addresses' ? 'active' : ''}
+                                            onClick={(e) => { e.preventDefault(); setActiveTab('addresses'); }}
+                                        >
+                                            <i className="fas fa-map-marker-alt"></i> Addresses
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a 
+                                            href="#" 
+                                            className={activeTab === 'wishlist' ? 'active' : ''}
+                                            onClick={(e) => { e.preventDefault(); setActiveTab('wishlist'); }}
+                                        >
+                                            <i className="fas fa-heart"></i> Wishlist
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="account-content">
+                                {activeTab === 'profile' && (
+                                    <div className="account-section">
+                                        <h2 className="account-section-title">Profile Information</h2>
+                                        <div className="profile-avatar">
+                                            {currentUser?.name?.charAt(0).toUpperCase()}
+                                        </div>
+                                        <form onSubmit={handleProfileSubmit}>
+                                            <div className="profile-info">
+                                                <div className="form-group">
+                                                    <label htmlFor="account-name">Full Name</label>
+                                                    <input 
+                                                        type="text" 
+                                                        id="account-name" 
+                                                        name="name"
+                                                        className="form-control" 
+                                                        value={profileData.name}
+                                                        onChange={handleProfileChange}
+                                                        required 
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="account-email">Email</label>
+                                                    <input 
+                                                        type="email" 
+                                                        id="account-email" 
+                                                        name="email"
+                                                        className="form-control" 
+                                                        value={profileData.email}
+                                                        onChange={handleProfileChange}
+                                                        required 
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="account-phone">Phone</label>
+                                                    <input 
+                                                        type="tel" 
+                                                        id="account-phone" 
+                                                        name="phone"
+                                                        className="form-control" 
+                                                        value={profileData.phone}
+                                                        onChange={handleProfileChange}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="account-address">Address</label>
+                                                    <input 
+                                                        type="text" 
+                                                        id="account-address" 
+                                                        name="address"
+                                                        className="form-control" 
+                                                        value={profileData.address}
+                                                        onChange={handleProfileChange}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <button type="submit" className="save-btn">Save Changes</button>
+                                        </form>
+                                    </div>
+                                )}
+                                {activeTab === 'orders' && (
+                                    <div className="account-section">
+                                        <h2 className="account-section-title">Order History</h2>
+                                        {currentUser?.orders && currentUser.orders.length > 0 ? (
+                                            <div className="order-history">
+                                                {currentUser.orders.map(order => (
+                                                    <div key={order.id} className="order-card">
+                                                        <div className="order-header">
+                                                            <div>
+                                                                <div className="order-id">Order #{order.id}</div>
+                                                                <div className="order-date">
+                                                                    {new Date(order.date).toLocaleDateString('en-IN', { 
+                                                                        day: 'numeric', 
+                                                                        month: 'long', 
+                                                                        year: 'numeric' 
+                                                                    })}
+                                                                </div>
+                                                            </div>
+                                                            <div className={`order-status status-${order.status}`}>
+                                                                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                                            </div>
+                                                        </div>
+                                                        <div className="order-items">
+                                                            {order.items.map(item => (
+                                                                <div key={item.id} className="order-item">
+                                                                    <div 
+                                                                        className="order-item-img"
+                                                                        style={{ backgroundImage: `url(${item.image})` }}
+                                                                    ></div>
+                                                                    <div className="order-item-name">{item.name}</div>
+                                                                    <div className="order-item-price">₹{item.price.toLocaleString()}</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <div className="order-total">
+                                                            <div>Total</div>
+                                                            <div>₹{order.total.toFixed(0)}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="empty-cart">
+                                                <i className="fas fa-shopping-bag"></i>
+                                                <p>You haven't placed any orders yet</p>
+                                                <button className="cta-button" onClick={onBack}>Start Shopping</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                {activeTab === 'addresses' && (
+                                    <div className="account-section">
+                                        <h2 className="account-section-title">Saved Addresses</h2>
+                                        <p>Manage your shipping addresses here.</p>
+                                        {/* Address management would be implemented here */}
+                                    </div>
+                                )}
+                                {activeTab === 'wishlist' && (
+                                    <div className="account-section">
+                                        <h2 className="account-section-title">My Wishlist</h2>
+                                        <p>View and manage your wishlist items.</p>
+                                        {/* Wishlist management would be implemented here */}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         // Main App Component
         const App = () => {
+            const [currentPage, setCurrentPage] = useState('home');
             const [activeModal, setActiveModal] = useState(null);
             const [selectedProduct, setSelectedProduct] = useState(null);
             const [activeCategory, setActiveCategory] = useState('');
             const [cartItems, setCartItems] = useState([]);
             const [wishlist, setWishlist] = useState([]);
             const [toast, setToast] = useState({ show: false, message: '', type: '' });
+            const [currentUser, setCurrentUser] = useState(AuthService.currentUser);
+            const [currentOrder, setCurrentOrder] = useState(null);
 
             const showToast = (message, type = '') => {
                 setToast({ show: true, message, type });
@@ -2602,6 +3525,11 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
             const handleProductClick = (product) => {
                 setSelectedProduct(product);
                 setActiveModal('product-details');
+            };
+
+            const handleViewDetails = (product) => {
+                setSelectedProduct(product);
+                setCurrentPage('product-details');
             };
 
             const handleCategoryClick = (category) => {
@@ -2658,8 +3586,25 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
             };
 
             const handleCheckout = () => {
-                showToast('Proceeding to checkout!', 'success');
+                if (!currentUser) {
+                    setActiveModal('login');
+                    showToast('Please login to proceed with checkout', 'warning');
+                    return;
+                }
+                setCurrentPage('checkout');
                 setActiveModal(null);
+            };
+
+            const handlePlaceOrder = (orderData) => {
+                const result = AuthService.addOrder(currentUser.id, orderData);
+                if (result.success) {
+                    setCurrentOrder(result.order);
+                    setCartItems([]); // Clear cart after successful order
+                    setCurrentPage('order-success');
+                    setCurrentUser(AuthService.currentUser); // Update current user with new order
+                } else {
+                    alert('Failed to place order: ' + result.message);
+                }
             };
 
             const handleWishlist = (product, isWishlisted) => {
@@ -2679,7 +3624,52 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
 
             const handleBuyNow = (product, size = 'M', quantity = 1) => {
                 handleAddToCart(product, size, quantity);
-                setActiveModal('cart');
+                if (!currentUser) {
+                    setActiveModal('login');
+                    showToast('Please login to proceed with checkout', 'warning');
+                    return;
+                }
+                setCurrentPage('checkout');
+            };
+
+            const handleLoginSuccess = (user) => {
+                setCurrentUser(user);
+                showToast(`Welcome back, ${user.name}!`, 'success');
+            };
+
+            const handleSignupSuccess = (user) => {
+                setCurrentUser(user);
+                showToast(`Account created successfully! Welcome, ${user.name}!`, 'success');
+            };
+
+            const handleLogout = () => {
+                AuthService.logout();
+                setCurrentUser(null);
+                showToast('You have been logged out', 'info');
+            };
+
+            const handleAccountClick = () => {
+                setCurrentPage('account');
+            };
+
+            const handleBackToHome = () => {
+                setCurrentPage('home');
+                setSelectedProduct(null);
+                setCurrentOrder(null);
+            };
+
+            const handleContinueShopping = () => {
+                setCurrentPage('home');
+                setCurrentOrder(null);
+            };
+
+            const handleViewOrders = () => {
+                setCurrentPage('account');
+                setCurrentOrder(null);
+            };
+
+            const handleUpdateProfile = (user) => {
+                setCurrentUser(user);
             };
 
             const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -2693,63 +3683,168 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
 
             return (
                 <div>
-                    <Header 
-                        onLoginClick={handleLoginClick} 
-                        onCartClick={handleCartClick}
-                        onWishlistClick={handleWishlistClick}
-                        cartCount={cartCount}
-                        wishlistCount={wishlistCount}
-                        activeCategory={activeCategory}
-                        onCategoryChange={handleCategoryChange}
-                    />
-                    <Hero />
-                    <Categories onCategoryClick={handleCategoryClick} />
-                    
-                    {!activeCategory && (
-                        <ProductsSection 
-                            title="Featured Costumes"
-                            products={featuredProducts}
-                            onProductClick={handleProductClick}
-                            onAddToCart={handleAddToCart}
-                            onWishlist={handleWishlist}
-                            wishlist={wishlist}
-                        />
-                    )}
-                    
-                    {activeCategory && productDatabase[activeCategory] && (
-                        <div id={`anime-${activeCategory}`}>
-                            <AnimeSection 
-                                anime={productDatabase[activeCategory]}
-                                onProductClick={handleProductClick}
-                                onAddToCart={handleAddToCart}
-                                onWishlist={handleWishlist}
-                                wishlist={wishlist}
+                    {currentPage === 'home' && (
+                        <>
+                            <Header 
+                                onLoginClick={handleLoginClick} 
+                                onCartClick={handleCartClick}
+                                onWishlistClick={handleWishlistClick}
+                                cartCount={cartCount}
+                                wishlistCount={wishlistCount}
+                                activeCategory={activeCategory}
+                                onCategoryChange={handleCategoryChange}
+                                currentUser={currentUser}
+                                onLogout={handleLogout}
+                                onAccountClick={handleAccountClick}
                             />
-                        </div>
+                            <Hero />
+                            <Categories onCategoryClick={handleCategoryClick} />
+                            
+                            {!activeCategory && (
+                                <ProductsSection 
+                                    title="Featured Costumes"
+                                    products={featuredProducts}
+                                    onProductClick={handleProductClick}
+                                    onAddToCart={handleAddToCart}
+                                    onWishlist={handleWishlist}
+                                    wishlist={wishlist}
+                                    onViewDetails={handleViewDetails}
+                                />
+                            )}
+                            
+                            {activeCategory && productDatabase[activeCategory] && (
+                                <div id={`anime-${activeCategory}`}>
+                                    <AnimeSection 
+                                        anime={productDatabase[activeCategory]}
+                                        onProductClick={handleProductClick}
+                                        onAddToCart={handleAddToCart}
+                                        onWishlist={handleWishlist}
+                                        wishlist={wishlist}
+                                        onViewDetails={handleViewDetails}
+                                    />
+                                </div>
+                            )}
+                            
+                            {!activeCategory && Object.entries(productDatabase).map(([key, anime]) => (
+                                <AnimeSection 
+                                    key={key}
+                                    anime={anime}
+                                    onProductClick={handleProductClick}
+                                    onAddToCart={handleAddToCart}
+                                    onWishlist={handleWishlist}
+                                    wishlist={wishlist}
+                                    onViewDetails={handleViewDetails}
+                                />
+                            ))}
+                            
+                            <Footer />
+                        </>
                     )}
-                    
-                    {!activeCategory && Object.entries(productDatabase).map(([key, anime]) => (
-                        <AnimeSection 
-                            key={key}
-                            anime={anime}
-                            onProductClick={handleProductClick}
-                            onAddToCart={handleAddToCart}
-                            onWishlist={handleWishlist}
-                            wishlist={wishlist}
-                        />
-                    ))}
-                    
-                    <Footer />
+
+                    {currentPage === 'product-details' && selectedProduct && (
+                        <>
+                            <Header 
+                                onLoginClick={handleLoginClick} 
+                                onCartClick={handleCartClick}
+                                onWishlistClick={handleWishlistClick}
+                                cartCount={cartCount}
+                                wishlistCount={wishlistCount}
+                                activeCategory={activeCategory}
+                                onCategoryChange={handleCategoryChange}
+                                currentUser={currentUser}
+                                onLogout={handleLogout}
+                                onAccountClick={handleAccountClick}
+                            />
+                            <ProductDetailsPage 
+                                product={selectedProduct}
+                                onAddToCart={handleAddToCart}
+                                onBuyNow={handleBuyNow}
+                                onBack={handleBackToHome}
+                            />
+                            <Footer />
+                        </>
+                    )}
+
+                    {currentPage === 'checkout' && (
+                        <>
+                            <Header 
+                                onLoginClick={handleLoginClick} 
+                                onCartClick={handleCartClick}
+                                onWishlistClick={handleWishlistClick}
+                                cartCount={cartCount}
+                                wishlistCount={wishlistCount}
+                                activeCategory={activeCategory}
+                                onCategoryChange={handleCategoryChange}
+                                currentUser={currentUser}
+                                onLogout={handleLogout}
+                                onAccountClick={handleAccountClick}
+                            />
+                            <CheckoutPage 
+                                cartItems={cartItems}
+                                onPlaceOrder={handlePlaceOrder}
+                                onBack={() => setCurrentPage('home')}
+                            />
+                        </>
+                    )}
+
+                    {currentPage === 'order-success' && currentOrder && (
+                        <>
+                            <Header 
+                                onLoginClick={handleLoginClick} 
+                                onCartClick={handleCartClick}
+                                onWishlistClick={handleWishlistClick}
+                                cartCount={cartCount}
+                                wishlistCount={wishlistCount}
+                                activeCategory={activeCategory}
+                                onCategoryChange={handleCategoryChange}
+                                currentUser={currentUser}
+                                onLogout={handleLogout}
+                                onAccountClick={handleAccountClick}
+                            />
+                            <OrderSuccessPage 
+                                order={currentOrder}
+                                onContinueShopping={handleContinueShopping}
+                                onViewOrders={handleViewOrders}
+                            />
+                            <Footer />
+                        </>
+                    )}
+
+                    {currentPage === 'account' && currentUser && (
+                        <>
+                            <Header 
+                                onLoginClick={handleLoginClick} 
+                                onCartClick={handleCartClick}
+                                onWishlistClick={handleWishlistClick}
+                                cartCount={cartCount}
+                                wishlistCount={wishlistCount}
+                                activeCategory={activeCategory}
+                                onCategoryChange={handleCategoryChange}
+                                currentUser={currentUser}
+                                onLogout={handleLogout}
+                                onAccountClick={handleAccountClick}
+                            />
+                            <AccountPage 
+                                currentUser={currentUser}
+                                onUpdateProfile={handleUpdateProfile}
+                                onBack={handleBackToHome}
+                                onViewOrders={handleViewOrders}
+                            />
+                            <Footer />
+                        </>
+                    )}
 
                     <LoginModal 
                         isOpen={activeModal === 'login'} 
                         onClose={() => setActiveModal(null)}
                         onSwitchToSignup={() => setActiveModal('signup')}
+                        onLoginSuccess={handleLoginSuccess}
                     />
                     <SignupModal 
                         isOpen={activeModal === 'signup'} 
                         onClose={() => setActiveModal(null)}
                         onSwitchToLogin={() => setActiveModal('login')}
+                        onSignupSuccess={handleSignupSuccess}
                     />
                     <CartModal 
                         isOpen={activeModal === 'cart'} 
@@ -2758,13 +3853,6 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
                         onUpdateQuantity={handleUpdateQuantity}
                         onRemoveItem={handleRemoveItem}
                         onCheckout={handleCheckout}
-                    />
-                    <ProductDetailsModal 
-                        isOpen={activeModal === 'product-details'} 
-                        onClose={() => setActiveModal(null)}
-                        product={selectedProduct}
-                        onAddToCart={handleAddToCart}
-                        onBuyNow={handleBuyNow}
                     />
                     <WishlistModal 
                         isOpen={activeModal === 'wishlist'} 
@@ -2783,243 +3871,9 @@ const ProductDetailsModal = ({ isOpen, onClose, product, onAddToCart, onBuyNow }
                 </div>
             );
         };
-        // Search Component
-const SearchBar = ({ onSearch, onSearchResultClick }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [showResults, setShowResults] = useState(false);
-    const searchRef = useRef(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (searchRef.current && !searchRef.current.contains(event.target)) {
-                setShowResults(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleSearch = (query) => {
-        setSearchQuery(query);
-        
-        if (query.trim() === '') {
-            setSearchResults([]);
-            setShowResults(false);
-            return;
-        }
-
-        const results = [];
-        const lowerCaseQuery = query.toLowerCase();
-
-        // Search through all anime and products
-        Object.keys(productDatabase).forEach(animeKey => {
-            const anime = productDatabase[animeKey];
-            
-            // Check if anime title matches
-            if (anime.title.toLowerCase().includes(lowerCaseQuery)) {
-                results.push({
-                    type: 'anime',
-                    title: anime.title,
-                    description: anime.description,
-                    key: animeKey
-                });
-            }
-            
-            // Check if any product matches
-            anime.products.forEach(product => {
-                if (product.name.toLowerCase().includes(lowerCaseQuery)) {
-                    results.push({
-                        type: 'product',
-                        ...product,
-                        animeTitle: anime.title,
-                        animeKey: animeKey
-                    });
-                }
-            });
-        });
-
-        setSearchResults(results);
-        setShowResults(results.length > 0);
-    };
-
-    const handleResultClick = (result) => {
-        if (result.type === 'anime') {
-            onSearchResultClick(result.key);
-        } else {
-            onSearchResultClick(result.animeKey, result);
-        }
-        setShowResults(false);
-        setSearchQuery('');
-    };
-
-    const handleViewAllResults = () => {
-        onSearch(searchQuery);
-        setShowResults(false);
-    };
-
-    return (
-        <div className="search-bar" ref={searchRef}>
-            <input 
-                type="text" 
-                placeholder="Search for costumes, accessories..." 
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => searchQuery && setShowResults(true)}
-            />
-            <button onClick={() => onSearch(searchQuery)}><i className="fas fa-search"></i></button>
-            
-            {showResults && (
-                <div className="search-results active">
-                    {searchResults.slice(0, 5).map((result, index) => (
-                        <div 
-                            key={index} 
-                            className="search-result-item"
-                            onClick={() => handleResultClick(result)}
-                        >
-                            {result.type === 'product' && (
-                                <div 
-                                    className="search-result-img" 
-                                    style={{ backgroundImage: `url(${result.image})` }}
-                                ></div>
-                            )}
-                            <div className="search-result-info">
-                                <div className="search-result-name">
-                                    {result.type === 'anime' ? result.title : result.name}
-                                </div>
-                                {result.type === 'product' && (
-                                    <div className="search-result-price">₹{result.price.toLocaleString()}</div>
-                                )}
-                                <div className="search-result-category">
-                                    {result.type === 'anime' ? 'Anime Category' : result.animeTitle}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    {searchResults.length > 5 && (
-                        <div 
-                            className="search-result-item text-center" 
-                            style={{ justifyContent: 'center', fontWeight: '600', color: 'var(--primary)' }}
-                            onClick={handleViewAllResults}
-                        >
-                            View all {searchResults.length} results
-                        </div>
-                    )}
-                    {searchResults.length === 0 && (
-                        <div className="no-results">No results found for "{searchQuery}"</div>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-};
-
-// Product Gallery Component with Zoom
-const ProductGallery = ({ product, images = [] }) => {
-    const [selectedImage, setSelectedImage] = useState(product.image);
-    const [isZoomed, setIsZoomed] = useState(false);
-    
-    // If no additional images provided, use the product image
-    const productImages = images.length > 0 ? images : [product.image];
-
-    const handleThumbnailClick = (image) => {
-        setSelectedImage(image);
-        setIsZoomed(false);
-    };
-
-    const handleImageClick = () => {
-        setIsZoomed(!isZoomed);
-    };
-
-    return (
-        <div className="product-gallery">
-            <div 
-                className={`product-zoom-container ${isZoomed ? 'zoomed' : ''}`}
-                onClick={handleImageClick}
-            >
-                <div 
-                    className="product-zoom-img"
-                    style={{ backgroundImage: `url(${selectedImage})` }}
-                ></div>
-            </div>
-            <div className="product-thumbnails">
-                {productImages.map((image, index) => (
-                    <div 
-                        key={index}
-                        className={`product-thumbnail ${selectedImage === image ? 'active' : ''}`}
-                        style={{ backgroundImage: `url(${image})` }}
-                        onClick={() => handleThumbnailClick(image)}
-                    ></div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-// Search Results Modal Component
-const SearchResultsModal = ({ isOpen, onClose, searchQuery, searchResults, onProductClick, onCategoryClick }) => {
-    return (
-        <Modal isOpen={isOpen} onClose={onClose} size="search-modal">
-            <h2 className="modal-title">Search Results for "{searchQuery}"</h2>
-            <div className="search-results-container">
-                {searchResults.length > 0 ? (
-                    <div>
-                        <h3 className="search-results-title">
-                            Found {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'}
-                        </h3>
-                        <div className="search-results-grid">
-                            {searchResults.map((result, index) => (
-                                <div 
-                                    key={index} 
-                                    className="search-result-card"
-                                    onClick={() => {
-                                        if (result.type === 'anime') {
-                                            onCategoryClick(result.key);
-                                        } else {
-                                            onProductClick(result);
-                                        }
-                                        onClose();
-                                    }}
-                                >
-                                    <div 
-                                        className="search-result-card-img"
-                                        style={{ backgroundImage: `url(${result.type === 'product' ? result.image : 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'})` }}
-                                    ></div>
-                                    <div className="search-result-card-info">
-                                        <div className="search-result-card-name">
-                                            {result.type === 'anime' ? result.title : result.name}
-                                        </div>
-                                        {result.type === 'product' && (
-                                            <div className="search-result-card-price">
-                                                ₹{result.price.toLocaleString()}
-                                            </div>
-                                        )}
-                                        <div className="search-result-card-category">
-                                            {result.type === 'anime' ? 'Anime Category' : result.animeTitle}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ) : (
-                    <div className="empty-cart">
-                        <i className="fas fa-search"></i>
-                        <p>No results found for "{searchQuery}"</p>
-                        <button className="cta-button" onClick={onClose}>Continue Shopping</button>
-                    </div>
-                )}
-            </div>
-        </Modal>
-    );
-};
-
 
         // Render the app
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
-</html>   
+</html>
