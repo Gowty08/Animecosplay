@@ -1,0 +1,248 @@
+{
+  "one-piece": {
+    "title": "One Piece Costumes",
+    "description": "Dress up as your favorite pirates from the Grand Line!",
+    "products": [
+      {
+        "id": 1,
+        "name": "Monkey D. Luffy Costume",
+        "price": 2499,
+        "rating": 4.8,
+        "reviews": 342,
+        "image": "https://m.media-amazon.com/images/I/61iXeNizOGL._AC_UY1100_.jpg",
+        "badge": "Best Seller",
+        "description": "Complete Luffy costume with authentic straw hat, red vest, and blue shorts. Perfect for any pirate adventure!",
+        "category": "one-piece",
+        "sizes": ["S", "M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 2,
+        "name": "Roronoa Zoro Swordsman Outfit",
+        "price": 2899,
+        "rating": 4.7,
+        "reviews": 215,
+        "image": "https://geekmonkey.in/cdn/shop/files/83_01ecf235-4f07-46b5-a143-e3308a85fee2.jpg?v=1711413874",
+        "badge": "Popular",
+        "description": "Zoro's iconic green haramaki with three sword replica set. Become the world's greatest swordsman!",
+        "category": "one-piece",
+        "sizes": ["M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 3,
+        "name": "Sanji Black Leg Cook Uniform",
+        "price": 2699,
+        "rating": 4.6,
+        "reviews": 187,
+        "image": "https://images-cdn.ubuy.co.in/66f0e5bc23eaba641e51cba3-anime-costume-chef-sanji-cosplay-black.jpg",
+        "badge": "New",
+        "description": "Sanji's elegant black suit with blonde wig and signature eyebrow. Cook up some trouble in style!",
+        "category": "one-piece",
+        "sizes": ["S", "M", "L", "XL"],
+        "inStock": true,
+        "featured": false
+      },
+      {
+        "id": 4,
+        "name": "Nami Navigator Costume",
+        "price": 2399,
+        "rating": 4.5,
+        "reviews": 156,
+        "image": "https://onepiece.b-cdn.net/wp-content/uploads/2021/12/Anime-Nami-Cosplay-Costumes-Set-Dress-Accessories-Suit-Adult-Unisex-Prop.jpg",
+        "badge": "Hot",
+        "description": "Nami's orange bikini top and shorts with weather staff replica. Navigate your way to the best costume!",
+        "category": "one-piece",
+        "sizes": ["XS", "S", "M"],
+        "inStock": true,
+        "featured": true
+      }
+    ]
+  },
+  "naruto": {
+    "title": "Naruto Costumes",
+    "description": "Become a ninja from the Hidden Leaf Village!",
+    "products": [
+      {
+        "id": 11,
+        "name": "Naruto Uzumaki Sage Mode",
+        "price": 2799,
+        "rating": 4.9,
+        "reviews": 298,
+        "image": "https://images-na.ssl-images-amazon.com/images/I/51HZv%2BkAPEL.jpg",
+        "badge": "Best Seller",
+        "description": "Naruto's iconic orange jumpsuit with Konoha headband and sage mode accessories. Believe it!",
+        "category": "naruto",
+        "sizes": ["S", "M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 12,
+        "name": "Sasuke Uchiha Akatsuki Cloak",
+        "price": 3199,
+        "rating": 4.8,
+        "reviews": 234,
+        "image": "https://images-cdn.ubuy.co.in/634f3c5b2f66e254180d1302-fokicos-naruto-akatsuki-cloak-unisex.jpg",
+        "badge": "Premium",
+        "description": "Sasuke's Akatsuki cloak with sharingan contacts and sword. Avenger style perfected!",
+        "category": "naruto",
+        "sizes": ["S", "M", "L"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 13,
+        "name": "Kakashi Hatake Jonin Uniform",
+        "price": 2999,
+        "rating": 4.7,
+        "reviews": 189,
+        "image": "https://narutoshop.fr/wp-content/uploads/2024/07/description-image-4-27.jpeg",
+        "badge": "Popular",
+        "description": "Kakashi's jonin uniform with mask, sharingan eye, and headband. Copy ninja style!",
+        "category": "naruto",
+        "sizes": ["M", "L", "XL"],
+        "inStock": true,
+        "featured": false
+      }
+    ]
+  },
+  "attack-on-titan": {
+    "title": "Attack on Titan Costumes",
+    "description": "Join the Survey Corps and fight against the Titans!",
+    "products": [
+      {
+        "id": 21,
+        "name": "Levi Ackerman Uniform",
+        "price": 3499,
+        "rating": 4.9,
+        "reviews": 267,
+        "image": "https://i.pinimg.com/736x/cb/d2/c5/cbd2c54f6e7a60658ad1896201b97218.jpg",
+        "badge": "Best Seller",
+        "description": "Levi's Survey Corps uniform with ODM gear replica and cape. Humanity's strongest soldier!",
+        "category": "attack-on-titan",
+        "sizes": ["S", "M", "L"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 22,
+        "name": "Eren Yeager Cosplay Costume",
+        "price": 3299,
+        "rating": 4.7,
+        "reviews": 198,
+        "image": "https://img.drz.lazcdn.com/static/bd/p/34aa6c685eefa648da6ba26ae1140c2f.jpg_960x960q80.jpg_.webp",
+        "badge": "New",
+        "description": "Eren's final season uniform with determined expression wig. Fight for freedom!",
+        "category": "attack-on-titan",
+        "sizes": ["M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      }
+    ]
+  },
+  "demon-slayer": {
+    "title": "Demon Slayer Costumes",
+    "description": "Join the Demon Slayer Corps and master Breathing Techniques!",
+    "products": [
+      {
+        "id": 31,
+        "name": "Tanjiro Kamado Uniform",
+        "price": 2999,
+        "rating": 4.8,
+        "reviews": 223,
+        "image": "https://i.pinimg.com/736x/ab/63/d8/ab63d80056418c01d7c52cf3aefae0f2.jpg",
+        "badge": "Popular",
+        "description": "Tanjiro's checkered haori with nichirin sword replica. Water Breathing ready!",
+        "category": "demon-slayer",
+        "sizes": ["S", "M", "L"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 32,
+        "name": "Nezuko Kamado Demon Form",
+        "price": 2699,
+        "rating": 4.6,
+        "reviews": 176,
+        "image": "https://images-cdn.ubuy.co.in/634b42d34f58be3a4c078c13-fallinoce-with-wig-demon-slayer-cosplay.jpg",
+        "badge": "Hot",
+        "description": "Nezuko's kimono with bamboo muzzle and demon contacts. Protect your family!",
+        "category": "demon-slayer",
+        "sizes": ["XS", "S", "M"],
+        "inStock": true,
+        "featured": false
+      }
+    ]
+  },
+  "my-hero-academia": {
+    "title": "My Hero Academia Costumes",
+    "description": "Become a hero from UA High School!",
+    "products": [
+      {
+        "id": 41,
+        "name": "Izuku Midoriya Hero Costume",
+        "price": 3199,
+        "rating": 4.7,
+        "reviews": 245,
+        "image": "https://m.media-amazon.com/images/I/61YdIa9d2yL._AC_UY1100_.jpg",
+        "badge": "New",
+        "description": "Deku's green hero costume with mask and accessories. Plus Ultra!",
+        "category": "my-hero-academia",
+        "sizes": ["S", "M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 42,
+        "name": "Katsuki Bakugo Cosplay Costume",
+        "price": 3399,
+        "rating": 4.8,
+        "reviews": 198,
+        "image": "https://www.ubuy.co.in/productimg/?image=aHR0cHM6Ly9pbWFnZXMtY2RuLnVidXkucGUvNjUzZjdjNDNhOWY1OTkyYjQ0NTIyYzgzLW15LWhlcm8tYWNhZGVtaWEtYmFrdWdvLWthdHN1a2ktY29tYmF0cy5qcGc.jpg",
+        "badge": "Premium",
+        "description": "Bakugo's explosive hero costume with grenade gauntlets. The future number one hero!",
+        "category": "my-hero-academia",
+        "sizes": ["M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      }
+    ]
+  },
+  "jujutsu-kaisen": {
+    "title": "Jujutsu Kaisen Costumes",
+    "description": "Master cursed energy and become a Jujutsu Sorcerer!",
+    "products": [
+      {
+        "id": 51,
+        "name": "Yuji Itadori Jujutsu Costume",
+        "price": 2899,
+        "rating": 4.6,
+        "reviews": 167,
+        "image": "https://images-cdn.ubuy.co.in/66144090a438e067d2423627-jujutsu-kaisen-s-yuji-itadori-anime.jpg",
+        "badge": "Popular",
+        "description": "Yuji's Jujutsu High uniform with pink hair. Eat this finger and become the vessel!",
+        "category": "jujutsu-kaisen",
+        "sizes": ["S", "M", "L"],
+        "inStock": true,
+        "featured": true
+      },
+      {
+        "id": 52,
+        "name": "Gojo Satoru Blindfold Style",
+        "price": 3599,
+        "rating": 4.9,
+        "reviews": 289,
+        "image": "https://m.media-amazon.com/images/I/61DWH1h3zdL._AC_UY1100_.jpg",
+        "badge": "Best Seller",
+        "description": "Gojo's iconic blindfold look with white hair and Jujutsu High uniform. The strongest sorcerer!",
+        "category": "jujutsu-kaisen",
+        "sizes": ["M", "L", "XL"],
+        "inStock": true,
+        "featured": true
+      }
+    ]
+  }
+}

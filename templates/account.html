@@ -1,0 +1,1342 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - My Account{% endblock %}
+
+{% block content %}
+<div id="account-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const AccountApp = () => {
+        const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
+        const [activeTab, setActiveTab] = React.useState('profile');
+        const [profileData, setProfileData] = React.useState({
+            name: '',
+            email: '',
+            phone: '',
+            address: '',
+            city: '',
+            state: '',
+            pincode: ''
+        });
+        const [loading, setLoading] = React.useState(true);
+        const [orders, setOrders] = React.useState([]);
+        const [wishlistItems, setWishlistItems] = React.useState([]);
+
+        React.useEffect(() => {
+            // Simulate loading
+            setTimeout(() => {
+                if (!currentUser) {
+                    const proceed = confirm('Please login to access your account. Would you like to login now?');
+                    if (proceed) {
+                        window.location.href = '/login';
+                    } else {
+                        window.location.href = '/';
+                    }
+                    return;
+                }
+
+                // Initialize profile data
+                setProfileData({
+                    name: currentUser?.name || '',
+                    email: currentUser?.email || '',
+                    phone: currentUser?.phone || '+91 ',
+                    address: currentUser?.address || '',
+                    city: currentUser?.city || '',
+                    state: currentUser?.state || '',
+                    pincode: currentUser?.pincode || ''
+                });
+
+                // Load mock orders (in real app, this would be from API)
+                const mockOrders = [
+                    {
+                        id: 'AC2024001',
+                        date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                        status: 'delivered',
+                        items: [
+                            { id: 1, name: 'Naruto Uzumaki Costume', price: 2499, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
+                            { id: 2, name: 'Kunai Weapon Set', price: 899, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }
+                        ],
+                        total: 3398
+                    },
+                    {
+                        id: 'AC2024002',
+                        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+                        status: 'shipped',
+                        items: [
+                            { id: 3, name: 'Sasuke Uchiha Costume', price: 2799, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }
+                        ],
+                        total: 2799
+                    }
+                ];
+                setOrders(mockOrders);
+
+                // Load wishlist items
+                const wishlist = window.WishlistManager?.getWishlist() || [];
+                setWishlistItems(wishlist);
+
+                setLoading(false);
+            }, 800);
+        }, [currentUser]);
+
+        const handleProfileChange = (e) => {
+            setProfileData({
+                ...profileData,
+                [e.target.name]: e.target.value
+            });
+        };
+
+        const handleProfileSubmit = (e) => {
+            e.preventDefault();
+            const result = window.AuthService?.updateProfile(currentUser.id, profileData);
+            if (result?.success) {
+                setCurrentUser(result.user);
+                showToast('Profile updated successfully!', 'success');
+            } else {
+                showToast(result?.message || 'Failed to update profile', 'error');
+            }
+        };
+
+        const handleLogout = () => {
+            if (window.AuthService) {
+                window.AuthService.logout();
+                showToast('You have been logged out', 'info');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            }
+        };
+
+        const showToast = (message, type = '') => {
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        // Header Component
+        const Header = () => {
+            const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'header-action active', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, currentUser.name.split(' ')[0])
+                                    ),
+                                    React.createElement('div', { className: 'header-action', onClick: handleLogout },
+                                        React.createElement('i', { className: 'fas fa-sign-out-alt' }),
+                                        React.createElement('span', null, 'Logout')
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        // Order Status Badge Component
+        const OrderStatusBadge = ({ status }) => {
+            const statusConfig = {
+                delivered: { class: 'status-delivered', icon: 'fa-check-circle', text: 'Delivered' },
+                shipped: { class: 'status-shipped', icon: 'fa-shipping-fast', text: 'Shipped' },
+                processing: { class: 'status-processing', icon: 'fa-cog', text: 'Processing' },
+                cancelled: { class: 'status-cancelled', icon: 'fa-times-circle', text: 'Cancelled' }
+            };
+
+            const config = statusConfig[status] || statusConfig.processing;
+
+            return React.createElement('div', { className: `order-status ${config.class}` },
+                React.createElement('i', { className: `fas ${config.icon}` }),
+                config.text
+            );
+        };
+
+        // Security Item Component
+        const SecurityItem = ({ icon, title, description, buttonText, isDanger = false }) => {
+            return React.createElement('div', { className: 'security-item' },
+                React.createElement('i', { className: `fas ${icon}` }),
+                React.createElement('div', { className: 'security-info' },
+                    React.createElement('h4', null, title),
+                    React.createElement('p', null, description)
+                ),
+                React.createElement('button', { 
+                    className: `security-action-btn ${isDanger ? 'danger' : ''}` 
+                }, buttonText)
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        if (!currentUser) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        return React.createElement('div', { className: 'account-page-enhanced' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'account-header' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        ' Back to Store'
+                    ),
+                    React.createElement('h1', { className: 'section-title' }, 
+                        React.createElement('i', { className: 'fas fa-user-circle', style: { color: 'var(--primary)', marginRight: '15px' } }),
+                        'My Account'
+                    )
+                ),
+                React.createElement('div', { className: 'account-container-enhanced' },
+                    React.createElement('div', { className: 'account-sidebar-enhanced' },
+                        React.createElement('div', { className: 'user-welcome' },
+                            React.createElement('div', { className: 'user-avatar-large' },
+                                currentUser.name.charAt(0).toUpperCase()
+                            ),
+                            React.createElement('div', { className: 'user-info' },
+                                React.createElement('h3', null, currentUser.name),
+                                React.createElement('p', null, currentUser.email)
+                            )
+                        ),
+                        React.createElement('ul', { className: 'account-menu-enhanced' },
+                            [
+                                { id: 'profile', icon: 'fa-user', label: 'Profile', count: null },
+                                { id: 'orders', icon: 'fa-shopping-bag', label: 'Orders', count: orders.length },
+                                { id: 'wishlist', icon: 'fa-heart', label: 'Wishlist', count: wishlistItems.length },
+                                { id: 'addresses', icon: 'fa-map-marker-alt', label: 'Addresses', count: null },
+                                { id: 'security', icon: 'fa-shield-alt', label: 'Security', count: null }
+                            ].map(tab =>
+                                React.createElement('li', { key: tab.id },
+                                    React.createElement('a', {
+                                        href: '#',
+                                        className: activeTab === tab.id ? 'active' : '',
+                                        onClick: (e) => { e.preventDefault(); setActiveTab(tab.id); }
+                                    },
+                                        React.createElement('i', { className: `fas ${tab.icon}` }),
+                                        React.createElement('span', null, tab.label),
+                                        tab.count !== null && tab.count > 0 && 
+                                            React.createElement('span', { className: 'menu-count' }, tab.count)
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: 'account-actions' },
+                            React.createElement('button', {
+                                className: 'logout-btn',
+                                onClick: handleLogout
+                            },
+                                React.createElement('i', { className: 'fas fa-sign-out-alt' }),
+                                ' Logout'
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'account-content-enhanced' },
+                        activeTab === 'profile' && React.createElement('div', { className: 'account-section-enhanced' },
+                            React.createElement('div', { className: 'section-header' },
+                                React.createElement('h2', { className: 'section-title-enhanced' }, 'Profile Information'),
+                                React.createElement('p', null, 'Manage your personal information and account settings')
+                            ),
+                            React.createElement('div', { className: 'profile-section' },
+                                React.createElement('div', { className: 'profile-avatar-section' },
+                                    React.createElement('div', { className: 'profile-avatar-large' },
+                                        currentUser.name.charAt(0).toUpperCase()
+                                    ),
+                                    React.createElement('button', { className: 'change-avatar-btn' },
+                                        React.createElement('i', { className: 'fas fa-camera' }),
+                                        ' Change Photo'
+                                    )
+                                ),
+                                React.createElement('form', { onSubmit: handleProfileSubmit, className: 'profile-form' },
+                                    React.createElement('div', { className: 'form-grid' },
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-name' }, 'Full Name *'),
+                                            React.createElement('input', {
+                                                type: 'text',
+                                                id: 'account-name',
+                                                name: 'name',
+                                                className: 'form-control',
+                                                value: profileData.name,
+                                                onChange: handleProfileChange,
+                                                required: true,
+                                                placeholder: 'Enter your full name'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-email' }, 'Email Address *'),
+                                            React.createElement('input', {
+                                                type: 'email',
+                                                id: 'account-email',
+                                                name: 'email',
+                                                className: 'form-control',
+                                                value: profileData.email,
+                                                onChange: handleProfileChange,
+                                                required: true,
+                                                placeholder: 'your@email.com'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-phone' }, 'Phone Number'),
+                                            React.createElement('input', {
+                                                type: 'tel',
+                                                id: 'account-phone',
+                                                name: 'phone',
+                                                className: 'form-control',
+                                                value: profileData.phone,
+                                                onChange: handleProfileChange,
+                                                placeholder: '+91 98765 43210'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group full-width' },
+                                            React.createElement('label', { htmlFor: 'account-address' }, 'Address'),
+                                            React.createElement('input', {
+                                                type: 'text',
+                                                id: 'account-address',
+                                                name: 'address',
+                                                className: 'form-control',
+                                                value: profileData.address,
+                                                onChange: handleProfileChange,
+                                                placeholder: 'Street address'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-city' }, 'City'),
+                                            React.createElement('input', {
+                                                type: 'text',
+                                                id: 'account-city',
+                                                name: 'city',
+                                                className: 'form-control',
+                                                value: profileData.city,
+                                                onChange: handleProfileChange,
+                                                placeholder: 'City'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-state' }, 'State'),
+                                            React.createElement('input', {
+                                                type: 'text',
+                                                id: 'account-state',
+                                                name: 'state',
+                                                className: 'form-control',
+                                                value: profileData.state,
+                                                onChange: handleProfileChange,
+                                                placeholder: 'State'
+                                            })
+                                        ),
+                                        React.createElement('div', { className: 'form-group' },
+                                            React.createElement('label', { htmlFor: 'account-pincode' }, 'PIN Code'),
+                                            React.createElement('input', {
+                                                type: 'text',
+                                                id: 'account-pincode',
+                                                name: 'pincode',
+                                                className: 'form-control',
+                                                value: profileData.pincode,
+                                                onChange: handleProfileChange,
+                                                placeholder: 'PIN Code'
+                                            })
+                                        )
+                                    ),
+                                    React.createElement('div', { className: 'form-actions' },
+                                        React.createElement('button', { 
+                                            type: 'submit', 
+                                            className: 'save-btn-primary' 
+                                        }, 
+                                            React.createElement('i', { className: 'fas fa-save' }),
+                                            ' Save Changes'
+                                        ),
+                                        React.createElement('button', { 
+                                            type: 'button', 
+                                            className: 'cancel-btn',
+                                            onClick: () => setProfileData({
+                                                name: currentUser.name,
+                                                email: currentUser.email,
+                                                phone: currentUser.phone || '+91 ',
+                                                address: currentUser.address || '',
+                                                city: currentUser.city || '',
+                                                state: currentUser.state || '',
+                                                pincode: currentUser.pincode || ''
+                                            })
+                                        }, 'Cancel')
+                                    )
+                                )
+                            )
+                        ),
+
+                        activeTab === 'orders' && React.createElement('div', { className: 'account-section-enhanced' },
+                            React.createElement('div', { className: 'section-header' },
+                                React.createElement('h2', { className: 'section-title-enhanced' }, 'Order History'),
+                                React.createElement('p', null, 'Track and manage your recent orders')
+                            ),
+                            orders.length > 0 ? 
+                                React.createElement('div', { className: 'order-history-enhanced' },
+                                    orders.map(order =>
+                                        React.createElement('div', { key: order.id, className: 'order-card-enhanced' },
+                                            React.createElement('div', { className: 'order-header-enhanced' },
+                                                React.createElement('div', { className: 'order-info' },
+                                                    React.createElement('div', { className: 'order-id' }, `Order #${order.id}`),
+                                                    React.createElement('div', { className: 'order-date' },
+                                                        React.createElement('i', { className: 'fas fa-calendar' }),
+                                                        order.date.toLocaleDateString('en-IN', {
+                                                            day: 'numeric',
+                                                            month: 'long',
+                                                            year: 'numeric'
+                                                        })
+                                                    )
+                                                ),
+                                                React.createElement(OrderStatusBadge, { status: order.status })
+                                            ),
+                                            React.createElement('div', { className: 'order-items-enhanced' },
+                                                order.items.map(item =>
+                                                    React.createElement('div', { key: item.id, className: 'order-item-enhanced' },
+                                                        React.createElement('div', {
+                                                            className: 'order-item-img',
+                                                            style: { backgroundImage: `url(${item.image})` }
+                                                        }),
+                                                        React.createElement('div', { className: 'order-item-details' },
+                                                            React.createElement('div', { className: 'order-item-name' }, item.name),
+                                                            React.createElement('div', { className: 'order-item-price' }, `₹${item.price.toLocaleString()}`)
+                                                        )
+                                                    )
+                                                )
+                                            ),
+                                            React.createElement('div', { className: 'order-footer-enhanced' },
+                                                React.createElement('div', { className: 'order-total-enhanced' },
+                                                    React.createElement('span', null, 'Total Amount:'),
+                                                    React.createElement('span', null, `₹${order.total.toFixed(0)}`)
+                                                ),
+                                                React.createElement('div', { className: 'order-actions' },
+                                                    React.createElement('button', { className: 'order-action-btn' },
+                                                        React.createElement('i', { className: 'fas fa-eye' }),
+                                                        ' View Details'
+                                                    ),
+                                                    order.status === 'delivered' && 
+                                                        React.createElement('button', { className: 'order-action-btn primary' },
+                                                            React.createElement('i', { className: 'fas fa-redo' }),
+                                                            ' Reorder'
+                                                        )
+                                                )
+                                            )
+                                        )
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'empty-state' },
+                                    React.createElement('i', { className: 'fas fa-shopping-bag' }),
+                                    React.createElement('h3', null, 'No Orders Yet'),
+                                    React.createElement('p', null, 'You haven\'t placed any orders yet. Start exploring our anime collection!'),
+                                    React.createElement('a', { href: '/', className: 'cta-button' }, 
+                                        React.createElement('i', { className: 'fas fa-store' }),
+                                        ' Start Shopping'
+                                    )
+                                )
+                        ),
+
+                        activeTab === 'wishlist' && React.createElement('div', { className: 'account-section-enhanced' },
+                            React.createElement('div', { className: 'section-header' },
+                                React.createElement('h2', { className: 'section-title-enhanced' }, 'My Wishlist'),
+                                React.createElement('p', null, 'Your favorite anime costumes and accessories')
+                            ),
+                            wishlistItems.length > 0 ?
+                                React.createElement('div', { className: 'wishlist-section' },
+                                    React.createElement('div', { className: 'wishlist-stats' },
+                                        React.createElement('div', { className: 'wishlist-count' },
+                                            `${wishlistItems.length} ${wishlistItems.length === 1 ? 'item' : 'items'} saved`
+                                        )
+                                    ),
+                                    React.createElement('div', { className: 'products' },
+                                        wishlistItems.slice(0, 6).map(product =>
+                                            React.createElement('div', { key: product.id, className: 'product-card' },
+                                                React.createElement('div', { 
+                                                    className: 'product-img', 
+                                                    style: { backgroundImage: `url(${product.image})` } 
+                                                }),
+                                                React.createElement('div', { className: 'product-info' },
+                                                    React.createElement('div', { className: 'product-title' }, product.name),
+                                                    React.createElement('div', { className: 'product-price' }, `₹${product.price.toLocaleString()}`),
+                                                    React.createElement('button', { className: 'view-details' },
+                                                        React.createElement('i', { className: 'fas fa-eye' }),
+                                                        ' View Product'
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    wishlistItems.length > 6 &&
+                                        React.createElement('div', { className: 'view-all-container' },
+                                            React.createElement('a', { href: '/wishlist', className: 'view-all-btn' },
+                                                'View All Wishlist Items',
+                                                React.createElement('i', { className: 'fas fa-arrow-right' })
+                                            )
+                                        )
+                                ) :
+                                React.createElement('div', { className: 'empty-state' },
+                                    React.createElement('i', { className: 'fas fa-heart' }),
+                                    React.createElement('h3', null, 'Wishlist Empty'),
+                                    React.createElement('p', null, 'Save your favorite anime costumes here for easy access later!'),
+                                    React.createElement('a', { href: '/', className: 'cta-button' },
+                                        React.createElement('i', { className: 'fas fa-store' }),
+                                        ' Browse Collection'
+                                    )
+                                )
+                        ),
+
+                        activeTab === 'addresses' && React.createElement('div', { className: 'account-section-enhanced' },
+                            React.createElement('div', { className: 'section-header' },
+                                React.createElement('h2', { className: 'section-title-enhanced' }, 'Saved Addresses'),
+                                React.createElement('p', null, 'Manage your delivery addresses')
+                            ),
+                            React.createElement('div', { className: 'empty-state' },
+                                React.createElement('i', { className: 'fas fa-map-marker-alt' }),
+                                React.createElement('h3', null, 'No Saved Addresses'),
+                                React.createElement('p', null, 'Add your delivery addresses for faster checkout'),
+                                React.createElement('button', { className: 'cta-button' },
+                                    React.createElement('i', { className: 'fas fa-plus' }),
+                                    ' Add New Address'
+                                )
+                            )
+                        ),
+
+                        activeTab === 'security' && React.createElement('div', { className: 'account-section-enhanced' },
+                            React.createElement('div', { className: 'section-header' },
+                                React.createElement('h2', { className: 'section-title-enhanced' }, 'Security Settings'),
+                                React.createElement('p', null, 'Manage your account security and password')
+                            ),
+                            React.createElement('div', { className: 'security-section' },
+                                React.createElement(SecurityItem, {
+                                    icon: 'fa-key',
+                                    title: 'Change Password',
+                                    description: 'Update your password regularly to keep your account secure',
+                                    buttonText: 'Change'
+                                }),
+                                React.createElement(SecurityItem, {
+                                    icon: 'fa-shield-alt',
+                                    title: 'Two-Factor Authentication',
+                                    description: 'Add an extra layer of security to your account',
+                                    buttonText: 'Enable'
+                                }),
+                                React.createElement(SecurityItem, {
+                                    icon: 'fa-trash',
+                                    title: 'Delete Account',
+                                    description: 'Permanently delete your account and all associated data',
+                                    buttonText: 'Delete',
+                                    isDanger: true
+                                })
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(AccountApp), document.getElementById('account-app'));
+</script>
+
+<style>
+    /* Enhanced Account Page Styles */
+    .account-page-enhanced {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .account-header {
+        padding: 40px 0 20px;
+        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: 30px;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--accent);
+    }
+
+    .account-container-enhanced {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .account-sidebar-enhanced {
+        background: white;
+        border-radius: 12px;
+        padding: 0;
+        box-shadow: var(--shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+        overflow: hidden;
+    }
+
+    .user-welcome {
+        padding: 30px;
+        background: linear-gradient(135deg, var(--secondary), var(--accent));
+        color: white;
+        text-align: center;
+    }
+
+    .user-avatar-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 600;
+        margin: 0 auto 15px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .user-info h3 {
+        margin: 0 0 5px;
+        font-size: 1.3rem;
+    }
+
+    .user-info p {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 0.9rem;
+    }
+
+    .account-menu-enhanced {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .account-menu-enhanced li {
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .account-menu-enhanced li:last-child {
+        border-bottom: none;
+    }
+
+    .account-menu-enhanced a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 25px;
+        color: black;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .account-menu-enhanced a:hover {
+        background: rgba(67, 97, 238, 0.05);
+        color: var(--accent);
+    }
+
+    .account-menu-enhanced a.active {
+        background: rgba(67, 97, 238, 0.1);
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    .account-menu-enhanced a.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--primary);
+    }
+
+    .account-menu-enhanced i {
+        width: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .menu-count {
+        background: var(--primary);
+        color: white;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-left: auto;
+    }
+
+    .account-actions {
+        padding: 20px 25px;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .logout-btn {
+        background: transparent;
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        justify-content: center;
+        transition: var(--transition);
+    }
+
+    .logout-btn:hover {
+        background: var(--danger);
+        color: white;
+    }
+
+    .account-content-enhanced {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+
+    .account-section-enhanced {
+        animation: fadeIn 0.5s ease;
+    }
+
+    .section-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .section-title-enhanced {
+        font-size: 1.8rem;
+        color: var(--secondary);
+        margin-bottom: 8px;
+    }
+
+    .section-header p {
+        color: var(--gray);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    /* Profile Section Styles */
+    .profile-section {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 40px;
+    }
+
+    .profile-avatar-section {
+        text-align: center;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #ff6b9c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin: 0 auto 15px;
+    }
+
+    .change-avatar-btn {
+        background: var(--light-gray);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 auto;
+        transition: var(--transition);
+    }
+
+    .change-avatar-btn:hover {
+        background: #ddd;
+        color: black;
+    }
+
+    .profile-form {
+        flex: 1;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: black;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-start;
+    }
+
+    .save-btn-primary {
+        background: var(--primary);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .save-btn-primary:hover {
+        background: #e02e5a;
+        transform: translateY(-2px);
+    }
+
+    .cancel-btn {
+        background: var(--light-gray);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .cancel-btn:hover {
+        background: #ddd;
+        color: black;
+    }
+
+    /* Order History Styles */
+    .order-history-enhanced {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .order-card-enhanced {
+        border: 1px solid var(--light-gray);
+        border-radius: 10px;
+        padding: 25px;
+        transition: var(--transition);
+    }
+
+    .order-card-enhanced:hover {
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(255, 62, 108, 0.1);
+    }
+
+    .order-header-enhanced {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-info {
+        flex: 1;
+    }
+
+    .order-id {
+        font-weight: 600;
+        color: var(--secondary);
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .order-date {
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.9rem;
+    }
+
+    .order-status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-delivered {
+        background: #e7f7ef;
+        color: var(--success);
+    }
+
+    .status-shipped {
+        background: #e3f2fd;
+        color: var(--accent);
+    }
+
+    .status-processing {
+        background: #fff3cd;
+        color: var(--warning);
+    }
+
+    .status-cancelled {
+        background: #f8d7da;
+        color: var(--danger);
+    }
+
+    .order-items-enhanced {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .order-item-enhanced {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .order-item-img {
+        width: 80px;
+        height: 80px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+
+    .order-item-details {
+        flex: 1;
+    }
+
+    .order-item-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        line-height: 1.3;
+        color: black;
+    }
+
+    .order-item-price {
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .order-footer-enhanced {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .order-total-enhanced {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--primary);
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .order-action-btn {
+        background: var(--light-gray);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+    }
+
+    .order-action-btn:hover {
+        background: #ddd;
+        color: black;
+    }
+
+    .order-action-btn.primary {
+        background: var(--primary);
+        color: white;
+    }
+
+    .order-action-btn.primary:hover {
+        background: #e02e5a;
+    }
+
+    /* Wishlist Section */
+    .wishlist-section {
+        margin-top: 20px;
+    }
+
+    .wishlist-stats {
+        margin-bottom: 25px;
+        padding: 15px;
+        background: var(--light-gray);
+        border-radius: 8px;
+    }
+
+    .wishlist-count {
+        font-weight: 600;
+        color: var(--secondary);
+    }
+
+    .view-all-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .view-all-btn {
+        color: var(--primary);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .view-all-btn:hover {
+        gap: 12px;
+    }
+
+    /* Security Section */
+    .security-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .security-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid var(--light-gray);
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .security-item:hover {
+        border-color: var(--primary);
+    }
+
+    .security-item i {
+        font-size: 1.5rem;
+        color: var(--primary);
+        width: 40px;
+    }
+
+    .security-info {
+        flex: 1;
+    }
+
+    .security-info h4 {
+        margin: 0 0 5px;
+        color: var(--secondary);
+    }
+
+    .security-info p {
+        margin: 0;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .security-action-btn {
+        background: var(--light-gray);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .security-action-btn:hover {
+        background: #ddd;
+        color: black;
+    }
+
+    .security-action-btn.danger {
+        background: var(--danger);
+        color: white;
+    }
+
+    .security-action-btn.danger:hover {
+        background: #c82333;
+    }
+
+    /* Empty State Styles */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--gray);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--light-gray);
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Responsive Account Styles */
+    @media (max-width: 992px) {
+        .account-container-enhanced {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .account-sidebar-enhanced {
+            position: static;
+        }
+
+        .profile-section {
+            grid-template-columns: 1fr;
+            gap: 30px;
+            text-align: center;
+        }
+
+        .form-actions {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .account-header {
+            padding: 30px 0 15px;
+        }
+
+        .account-content-enhanced {
+            padding: 20px;
+        }
+
+        .section-title-enhanced {
+            font-size: 1.5rem;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .order-header-enhanced {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-footer-enhanced {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .order-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .security-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .user-welcome {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .account-header {
+            padding: 20px 0 10px;
+        }
+
+        .empty-state {
+            padding: 40px 15px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        .order-card-enhanced {
+            padding: 20px;
+        }
+
+        .order-items-enhanced {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-item-enhanced {
+            flex-direction: row;
+            text-align: left;
+            min-width: auto;
+        }
+
+        .order-item-img {
+            margin-bottom: 0;
+            margin-right: 15px;
+        }
+
+        .save-btn-primary,
+        .cancel-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .account-content-enhanced {
+            padding: 15px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .save-btn-primary,
+        .cancel-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .order-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .order-action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

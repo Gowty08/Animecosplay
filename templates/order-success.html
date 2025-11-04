@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - Order Success{% endblock %}
+
+{% block content %}
+<div id="order-success-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const OrderSuccessApp = () => {
+        return React.createElement('div', { className: 'success-page' },
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'success-icon' },
+                    React.createElement('i', { className: 'fas fa-check-circle' })
+                ),
+                React.createElement('h1', { className: 'success-title' }, 'Order Placed Successfully!'),
+                React.createElement('p', { className: 'success-message' },
+                    'Thank you for your order! Your order has been confirmed and will be shipped within 3-5 business days. ' +
+                    'You will receive a confirmation email shortly with your order details.'
+                ),
+                React.createElement('div', { className: 'success-actions' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'cta-button'
+                    }, 'Continue Shopping'),
+                    React.createElement('a', { 
+                        href: '/account', 
+                        className: 'view-details'
+                    }, 'View My Orders')
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(OrderSuccessApp), document.getElementById('order-success-app'));
+</script>
+{% endblock %}

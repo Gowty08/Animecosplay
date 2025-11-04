@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - {{ product.name if product else 'Product Not Found' }}{% endblock %}
+
+{% block content %}
+<div id="product-details-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const { AuthService } = window;
+    const { CartManager, WishlistManager } = window;
+    const { ProductUtils } = window;
+
+    const ProductDetailsApp = () => {
+        const [selectedSize, setSelectedSize] = React.useState('M');
+        const [quantity, setQuantity] = React.useState(1);
+        const [selectedImage, setSelectedImage] = React.useState('');
+        const [currentUser, setCurrentUser] = React.useState(AuthService.currentUser);
+        const product = {{ product | tojson | safe }};
+
+        React.useEffect(() => {
+            if (product && product.image) {
+                setSelectedImage(product.image);
+            }
+        }, [product]);
+
+        if (!product) {
+            return React.createElement('div', { className: 'product-details-page' },
+                React.createElement('div', { className: 'container' },
+                    React.createElement('h1', null, 'Product Not Found'),
+                    React.createElement('a', { href: '/', className: 'cta-button' }, 'Back to Home')
+                )
+            );
+        }
+
+        const handleAddToCart = () => {
+            const updatedCart = CartManager.addToCart(product, selectedSize, quantity);
+            alert(`${product.name} added to cart!`);
+        };
+
+        const handleBuyNow = () => {
+            handleAddToCart();
+            if (!currentUser) {
+                window.location.href = '/login';
+                return;
+            }
+            window.location.href = '/checkout';
+        };
+
+        const productImages = [
+            product.image,
+            "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+        ];
+
+        return React.createElement('div', { className: 'product-details-page' },
+            React.createElement('div', { className: 'container' },
+                React.createElement('a', { 
+                    href: '/', 
+                    className: 'view-all',
+                    style: { marginBottom: '30px', display: 'inline-block' }
+                },
+                    React.createElement('i', { className: 'fas fa-arrow-left' }),
+                    ' Back to Products'
+                ),
+                React.createElement('div', { className: 'product-details-container' },
+                    React.createElement('div', { className: 'product-gallery' },
+                        React.createElement('div', { 
+                            className: 'product-main-img',
+                            style: { backgroundImage: `url(${selectedImage})` }
+                        }),
+                        React.createElement('div', { className: 'product-thumbnails' },
+                            productImages.map((image, index) =>
+                                React.createElement('div', {
+                                    key: index,
+                                    className: `product-thumbnail ${selectedImage === image ? 'active' : ''}`,
+                                    style: { backgroundImage: `url(${image})` },
+                                    onClick: () => setSelectedImage(image)
+                                })
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'product-details-info' },
+                        React.createElement('h1', { className: 'product-details-title' }, product.name),
+                        React.createElement('div', { className: 'product-details-price' }, `₹${product.price.toLocaleString()}`),
+                        React.createElement('div', { className: 'product-details-rating' },
+                            ProductUtils.renderStars(product.rating),
+                            React.createElement('span', null, `${product.rating} (${product.reviews} Reviews)`)
+                        ),
+                        React.createElement('p', { className: 'product-details-description' }, product.description),
+                        
+                        React.createElement('div', { className: 'product-meta' },
+                            React.createElement('div', { className: 'meta-item' },
+                                React.createElement('i', { className: 'fas fa-box' }),
+                                React.createElement('span', null, 'Free Shipping')
+                            ),
+                            React.createElement('div', { className: 'meta-item' },
+                                React.createElement('i', { className: 'fas fa-undo' }),
+                                React.createElement('span', null, '30 Day Returns')
+                            ),
+                            React.createElement('div', { className: 'meta-item' },
+                                React.createElement('i', { className: 'fas fa-shield-alt' }),
+                                React.createElement('span', null, '1 Year Warranty')
+                            )
+                        ),
+
+                        React.createElement('div', { className: 'size-selector' },
+                            React.createElement('label', null, 'Select Size:'),
+                            React.createElement('div', { className: 'size-options' },
+                                product.sizes.map(size =>
+                                    React.createElement('div', {
+                                        key: size,
+                                        className: `size-option ${selectedSize === size ? 'active' : ''}`,
+                                        onClick: () => setSelectedSize(size)
+                                    }, size)
+                                )
+                            )
+                        ),
+
+                        React.createElement('div', { 
+                            style: { marginBottom: '20px', display: 'flex', alignItems: 'center' }
+                        },
+                            React.createElement('label', { 
+                                style: { marginRight: '15px', fontWeight: '600' }
+                            }, 'Quantity:'),
+                            React.createElement('div', { 
+                                className: 'quantity-control', 
+                                style: { display: 'flex', alignItems: 'center' }
+                            },
+                                React.createElement('button', {
+                                    className: 'quantity-btn',
+                                    onClick: () => setQuantity(Math.max(1, quantity - 1))
+                                }, '-'),
+                                React.createElement('input', {
+                                    type: 'text',
+                                    className: 'quantity-input',
+                                    value: quantity,
+                                    readOnly: true,
+                                    style: { width: '60px' }
+                                }),
+                                React.createElement('button', {
+                                    className: 'quantity-btn',
+                                    onClick: () => setQuantity(quantity + 1)
+                                }, '+')
+                            )
+                        ),
+
+                        React.createElement('div', { className: 'product-details-actions' },
+                            React.createElement('button', {
+                                className: 'add-to-cart-large',
+                                onClick: handleAddToCart
+                            },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                ' Add to Cart'
+                            ),
+                            React.createElement('button', {
+                                className: 'buy-now',
+                                onClick: handleBuyNow
+                            },
+                                React.createElement('i', { className: 'fas fa-bolt' }),
+                                ' Buy Now'
+                            )
+                        )
+                    )
+                ),
+                React.createElement('div', { className: 'reviews-section' },
+                    React.createElement('div', { className: 'reviews-header' },
+                        React.createElement('h3', { className: 'reviews-title' }, 'Customer Reviews'),
+                        React.createElement('button', { className: 'view-all' }, 'Write a Review')
+                    ),
+                    React.createElement('div', { className: 'review-item' },
+                        React.createElement('div', { className: 'review-header' },
+                            React.createElement('div', { className: 'review-author' }, 'Rahul Sharma'),
+                            React.createElement('div', { className: 'review-rating' },
+                                React.createElement('i', { className: 'fas fa-star' }),
+                                React.createElement('i', { className: 'fas fa-star' }),
+                                React.createElement('i', { className: 'fas fa-star' }),
+                                React.createElement('i', { className: 'fas fa-star' }),
+                                React.createElement('i', { className: 'fas fa-star' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'review-date' }, 'Posted on October 12, 2023'),
+                        React.createElement('p', { className: 'review-text' }, 'Amazing quality! The costume looks exactly like in the anime. Got so many compliments at the convention. Definitely worth the price!')
+                    )
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(ProductDetailsApp), document.getElementById('product-details-app'));
+</script>
+{% endblock %}

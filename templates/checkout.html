@@ -1,0 +1,1269 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - Checkout{% endblock %}
+
+{% block content %}
+<div id="checkout-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const CheckoutApp = () => {
+        const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
+        const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+        const [formData, setFormData] = React.useState({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            address: '',
+            city: '',
+            state: '',
+            pincode: '',
+            paymentMethod: 'card',
+            saveAddress: true
+        });
+        const [loading, setLoading] = React.useState(false);
+        const [errors, setErrors] = React.useState({});
+        const [currentStep, setCurrentStep] = React.useState(1);
+
+        React.useEffect(() => {
+            if (!currentUser) {
+                const proceed = confirm('Please login to proceed with checkout. Would you like to login now?');
+                if (proceed) {
+                    window.location.href = '/login';
+                } else {
+                    window.location.href = '/';
+                }
+                return;
+            }
+
+            if (cartItems.length === 0) {
+                window.location.href = '/cart';
+                return;
+            }
+
+            // Pre-fill user data
+            setFormData({
+                firstName: currentUser?.name?.split(' ')[0] || '',
+                lastName: currentUser?.name?.split(' ').slice(1).join(' ') || '',
+                email: currentUser?.email || '',
+                phone: currentUser?.phone || '+91 ',
+                address: currentUser?.address || '',
+                city: currentUser?.city || '',
+                state: currentUser?.state || '',
+                pincode: currentUser?.pincode || '',
+                paymentMethod: 'card',
+                saveAddress: true
+            });
+        }, [currentUser, cartItems]);
+
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 999 ? 0 : 99;
+        const tax = subtotal * 0.18;
+        const total = subtotal + shipping + tax;
+
+        const handleChange = (e) => {
+            const { name, value, type, checked } = e.target;
+            setFormData({
+                ...formData,
+                [name]: type === 'checkbox' ? checked : value
+            });
+            
+            // Clear error when user starts typing
+            if (errors[name]) {
+                setErrors({
+                    ...errors,
+                    [name]: ''
+                });
+            }
+        };
+
+        const validateStep1 = () => {
+            const newErrors = {};
+
+            if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+            if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+            if (!formData.email.trim()) newErrors.email = 'Email is required';
+            else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+            if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+            else if (!/^\+91\s\d{10}$/.test(formData.phone)) newErrors.phone = 'Enter valid Indian phone number';
+            if (!formData.address.trim()) newErrors.address = 'Address is required';
+            if (!formData.city.trim()) newErrors.city = 'City is required';
+            if (!formData.state.trim()) newErrors.state = 'State is required';
+            if (!formData.pincode.trim()) newErrors.pincode = 'PIN code is required';
+            else if (!/^\d{6}$/.test(formData.pincode)) newErrors.pincode = 'Enter valid 6-digit PIN code';
+
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
+
+        const handleNextStep = () => {
+            if (validateStep1()) {
+                setCurrentStep(2);
+            }
+        };
+
+        const handlePreviousStep = () => {
+            setCurrentStep(1);
+        };
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            if (!validateStep1()) return;
+
+            setLoading(true);
+            try {
+                const orderData = {
+                    id: 'AC' + Date.now(),
+                    date: new Date(),
+                    status: formData.paymentMethod === 'cod' ? 'confirmed' : 'processing',
+                    items: cartItems,
+                    shipping: formData,
+                    payment: {
+                        method: formData.paymentMethod,
+                        amount: total
+                    },
+                    total: total
+                };
+
+                // Save order to user account
+                const result = window.AuthService?.addOrder(currentUser.id, orderData);
+                if (result?.success) {
+                    // Save address if requested
+                    if (formData.saveAddress) {
+                        window.AuthService?.updateProfile(currentUser.id, {
+                            ...currentUser,
+                            phone: formData.phone,
+                            address: formData.address,
+                            city: formData.city,
+                            state: formData.state,
+                            pincode: formData.pincode
+                        });
+                    }
+
+                    // Clear cart
+                    window.CartManager?.clearCart();
+                    
+                    showToast('Order placed successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/order-success';
+                    }, 1500);
+                } else {
+                    showToast(result?.message || 'Failed to place order', 'error');
+                }
+            } catch (error) {
+                showToast('An error occurred while placing your order', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const showToast = (message, type = '') => {
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        // Header Component
+        const Header = () => {
+            const [wishlistItems, setWishlistItems] = React.useState(window.WishlistManager?.getWishlist() || []);
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'header-action', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, currentUser.name.split(' ')[0])
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        // Checkout Steps Component
+        const CheckoutSteps = () => {
+            const steps = [
+                { number: 1, title: 'Shipping', active: currentStep === 1, completed: currentStep > 1 },
+                { number: 2, title: 'Payment', active: currentStep === 2, completed: currentStep > 2 }
+            ];
+
+            return React.createElement('div', { className: 'checkout-steps' },
+                steps.map(step =>
+                    React.createElement('div', { 
+                        key: step.number,
+                        className: `checkout-step ${step.active ? 'active' : ''} ${step.completed ? 'completed' : ''}`
+                    },
+                        React.createElement('div', { className: 'step-number' },
+                            step.completed ? 
+                                React.createElement('i', { className: 'fas fa-check' }) :
+                                step.number
+                        ),
+                        React.createElement('div', { className: 'step-title' }, step.title),
+                        step.number < steps.length && React.createElement('div', { className: 'step-connector' })
+                    )
+                )
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        if (cartItems.length === 0) {
+            return React.createElement('div', { className: 'checkout-page' },
+                React.createElement(Header),
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'empty-cart-enhanced' },
+                        React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                        React.createElement('h2', null, 'Your cart is empty'),
+                        React.createElement('p', null, 'Add some amazing anime costumes to your cart before checkout!'),
+                        React.createElement('a', { href: '/', className: 'cta-button' }, 
+                            React.createElement('i', { className: 'fas fa-store' }),
+                            ' Continue Shopping'
+                        )
+                    )
+                )
+            );
+        }
+
+        return React.createElement('div', { className: 'checkout-page-enhanced' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'checkout-header' },
+                    React.createElement('a', { 
+                        href: '/cart', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        ' Back to Cart'
+                    ),
+                    React.createElement('h1', { className: 'section-title' }, 
+                        React.createElement('i', { className: 'fas fa-shopping-bag', style: { color: 'var(--primary)', marginRight: '15px' } }),
+                        'Checkout'
+                    )
+                ),
+                React.createElement(CheckoutSteps),
+                React.createElement('div', { className: 'checkout-container-enhanced' },
+                    React.createElement('div', { className: 'checkout-content' },
+                        currentStep === 1 && React.createElement('div', { className: 'checkout-form-section' },
+                            React.createElement('h2', { className: 'form-section-title' }, 'Shipping Information'),
+                            React.createElement('form', null,
+                                React.createElement('div', { className: 'form-row' },
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'firstName' }, 'First Name *'),
+                                        React.createElement('input', {
+                                            type: 'text',
+                                            id: 'firstName',
+                                            name: 'firstName',
+                                            className: `form-control ${errors.firstName ? 'error' : ''}`,
+                                            value: formData.firstName,
+                                            onChange: handleChange,
+                                            placeholder: 'Enter your first name'
+                                        }),
+                                        errors.firstName && React.createElement('div', { className: 'error-message' }, errors.firstName)
+                                    ),
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'lastName' }, 'Last Name *'),
+                                        React.createElement('input', {
+                                            type: 'text',
+                                            id: 'lastName',
+                                            name: 'lastName',
+                                            className: `form-control ${errors.lastName ? 'error' : ''}`,
+                                            value: formData.lastName,
+                                            onChange: handleChange,
+                                            placeholder: 'Enter your last name'
+                                        }),
+                                        errors.lastName && React.createElement('div', { className: 'error-message' }, errors.lastName)
+                                    )
+                                ),
+                                React.createElement('div', { className: 'form-row' },
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'email' }, 'Email Address *'),
+                                        React.createElement('input', {
+                                            type: 'email',
+                                            id: 'email',
+                                            name: 'email',
+                                            className: `form-control ${errors.email ? 'error' : ''}`,
+                                            value: formData.email,
+                                            onChange: handleChange,
+                                            placeholder: 'your@email.com'
+                                        }),
+                                        errors.email && React.createElement('div', { className: 'error-message' }, errors.email)
+                                    ),
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'phone' }, 'Phone Number *'),
+                                        React.createElement('input', {
+                                            type: 'tel',
+                                            id: 'phone',
+                                            name: 'phone',
+                                            className: `form-control ${errors.phone ? 'error' : ''}`,
+                                            value: formData.phone,
+                                            onChange: handleChange,
+                                            placeholder: '+91 98765 43210'
+                                        }),
+                                        errors.phone && React.createElement('div', { className: 'error-message' }, errors.phone)
+                                    )
+                                ),
+                                React.createElement('div', { className: 'form-group' },
+                                    React.createElement('label', { htmlFor: 'address' }, 'Delivery Address *'),
+                                    React.createElement('input', {
+                                        type: 'text',
+                                        id: 'address',
+                                        name: 'address',
+                                        className: `form-control ${errors.address ? 'error' : ''}`,
+                                        value: formData.address,
+                                        onChange: handleChange,
+                                        placeholder: 'House no., Street, Area'
+                                    }),
+                                    errors.address && React.createElement('div', { className: 'error-message' }, errors.address)
+                                ),
+                                React.createElement('div', { className: 'form-row' },
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'city' }, 'City *'),
+                                        React.createElement('input', {
+                                            type: 'text',
+                                            id: 'city',
+                                            name: 'city',
+                                            className: `form-control ${errors.city ? 'error' : ''}`,
+                                            value: formData.city,
+                                            onChange: handleChange,
+                                            placeholder: 'Enter your city'
+                                        }),
+                                        errors.city && React.createElement('div', { className: 'error-message' }, errors.city)
+                                    ),
+                                    React.createElement('div', { className: 'form-group' },
+                                        React.createElement('label', { htmlFor: 'state' }, 'State *'),
+                                        React.createElement('input', {
+                                            type: 'text',
+                                            id: 'state',
+                                            name: 'state',
+                                            className: `form-control ${errors.state ? 'error' : ''}`,
+                                            value: formData.state,
+                                            onChange: handleChange,
+                                            placeholder: 'Enter your state'
+                                        }),
+                                        errors.state && React.createElement('div', { className: 'error-message' }, errors.state)
+                                    )
+                                ),
+                                React.createElement('div', { className: 'form-group' },
+                                    React.createElement('label', { htmlFor: 'pincode' }, 'PIN Code *'),
+                                    React.createElement('input', {
+                                        type: 'text',
+                                        id: 'pincode',
+                                        name: 'pincode',
+                                        className: `form-control ${errors.pincode ? 'error' : ''}`,
+                                        value: formData.pincode,
+                                        onChange: handleChange,
+                                        placeholder: '6-digit PIN code'
+                                    }),
+                                    errors.pincode && React.createElement('div', { className: 'error-message' }, errors.pincode)
+                                ),
+                                React.createElement('div', { className: 'form-options' },
+                                    React.createElement('label', { className: 'checkbox-label' },
+                                        React.createElement('input', {
+                                            type: 'checkbox',
+                                            name: 'saveAddress',
+                                            checked: formData.saveAddress,
+                                            onChange: handleChange
+                                        }),
+                                        React.createElement('span', null, 'Save this address for future orders')
+                                    )
+                                )
+                            ),
+                            React.createElement('button', {
+                                className: 'next-step-btn',
+                                onClick: handleNextStep
+                            },
+                                'Continue to Payment',
+                                React.createElement('i', { className: 'fas fa-arrow-right' })
+                            )
+                        ),
+
+                        currentStep === 2 && React.createElement('div', { className: 'checkout-form-section' },
+                            React.createElement('h2', { className: 'form-section-title' }, 'Payment Method'),
+                            React.createElement('div', { className: 'payment-methods-enhanced' },
+                                [
+                                    { 
+                                        id: 'card', 
+                                        name: 'Credit/Debit Card', 
+                                        description: 'Pay securely with your card',
+                                        icon: 'far fa-credit-card',
+                                        popular: true
+                                    },
+                                    { 
+                                        id: 'upi', 
+                                        name: 'UPI Payment', 
+                                        description: 'Pay using UPI apps',
+                                        icon: 'fas fa-mobile-alt',
+                                        popular: true
+                                    },
+                                    { 
+                                        id: 'cod', 
+                                        name: 'Cash on Delivery', 
+                                        description: 'Pay when you receive the order',
+                                        icon: 'fas fa-money-bill-wave'
+                                    }
+                                ].map(method =>
+                                    React.createElement('div', {
+                                        key: method.id,
+                                        className: `payment-method-card ${formData.paymentMethod === method.id ? 'active' : ''}`,
+                                        onClick: () => setFormData({...formData, paymentMethod: method.id})
+                                    },
+                                        React.createElement('div', { className: 'payment-method-header' },
+                                            React.createElement('div', { className: 'payment-icon' },
+                                                React.createElement('i', { className: method.icon })
+                                            ),
+                                            React.createElement('div', { className: 'payment-method-info' },
+                                                React.createElement('div', { className: 'payment-method-name' }, method.name),
+                                                React.createElement('div', { className: 'payment-method-desc' }, method.description)
+                                            ),
+                                            React.createElement('div', { className: 'payment-selector' },
+                                                React.createElement('div', { className: `radio-dot ${formData.paymentMethod === method.id ? 'active' : ''}` })
+                                            )
+                                        ),
+                                        method.popular && React.createElement('div', { className: 'popular-badge' },
+                                            React.createElement('i', { className: 'fas fa-bolt' }),
+                                            'Popular'
+                                        )
+                                    )
+                                )
+                            ),
+                            React.createElement('div', { className: 'checkout-actions' },
+                                React.createElement('button', {
+                                    className: 'back-btn',
+                                    onClick: handlePreviousStep
+                                },
+                                    React.createElement('i', { className: 'fas fa-arrow-left' }),
+                                    ' Back to Shipping'
+                                ),
+                                React.createElement('button', {
+                                    className: 'place-order-btn-primary',
+                                    onClick: handleSubmit,
+                                    disabled: loading
+                                },
+                                    loading ? 
+                                        React.createElement(React.Fragment, null,
+                                            React.createElement('div', { className: 'btn-spinner' }),
+                                            ' Processing...'
+                                        ) :
+                                        React.createElement(React.Fragment, null,
+                                            React.createElement('i', { className: 'fas fa-lock' }),
+                                            ` Place Order - ₹${total.toFixed(0)}`
+                                        )
+                                )
+                            )
+                        )
+                    ),
+
+                    React.createElement('div', { className: 'order-summary-enhanced' },
+                        React.createElement('div', { className: 'order-summary-card' },
+                            React.createElement('h3', { className: 'summary-title' }, 'Order Summary'),
+                            React.createElement('div', { className: 'order-items-list' },
+                                cartItems.map(item =>
+                                    React.createElement('div', { key: item.id, className: 'order-summary-item' },
+                                        React.createElement('div', { className: 'item-image', 
+                                            style: { backgroundImage: `url(${item.image})` } 
+                                        }),
+                                        React.createElement('div', { className: 'item-details' },
+                                            React.createElement('div', { className: 'item-name' }, item.name),
+                                            item.size && React.createElement('div', { className: 'item-size' }, `Size: ${item.size}`),
+                                            React.createElement('div', { className: 'item-quantity' }, `Qty: ${item.quantity}`)
+                                        ),
+                                        React.createElement('div', { className: 'item-price' }, `₹${(item.price * item.quantity).toLocaleString()}`)
+                                    )
+                                )
+                            ),
+                            React.createElement('div', { className: 'order-totals' },
+                                React.createElement('div', { className: 'total-line' },
+                                    React.createElement('span', null, 'Subtotal'),
+                                    React.createElement('span', null, `₹${subtotal.toLocaleString()}`)
+                                ),
+                                React.createElement('div', { className: 'total-line' },
+                                    React.createElement('span', null, 
+                                        React.createElement('span', null, 'Shipping'),
+                                        shipping === 0 ? React.createElement('span', { className: 'free-shipping-badge' }, 'FREE') : null
+                                    ),
+                                    React.createElement('span', null, shipping === 0 ? 'FREE' : `₹${shipping}`)
+                                ),
+                                React.createElement('div', { className: 'total-line' },
+                                    React.createElement('span', null, 'Tax (18%)'),
+                                    React.createElement('span', null, `₹${tax.toFixed(0)}`)
+                                ),
+                                shipping === 0 && subtotal < 999 && 
+                                    React.createElement('div', { className: 'shipping-notice' },
+                                        React.createElement('i', { className: 'fas fa-truck' }),
+                                        ` Add ₹${(1000 - subtotal).toFixed(0)} more for FREE shipping!`
+                                    ),
+                                React.createElement('div', { className: 'grand-total' },
+                                    React.createElement('span', null, 'Total Amount'),
+                                    React.createElement('span', null, `₹${total.toFixed(0)}`)
+                                )
+                            ),
+                            React.createElement('div', { className: 'delivery-info' },
+                                React.createElement('i', { className: 'fas fa-shipping-fast' }),
+                                React.createElement('div', null,
+                                    React.createElement('div', { className: 'delivery-title' }, 'Estimated Delivery'),
+                                    React.createElement('div', { className: 'delivery-date' }, '3-5 business days')
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(CheckoutApp), document.getElementById('checkout-app'));
+</script>
+
+<style>
+    /* Enhanced Checkout Page Styles */
+    .checkout-page-enhanced {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .checkout-header {
+        padding: 40px 0 20px;
+        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: 30px;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--accent);
+    }
+
+    .checkout-steps {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 40px;
+        position: relative;
+    }
+
+    .checkout-step {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        max-width: 200px;
+        position: relative;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--light-gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--gray);
+        z-index: 2;
+        transition: var(--transition);
+    }
+
+    .checkout-step.active .step-number {
+        background: var(--primary);
+        color: white;
+    }
+
+    .checkout-step.completed .step-number {
+        background: var(--success);
+        color: white;
+    }
+
+    .step-title {
+        margin-left: 12px;
+        font-weight: 600;
+        color: var(--gray);
+        transition: var(--transition);
+    }
+
+    .checkout-step.active .step-title {
+        color: var(--primary);
+    }
+
+    .checkout-step.completed .step-title {
+        color: var(--success);
+    }
+
+    .step-connector {
+        flex: 1;
+        height: 2px;
+        background: var(--light-gray);
+        margin: 0 20px;
+        position: relative;
+    }
+
+    .checkout-step.completed .step-connector {
+        background: var(--success);
+    }
+
+    .checkout-container-enhanced {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+
+    .checkout-content {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+
+    .checkout-form-section {
+        animation: fadeIn 0.5s ease;
+    }
+
+    .form-section-title {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: black;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid var(--light-gray);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: #fafafa;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255, 62, 108, 0.1);
+    }
+
+    .form-control.error {
+        border-color: var(--danger);
+        background: #fff5f5;
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .error-message::before {
+        content: '⚠';
+        font-size: 0.8rem;
+    }
+
+    .form-options {
+        margin: 25px 0;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        color: var(--gray);
+    }
+
+    .checkbox-label input {
+        width: 18px;
+        height: 18px;
+    }
+
+    .next-step-btn {
+        background: var(--primary);
+        color: white;
+        padding: 14px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        margin-top: 20px;
+    }
+
+    .next-step-btn:hover {
+        background: #e02e5a;
+        transform: translateY(-2px);
+    }
+
+    /* Payment Methods */
+    .payment-methods-enhanced {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .payment-method-card {
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        padding: 20px;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .payment-method-card:hover {
+        border-color: var(--primary);
+    }
+
+    .payment-method-card.active {
+        border-color: var(--primary);
+        background: rgba(255, 62, 108, 0.05);
+    }
+
+    .payment-method-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .payment-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--light-gray);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        color: var(--gray);
+    }
+
+    .payment-method-card.active .payment-icon {
+        background: var(--primary);
+        color: white;
+    }
+
+    .payment-method-info {
+        flex: 1;
+    }
+
+    .payment-method-name {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: black;
+    }
+
+    .payment-method-desc {
+        font-size: 0.9rem;
+        color: var(--gray);
+    }
+
+    .payment-selector {
+        display: flex;
+        align-items: center;
+    }
+
+    .radio-dot {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--light-gray);
+        border-radius: 50%;
+        position: relative;
+        transition: var(--transition);
+    }
+
+    .radio-dot.active {
+        border-color: var(--primary);
+    }
+
+    .radio-dot.active::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border-radius: 50%;
+    }
+
+    .popular-badge {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--warning);
+        color: black;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .checkout-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .back-btn {
+        background: var(--light-gray);
+        color: var(--dark);
+        padding: 14px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        flex: 1;
+    }
+
+    .back-btn:hover {
+        background: #ddd;
+    }
+
+    .place-order-btn-primary {
+        background: var(--success);
+        color: white;
+        padding: 14px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        flex: 2;
+    }
+
+    .place-order-btn-primary:hover:not(:disabled) {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+
+    .place-order-btn-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Order Summary */
+    .order-summary-enhanced {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    .order-summary-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+    }
+
+    .summary-title {
+        font-size: 1.3rem;
+        color: var(--secondary);
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-items-list {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .order-summary-item {
+        display: flex;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-summary-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-image {
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-name {
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 0.9rem;
+    }
+
+    .item-size, .item-quantity {
+        font-size: 0.8rem;
+        color: var(--gray);
+    }
+
+    .item-price {
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 0.9rem;
+    }
+
+    .order-totals {
+        border-top: 1px solid var(--light-gray);
+        padding-top: 20px;
+    }
+
+    .total-line {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        color: var(--gray);
+    }
+
+    .free-shipping-badge {
+        background: var(--success);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        margin-left: 8px;
+    }
+
+    .shipping-notice {
+        background: #e7f7ef;
+        color: var(--success);
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 10px 0;
+    }
+
+    .grand-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--primary);
+        padding-top: 15px;
+        border-top: 2px solid var(--light-gray);
+        margin-top: 10px;
+    }
+
+    .delivery-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        background: #f0f8ff;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .delivery-info i {
+        color: var(--accent);
+        font-size: 1.2rem;
+    }
+
+    .delivery-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: black;
+    }
+
+    .delivery-date {
+        color: var(--gray);
+        font-size: 0.8rem;
+    }
+
+    /* Empty State */
+    .empty-cart-enhanced {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin: 40px 0;
+    }
+
+    .empty-cart-enhanced i {
+        font-size: 5rem;
+        color: var(--light-gray);
+        margin-bottom: 25px;
+    }
+
+    .empty-cart-enhanced h2 {
+        font-size: 2rem;
+        color: var(--secondary);
+        margin-bottom: 15px;
+    }
+
+    .empty-cart-enhanced p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        margin-bottom: 30px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Responsive Checkout Styles */
+    @media (max-width: 992px) {
+        .checkout-container-enhanced {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .order-summary-enhanced {
+            position: static;
+        }
+
+        .checkout-steps {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .checkout-step {
+            flex: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .checkout-header {
+            padding: 30px 0 15px;
+        }
+
+        .checkout-content,
+        .order-summary-card {
+            padding: 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .checkout-actions {
+            flex-direction: column;
+        }
+
+        .back-btn,
+        .place-order-btn-primary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .payment-method-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .payment-selector {
+            margin-top: 10px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .checkout-header {
+            padding: 20px 0 10px;
+        }
+
+        .checkout-content,
+        .order-summary-card {
+            padding: 15px;
+        }
+
+        .form-section-title {
+            font-size: 1.3rem;
+        }
+
+        .empty-cart-enhanced {
+            padding: 60px 15px;
+        }
+
+        .empty-cart-enhanced i {
+            font-size: 4rem;
+        }
+
+        .empty-cart-enhanced h2 {
+            font-size: 1.7rem;
+        }
+
+        .order-summary-item {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .item-image {
+            align-self: center;
+        }
+
+        .checkout-steps {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .step-connector {
+            display: none;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .checkout-content,
+        .order-summary-card {
+            padding: 12px;
+        }
+
+        .payment-method-card {
+            padding: 15px;
+        }
+
+        .next-step-btn,
+        .back-btn,
+        .place-order-btn-primary {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading State */
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+</style>
+{% endblock %}

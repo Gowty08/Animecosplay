@@ -1,0 +1,812 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - Login{% endblock %}
+
+{% block content %}
+<div id="login-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const LoginApp = () => {
+        const [isLogin, setIsLogin] = React.useState(true);
+        const [formData, setFormData] = React.useState({
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: ''
+        });
+        const [loading, setLoading] = React.useState(false);
+        const [errors, setErrors] = React.useState({});
+
+        React.useEffect(() => {
+            // Redirect if already logged in
+            if (window.AuthService?.currentUser) {
+                window.location.href = '/account';
+            }
+        }, []);
+
+        const handleChange = (e) => {
+            setFormData({
+                ...formData,
+                [e.target.name]: e.target.value
+            });
+            // Clear error when user starts typing
+            if (errors[e.target.name]) {
+                setErrors({
+                    ...errors,
+                    [e.target.name]: ''
+                });
+            }
+        };
+
+        const validateForm = () => {
+            const newErrors = {};
+
+            if (!formData.email) {
+                newErrors.email = 'Email is required';
+            } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+                newErrors.email = 'Email is invalid';
+            }
+
+            if (!formData.password) {
+                newErrors.password = 'Password is required';
+            } else if (formData.password.length < 6) {
+                newErrors.password = 'Password must be at least 6 characters';
+            }
+
+            if (!isLogin) {
+                if (!formData.name) {
+                    newErrors.name = 'Full name is required';
+                }
+
+                if (!formData.confirmPassword) {
+                    newErrors.confirmPassword = 'Please confirm your password';
+                } else if (formData.password !== formData.confirmPassword) {
+                    newErrors.confirmPassword = 'Passwords do not match';
+                }
+            }
+
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
+
+        const handleLogin = async (e) => {
+            e.preventDefault();
+            if (!validateForm()) return;
+
+            setLoading(true);
+            try {
+                const result = window.AuthService?.login(formData.email, formData.password);
+                if (result?.success) {
+                    showToast('Login successful!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/account';
+                    }, 1000);
+                } else {
+                    showToast(result?.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                showToast('An error occurred during login', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const handleSignup = async (e) => {
+            e.preventDefault();
+            if (!validateForm()) return;
+
+            setLoading(true);
+            try {
+                const result = window.AuthService?.signup(formData);
+                if (result?.success) {
+                    showToast('Account created successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/account';
+                    }, 1000);
+                } else {
+                    showToast(result?.message || 'Signup failed', 'error');
+                }
+            } catch (error) {
+                showToast('An error occurred during signup', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const handleSocialLogin = (provider) => {
+            showToast(`${provider} login would be implemented here`, 'info');
+        };
+
+        const showToast = (message, type = '') => {
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        // Header Component
+        const Header = () => {
+            const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+            const [wishlistItems, setWishlistItems] = React.useState(window.WishlistManager?.getWishlist() || []);
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            window.AuthService?.currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'user-avatar' },
+                                        window.AuthService.currentUser.name.charAt(0).toUpperCase()
+                                    ),
+                                    React.createElement('div', { className: 'header-action', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, window.AuthService.currentUser.name.split(' ')[0])
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action active', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        return React.createElement('div', { className: 'auth-page' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'auth-header' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        ' Back to Store'
+                    )
+                ),
+                React.createElement('div', { className: 'auth-container' },
+                    React.createElement('div', { className: 'auth-card' },
+                        React.createElement('div', { className: 'auth-header-content' },
+                            React.createElement('div', { className: 'auth-icon' },
+                                React.createElement('i', { className: isLogin ? 'fas fa-sign-in-alt' : 'fas fa-user-plus' })
+                            ),
+                            React.createElement('h1', { className: 'auth-title' }, 
+                                isLogin ? 'Welcome Back!' : 'Join AnimeCosplay'
+                            ),
+                            React.createElement('p', { className: 'auth-subtitle' },
+                                isLogin 
+                                    ? 'Sign in to your account to continue your cosplay journey'
+                                    : 'Create an account to save your favorite costumes and track orders'
+                            )
+                        ),
+                        
+
+                        React.createElement('form', { 
+                            className: 'auth-form',
+                            onSubmit: isLogin ? handleLogin : handleSignup 
+                        },
+                            !isLogin && React.createElement('div', { className: 'form-group' },
+                                React.createElement('label', { htmlFor: 'name' }, 'Full Name'),
+                                React.createElement('input', {
+                                    type: 'text',
+                                    id: 'name',
+                                    name: 'name',
+                                    className: `form-control ${errors.name ? 'error' : ''}`,
+                                    placeholder: 'Enter your full name',
+                                    value: formData.name,
+                                    onChange: handleChange
+                                }),
+                                errors.name && React.createElement('div', { className: 'error-message' }, errors.name)
+                            ),
+                            React.createElement('div', { className: 'form-group' },
+                                React.createElement('label', { htmlFor: 'email' }, 'Email Address'),
+                                React.createElement('input', {
+                                    type: 'email',
+                                    id: 'email',
+                                    name: 'email',
+                                    className: `form-control ${errors.email ? 'error' : ''}`,
+                                    placeholder: 'your@email.com',
+                                    value: formData.email,
+                                    onChange: handleChange
+                                }),
+                                errors.email && React.createElement('div', { className: 'error-message' }, errors.email)
+                            ),
+                            React.createElement('div', { className: 'form-group' },
+                                React.createElement('label', { htmlFor: 'password' }, 'Password'),
+                                React.createElement('input', {
+                                    type: 'password',
+                                    id: 'password',
+                                    name: 'password',
+                                    className: `form-control ${errors.password ? 'error' : ''}`,
+                                    placeholder: isLogin ? 'Enter your password' : 'Create a password (min. 6 characters)',
+                                    value: formData.password,
+                                    onChange: handleChange
+                                }),
+                                errors.password && React.createElement('div', { className: 'error-message' }, errors.password)
+                            ),
+                            !isLogin && React.createElement('div', { className: 'form-group' },
+                                React.createElement('label', { htmlFor: 'confirmPassword' }, 'Confirm Password'),
+                                React.createElement('input', {
+                                    type: 'password',
+                                    id: 'confirmPassword',
+                                    name: 'confirmPassword',
+                                    className: `form-control ${errors.confirmPassword ? 'error' : ''}`,
+                                    placeholder: 'Confirm your password',
+                                    value: formData.confirmPassword,
+                                    onChange: handleChange
+                                }),
+                                errors.confirmPassword && React.createElement('div', { className: 'error-message' }, errors.confirmPassword)
+                            ),
+                            
+                            isLogin && React.createElement('div', { className: 'form-options' },
+                                React.createElement('label', { className: 'checkbox-label' },
+                                    React.createElement('input', { type: 'checkbox' }),
+                                    React.createElement('span', null, 'Remember me')
+                                ),
+                                React.createElement('a', { href: '#', className: 'forgot-password' }, 'Forgot password?')
+                            ),
+
+                            React.createElement('button', { 
+                                type: 'submit', 
+                                className: 'auth-submit-btn',
+                                disabled: loading
+                            }, 
+                                loading 
+                                    ? React.createElement(React.Fragment, null,
+                                        React.createElement('div', { className: 'btn-spinner' }),
+                                        ' Please wait...'
+                                    )
+                                    : isLogin ? 'Sign In' : 'Create Account'
+                            )
+                        ),
+
+                        React.createElement('div', { className: 'auth-footer' },
+                            React.createElement('p', null,
+                                isLogin ? "Don't have an account? " : "Already have an account? ",
+                                React.createElement('a', {
+                                    href: '#',
+                                    className: 'auth-toggle',
+                                    onClick: (e) => {
+                                        e.preventDefault();
+                                        setIsLogin(!isLogin);
+                                        setFormData({
+                                            name: '',
+                                            email: '',
+                                            password: '',
+                                            confirmPassword: ''
+                                        });
+                                        setErrors({});
+                                    }
+                                }, isLogin ? 'Sign up now' : 'Sign in here')
+                            )
+                        ),
+                    )
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(LoginApp), document.getElementById('login-app'));
+</script>
+
+<style>
+    /* Auth Page Styles */
+    .auth-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+    }
+
+    .auth-page::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .auth-header {
+        padding: 20px 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--primary);
+    }
+
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 40px 20px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 480px;
+        animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .auth-header-content {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary), #ff6b9c);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .auth-title {
+        font-size: 2.2rem;
+        color: var(--secondary);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .auth-subtitle {
+        color: var(--gray);
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .social-auth {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        background: white;
+        color: black;
+        font-weight: 600;
+        transition: var(--transition);
+        font-size: 1rem;
+    }
+
+    .social-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .google-btn:hover {
+        border-color: #db4437;
+        color: #db4437;
+    }
+
+    .facebook-btn:hover {
+        border-color: #4267B2;
+        color: #4267B2;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+        color: var(--gray);
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--light-gray);
+    }
+
+    .divider span {
+        padding: 0 15px;
+        font-size: 0.9rem;
+    }
+
+    .auth-form {
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: black;
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: var(--transition);
+        background: #fafafa;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(255, 62, 108, 0.1);
+    }
+
+    .form-control.error {
+        border-color: var(--danger);
+        background: #fff5f5;
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .error-message::before {
+        content: '⚠';
+        font-size: 0.8rem;
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--gray);
+    }
+
+    .checkbox-label input {
+        width: 16px;
+        height: 16px;
+    }
+
+    .forgot-password {
+        color: var(--primary);
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .forgot-password:hover {
+        color: #e02e5a;
+    }
+
+    .auth-submit-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--primary), #ff6b9c);
+        color: white;
+        padding: 16px;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 62, 108, 0.4);
+    }
+
+    .auth-submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-spinner {
+        width: 18px;
+        height: 18px;
+        border: 2px solid transparent;
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .auth-footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .auth-footer p {
+        color: var(--gray);
+        margin: 0;
+    }
+
+    .auth-toggle {
+        color: var(--primary);
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .auth-toggle:hover {
+        color: #e02e5a;
+    }
+
+    .auth-benefits {
+        margin-top: 30px;
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .auth-benefits h3 {
+        font-size: 1.1rem;
+        color: var(--secondary);
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .auth-benefits ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .auth-benefits li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .auth-benefits li:last-child {
+        margin-bottom: 0;
+    }
+
+    .auth-benefits i {
+        color: var(--primary);
+        width: 16px;
+    }
+
+    /* Responsive Auth Styles */
+    @media (max-width: 768px) {
+        .auth-page {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+        }
+
+        .auth-container {
+            padding: 20px 15px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .auth-card {
+            padding: 30px 25px;
+            margin: 20px 0;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+        }
+
+        .auth-subtitle {
+            font-size: 1rem;
+        }
+
+        .auth-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 1.7rem;
+        }
+
+        .form-options {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .auth-benefits {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .auth-card {
+            padding: 25px 20px;
+        }
+
+        .auth-title {
+            font-size: 1.6rem;
+        }
+
+        .social-auth {
+            gap: 10px;
+        }
+
+        .social-btn {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            padding: 12px 14px;
+        }
+
+        .auth-submit-btn {
+            padding: 14px;
+            font-size: 1rem;
+        }
+
+        .auth-benefits {
+            padding: 15px;
+        }
+
+        .auth-benefits li {
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .auth-card {
+            padding: 20px 15px;
+        }
+
+        .auth-header-content {
+            margin-bottom: 20px;
+        }
+
+        .auth-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .auth-title {
+            font-size: 1.4rem;
+        }
+
+        .social-btn {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Loading State */
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,593 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - My Wishlist{% endblock %}
+
+{% block content %}
+<div id="wishlist-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const WishlistApp = () => {
+        const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
+        const [wishlist, setWishlist] = React.useState(window.WishlistManager?.getWishlist() || []);
+        const [loading, setLoading] = React.useState(true);
+
+        React.useEffect(() => {
+            // Simulate loading
+            setTimeout(() => setLoading(false), 500);
+            
+            // Redirect to login if not logged in
+            if (!currentUser) {
+                const proceed = confirm('Please login to view your wishlist. Would you like to login now?');
+                if (proceed) {
+                    window.location.href = '/login';
+                } else {
+                    window.location.href = '/';
+                }
+            }
+        }, [currentUser]);
+
+        const handleRemoveItem = (productId) => {
+            const updatedWishlist = window.WishlistManager.removeFromWishlist(productId);
+            setWishlist(updatedWishlist);
+            showToast('Item removed from wishlist', 'warning');
+        };
+
+        const handleAddToCart = (product) => {
+            const updatedCart = window.CartManager.addToCart(product);
+            showToast(`${product.name} added to cart!`, 'success');
+        };
+
+        const handleContinueShopping = () => {
+            window.location.href = '/';
+        };
+
+        const handleViewDetails = (product) => {
+            window.location.href = `/product/${product.id}`;
+        };
+
+        const handleMoveAllToCart = () => {
+            wishlist.forEach(product => {
+                window.CartManager.addToCart(product);
+            });
+            showToast('All items moved to cart!', 'success');
+        };
+
+        const handleClearWishlist = () => {
+            if (confirm('Are you sure you want to clear your entire wishlist?')) {
+                window.WishlistManager.clearWishlist();
+                setWishlist([]);
+                showToast('Wishlist cleared', 'info');
+            }
+        };
+
+        const showToast = (message, type = '') => {
+            // Simple toast implementation
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        // Header Component
+        const Header = () => {
+            const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+            const [wishlistItems, setWishlistItems] = React.useState(window.WishlistManager?.getWishlist() || []);
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleLogout = () => {
+                if (window.AuthService) {
+                    window.AuthService.logout();
+                    setCurrentUser(null);
+                    showToast('You have been logged out', 'info');
+                }
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'header-action', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, currentUser.name.split(' ')[0])
+                                    ),
+                                    React.createElement('div', { className: 'header-action', onClick: handleLogout },
+                                        React.createElement('i', { className: 'fas fa-sign-out-alt' }),
+                                        React.createElement('span', null, 'Logout')
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        // Product Card Component for Wishlist
+        const ProductCard = ({ product, onAddToCart, onRemoveItem, onViewDetails }) => {
+            const renderStars = (rating) => {
+                const stars = [];
+                const fullStars = Math.floor(rating);
+                const hasHalfStar = rating % 1 !== 0;
+
+                for (let i = 0; i < fullStars; i++) {
+                    stars.push(React.createElement('i', { key: i, className: "fas fa-star" }));
+                }
+
+                if (hasHalfStar) {
+                    stars.push(React.createElement('i', { key: "half", className: "fas fa-star-half-alt" }));
+                }
+
+                const emptyStars = 5 - stars.length;
+                for (let i = 0; i < emptyStars; i++) {
+                    stars.push(React.createElement('i', { key: `empty-${i}`, className: "far fa-star" }));
+                }
+
+                return stars;
+            };
+
+            return React.createElement('div', { className: 'product-card wishlist-product-card fade-in' },
+                React.createElement('div', { 
+                    className: 'product-img', 
+                    style: { backgroundImage: `url(${product.image})` } 
+                },
+                    product.badge && React.createElement('div', { 
+                        className: `product-badge ${product.badge.toLowerCase().replace(/ /g, '-')}` 
+                    }, product.badge),
+                    React.createElement('div', { 
+                        className: 'wishlist-remove-btn',
+                        onClick: (e) => { e.stopPropagation(); onRemoveItem(product.id); }
+                    },
+                        React.createElement('i', { className: 'fas fa-times' })
+                    )
+                ),
+                React.createElement('div', { className: 'product-info' },
+                    React.createElement('div', { className: 'product-title' }, product.name),
+                    React.createElement('div', { className: 'product-price' }, `₹${product.price.toLocaleString()}`),
+                    React.createElement('div', { className: 'product-rating' },
+                        renderStars(product.rating),
+                        React.createElement('span', null, `(${product.reviews})`)
+                    ),
+                    React.createElement('div', { className: 'product-actions wishlist-actions' },
+                        React.createElement('button', { 
+                            className: 'add-to-cart', 
+                            onClick: (e) => { e.stopPropagation(); onAddToCart(product); }
+                        },
+                            React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                            ' Add to Cart'
+                        ),
+                        React.createElement('button', { 
+                            className: 'view-details', 
+                            onClick: (e) => { e.stopPropagation(); onViewDetails(product); }
+                        },
+                            React.createElement('i', { className: 'fas fa-eye' }),
+                            ' View Details'
+                        )
+                    )
+                )
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        return React.createElement('div', { className: 'wishlist-page' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'wishlist-header' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        ' Back to Shopping'
+                    ),
+                    React.createElement('h1', { className: 'section-title' }, 
+                        React.createElement('i', { className: 'fas fa-heart', style: { color: 'var(--primary)', marginRight: '15px' } }),
+                        'My Wishlist'
+                    )
+                ),
+                
+                wishlist.length === 0 ? 
+                    React.createElement('div', { className: 'empty-wishlist' },
+                        React.createElement('i', { className: 'fas fa-heart-broken' }),
+                        React.createElement('h2', null, 'Your wishlist is empty'),
+                        React.createElement('p', null, 
+                            'Save your favorite anime costumes here for later! Start exploring our collection.'
+                        ),
+                        React.createElement('button', { 
+                            className: 'cta-button', 
+                            onClick: handleContinueShopping 
+                        }, 
+                            React.createElement('i', { className: 'fas fa-store' }),
+                            ' Explore Products'
+                        )
+                    ) :
+                    React.createElement('div', { className: 'wishlist-content' },
+                        React.createElement('div', { className: 'wishlist-stats' },
+                            React.createElement('div', { className: 'wishlist-count-badge' },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'}`)
+                            ),
+                            React.createElement('div', { className: 'wishlist-actions-top' },
+                                React.createElement('button', { 
+                                    className: 'secondary-button',
+                                    onClick: handleMoveAllToCart
+                                },
+                                    React.createElement('i', { className: 'fas fa-cart-plus' }),
+                                    ' Move All to Cart'
+                                ),
+                                React.createElement('button', { 
+                                    className: 'danger-button',
+                                    onClick: handleClearWishlist
+                                },
+                                    React.createElement('i', { className: 'fas fa-trash' }),
+                                    ' Clear Wishlist'
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: 'products wishlist-products' },
+                            wishlist.map(product => 
+                                React.createElement(ProductCard, {
+                                    key: product.id,
+                                    product,
+                                    onAddToCart: handleAddToCart,
+                                    onRemoveItem: handleRemoveItem,
+                                    onViewDetails: handleViewDetails
+                                })
+                            )
+                        ),
+                        React.createElement('div', { className: 'wishlist-footer' },
+                            React.createElement('button', { 
+                                className: 'continue-shopping-btn',
+                                onClick: handleContinueShopping
+                            },
+                                React.createElement('i', { className: 'fas fa-arrow-left' }),
+                                ' Continue Shopping'
+                            )
+                        )
+                    )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(WishlistApp), document.getElementById('wishlist-app'));
+</script>
+
+<style>
+    /* Wishlist Specific Styles */
+    .wishlist-page {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .wishlist-header {
+        padding: 40px 0 20px;
+        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: 30px;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--accent);
+    }
+
+    .empty-wishlist {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    .empty-wishlist .cta-button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+    }
+
+
+    .empty-wishlist i{
+        font-size: 20px;
+        color: var(--light-gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-wishlist i::before{
+        font-size: 2rem;
+        color: var(--light-gray);
+    }
+
+    .empty-wishlist h2 {
+        font-size: 2rem;
+        color: var(--secondary);
+        margin-bottom: 15px;
+    }
+    .product-title{
+        color: black;
+    }
+
+    .empty-wishlist p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        margin-bottom: 30px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wishlist-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+    }
+
+    .wishlist-count-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, var(--primary), #ff6b9c);
+        color: white;
+        border-radius: 25px;
+        font-weight: 600;
+    }
+
+    .wishlist-actions-top {
+        display: flex;
+        gap: 15px;
+    }
+
+    .secondary-button {
+        background: var(--secondary);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .secondary-button:hover {
+        background: #2d0a8a;
+        transform: translateY(-2px);
+    }
+
+    .danger-button {
+        background: var(--danger);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .danger-button:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    .wishlist-products {
+        margin-bottom: 40px;
+    }
+
+    .wishlist-product-card {
+        position: relative;
+    }
+
+    .wishlist-remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--danger);
+        font-size: 1.1rem;
+    }
+
+    .wishlist-remove-btn:hover {
+        background: var(--danger);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .wishlist-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .wishlist-footer {
+        text-align: center;
+        padding: 30px 0;
+    }
+
+    .continue-shopping-btn {
+        background: var(--accent);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+    }
+
+    .continue-shopping-btn:hover {
+        background: #3051e8;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Wishlist Styles */
+    @media (max-width: 768px) {
+        .wishlist-stats {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .wishlist-actions-top {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .secondary-button, .danger-button {
+            justify-content: center;
+        }
+
+        .wishlist-header {
+            padding: 30px 0 15px;
+        }
+
+        .empty-wishlist {
+            padding: 60px 15px;
+            margin: 20px 0;
+        }
+
+        .empty-wishlist i {
+            font-size: 4rem;
+        }
+
+        .empty-wishlist h2 {
+            font-size: 1.7rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .wishlist-products .products {
+            grid-template-columns: 1fr;
+        }
+
+        .wishlist-count-badge {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .secondary-button, .danger-button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .continue-shopping-btn {
+            padding: 10px 25px;
+            font-size: 0.9rem;
+        }
+
+        .empty-wishlist {
+            padding: 40px 15px;
+        }
+
+        .empty-wishlist i {
+            font-size: 3rem;
+        }
+
+        .empty-wishlist h2 {
+            font-size: 1.5rem;
+        }
+
+        .empty-wishlist p {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .wishlist-stats {
+            padding: 15px;
+        }
+
+        .wishlist-actions-top {
+            gap: 10px;
+        }
+
+        .products {
+            gap: 15px;
+        }
+    }
+</style>
+{% endblock %}

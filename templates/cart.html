@@ -1,0 +1,843 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - Shopping Cart{% endblock %}
+
+{% block content %}
+<div id="cart-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const CartApp = () => {
+        const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
+        const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+        const [loading, setLoading] = React.useState(true);
+
+        React.useEffect(() => {
+            // Simulate loading
+            setTimeout(() => setLoading(false), 500);
+            
+            // Redirect to login if not logged in and trying to checkout
+            if (!currentUser && cartItems.length > 0) {
+                const proceed = confirm('Please login to proceed with checkout. Would you like to login now?');
+                if (proceed) {
+                    window.location.href = '/login';
+                }
+            }
+        }, [currentUser, cartItems]);
+
+        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 999 ? 0 : 99;
+        const tax = subtotal * 0.18;
+        const total = subtotal + shipping + tax;
+
+        const handleUpdateQuantity = (productId, newQuantity) => {
+            if (newQuantity < 1) return;
+            const updatedCart = window.CartManager.updateQuantity(productId, newQuantity);
+            setCartItems(updatedCart);
+        };
+
+        const handleRemoveItem = (productId) => {
+            const updatedCart = window.CartManager.removeItem(productId);
+            setCartItems(updatedCart);
+        };
+
+        const handleCheckout = () => {
+            if (!currentUser) {
+                const proceed = confirm('Please login to proceed with checkout. Would you like to login now?');
+                if (proceed) {
+                    window.location.href = '/login';
+                }
+                return;
+            }
+            if (cartItems.length === 0) {
+                showToast('Your cart is empty', 'error');
+                return;
+            }
+            window.location.href = '/checkout';
+        };
+
+        const handleContinueShopping = () => {
+            window.location.href = '/';
+        };
+
+        const handleClearCart = () => {
+            if (confirm('Are you sure you want to clear your entire cart?')) {
+                window.CartManager.clearCart();
+                setCartItems([]);
+            }
+        };
+
+        const showToast = (message, type = '') => {
+            // Simple toast implementation
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        // Header Component
+        const Header = () => {
+            const [wishlistItems, setWishlistItems] = React.useState(window.WishlistManager?.getWishlist() || []);
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleLogout = () => {
+                if (window.AuthService) {
+                    window.AuthService.logout();
+                    setCurrentUser(null);
+                    showToast('You have been logged out', 'info');
+                }
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'header-action', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, currentUser.name.split(' ')[0])
+                                    ),
+                                    React.createElement('div', { className: 'header-action', onClick: handleLogout },
+                                        React.createElement('i', { className: 'fas fa-sign-out-alt' }),
+                                        React.createElement('span', null, 'Logout')
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'loading' },
+                React.createElement('div', { className: 'spinner' })
+            );
+        }
+
+        return React.createElement('div', { className: 'cart-page' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'cart-header' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        ' Back to Shopping'
+                    ),
+                    React.createElement('h1', { className: 'section-title' }, 
+                        React.createElement('i', { className: 'fas fa-shopping-cart', style: { color: 'var(--primary)', marginRight: '15px' } }),
+                        'Shopping Cart'
+                    )
+                ),
+                
+                cartItems.length === 0 ? 
+                    React.createElement('div', { className: 'empty-cart-enhanced' },
+                        React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                        React.createElement('h2', null, 'Your cart is empty'),
+                        React.createElement('p', null, 
+                            'Looks like you haven\'t added any anime costumes to your cart yet. Start exploring our amazing collection!'
+                        ),
+                        React.createElement('button', { 
+                            className: 'cta-button', 
+                            onClick: handleContinueShopping 
+                        }, 
+                            React.createElement('i', { className: 'fas fa-store' }),
+                            ' Explore Products'
+                        )
+                    ) :
+                    React.createElement('div', { className: 'cart-content' },
+                        React.createElement('div', { className: 'cart-stats' },
+                            React.createElement('div', { className: 'cart-count-badge' },
+                                React.createElement('i', { className: 'fas fa-shopping-bag' }),
+                                React.createElement('span', null, 
+                                    `${cartItems.reduce((total, item) => total + item.quantity, 0)} items`
+                                )
+                            ),
+                            React.createElement('div', { className: 'cart-actions-top' },
+                                React.createElement('button', { 
+                                    className: 'danger-button',
+                                    onClick: handleClearCart
+                                },
+                                    React.createElement('i', { className: 'fas fa-trash' }),
+                                    ' Clear Cart'
+                                )
+                            )
+                        ),
+                        React.createElement('div', { className: 'cart-layout' },
+                            React.createElement('div', { className: 'cart-items-section' },
+                                React.createElement('h3', { className: 'section-subtitle' }, 'Cart Items'),
+                                React.createElement('div', { className: 'cart-items-enhanced' },
+                                    cartItems.map(item => 
+                                        React.createElement('div', { 
+                                            key: `${item.id}-${item.size}`, 
+                                            className: 'cart-item-enhanced' 
+                                        },
+                                            React.createElement('div', { 
+                                                className: 'cart-item-img', 
+                                                style: { backgroundImage: `url(${item.image})` } 
+                                            }),
+                                            React.createElement('div', { className: 'cart-item-details-enhanced' },
+                                                React.createElement('div', { className: 'cart-item-header' },
+                                                    React.createElement('div', { className: 'cart-item-title' }, item.name),
+                                                    React.createElement('div', { 
+                                                        className: 'remove-item-btn',
+                                                        onClick: () => handleRemoveItem(item.id)
+                                                    },
+                                                        React.createElement('i', { className: 'fas fa-times' })
+                                                    )
+                                                ),
+                                                item.size && React.createElement('div', { className: 'cart-item-size' }, 
+                                                    React.createElement('i', { className: 'fas fa-ruler' }),
+                                                    ` Size: ${item.size}`
+                                                ),
+                                                React.createElement('div', { className: 'cart-item-price' }, 
+                                                    `₹${(item.price * item.quantity).toLocaleString()}`
+                                                ),
+                                                React.createElement('div', { className: 'cart-item-actions-enhanced' },
+                                                    React.createElement('div', { className: 'quantity-control-enhanced' },
+                                                        React.createElement('button', { 
+                                                            className: 'quantity-btn', 
+                                                            onClick: () => handleUpdateQuantity(item.id, item.quantity - 1),
+                                                            disabled: item.quantity <= 1
+                                                        }, 
+                                                            React.createElement('i', { className: 'fas fa-minus' })
+                                                        ),
+                                                        React.createElement('input', { 
+                                                            type: 'text', 
+                                                            className: 'quantity-input', 
+                                                            value: item.quantity, 
+                                                            readOnly: true 
+                                                        }),
+                                                        React.createElement('button', { 
+                                                            className: 'quantity-btn', 
+                                                            onClick: () => handleUpdateQuantity(item.id, item.quantity + 1)
+                                                        }, 
+                                                            React.createElement('i', { className: 'fas fa-plus' })
+                                                        )
+                                                    ),
+                                                    React.createElement('div', { className: 'item-price-unit' },
+                                                        `₹${item.price.toLocaleString()} each`
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                            React.createElement('div', { className: 'order-summary-section' },
+                                React.createElement('div', { className: 'order-summary-card' },
+                                    React.createElement('h3', { className: 'section-subtitle' }, 'Order Summary'),
+                                    React.createElement('div', { className: 'order-details' },
+                                        React.createElement('div', { className: 'order-line' },
+                                            React.createElement('span', null, 'Subtotal'),
+                                            React.createElement('span', null, `₹${subtotal.toLocaleString()}`)
+                                        ),
+                                        React.createElement('div', { className: 'order-line' },
+                                            React.createElement('span', null, 
+                                                React.createElement('span', null, 'Shipping'),
+                                                shipping === 0 ? 
+                                                    React.createElement('span', { 
+                                                        className: 'free-shipping-badge'
+                                                    }, 'FREE') : null
+                                            ),
+                                            React.createElement('span', null, 
+                                                shipping === 0 ? 'FREE' : `₹${shipping}`
+                                            )
+                                        ),
+                                        React.createElement('div', { className: 'order-line' },
+                                            React.createElement('span', null, 'Tax (18%)'),
+                                            React.createElement('span', null, `₹${tax.toFixed(0)}`)
+                                        ),
+                                        shipping === 0 && subtotal < 999 && 
+                                            React.createElement('div', { className: 'shipping-notice' },
+                                                React.createElement('i', { className: 'fas fa-truck' }),
+                                                ' Add ₹' + (1000 - subtotal).toFixed(0) + ' more for FREE shipping!'
+                                            ),
+                                        React.createElement('div', { className: 'order-total' },
+                                            React.createElement('span', null, 'Total'),
+                                            React.createElement('span', null, `₹${total.toFixed(0)}`)
+                                        )
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'checkout-btn-primary', 
+                                        onClick: handleCheckout
+                                    },
+                                        React.createElement('i', { className: 'fas fa-lock' }), 
+                                        ' Proceed to Checkout'
+                                    ),
+                                    React.createElement('button', { 
+                                        className: 'continue-shopping-btn',
+                                        onClick: handleContinueShopping
+                                    },
+                                        React.createElement('i', { className: 'fas fa-arrow-left' }), 
+                                        ' Continue Shopping'
+                                    )
+                                )
+                            )
+                        )
+                    )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(CartApp), document.getElementById('cart-app'));
+</script>
+
+<style>
+    /* Cart Specific Styles */
+    .cart-page {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .cart-header {
+        padding: 40px 0 20px;
+        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: 30px;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--accent);
+    }
+
+    .empty-cart-enhanced {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin: 40px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-cart-enhanced i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        padding: 10px;
+        color: var(--light-gray);
+    }
+
+    .empty-cart-enhanced i::before {
+        margin-right: 15px;
+        font-size: 2rem;
+        color: var(--light-gray);
+    }
+
+    .cta-button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .empty-cart-enhanced h2 {
+        font-size: 2rem;
+        color: var(--secondary);
+        margin-bottom: 15px;
+    }
+
+    .empty-cart-enhanced p {
+        font-size: 1.1rem;
+        color: var(--gray);
+        margin-bottom: 30px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cart-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+    }
+
+    .cart-count-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, var(--primary), #ff6b9c);
+        color: white;
+        border-radius: 25px;
+        font-weight: 600;
+    }
+
+    .cart-actions-top {
+        display: flex;
+        gap: 15px;
+    }
+
+    .danger-button {
+        background: var(--danger);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+    }
+
+    .danger-button:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+    }
+
+    .cart-items-section {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+    }
+
+    .section-subtitle {
+        font-size: 1.4rem;
+        color: var(--secondary);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--light-gray);
+    }
+
+    .cart-items-enhanced {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-item-enhanced {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid var(--light-gray);
+        border-radius: 10px;
+        transition: var(--transition);
+    }
+
+    .cart-item-enhanced:hover {
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(255, 62, 108, 0.1);
+    }
+
+    .cart-item-img {
+        width: 120px;
+        height: 120px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .cart-item-details-enhanced {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cart-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .cart-item-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: black;
+        flex: 1;
+        margin-right: 15px;
+    }
+
+    .remove-item-btn {
+        color: var(--danger);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+    }
+
+    .remove-item-btn:hover {
+        background: var(--danger);
+        color: white;
+    }
+
+    .cart-item-size {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .cart-item-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .cart-item-actions-enhanced {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .quantity-control-enhanced {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--light-gray);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        background: #f8f9fa;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+    }
+
+    .quantity-btn:hover:not(:disabled) {
+        background: var(--primary);
+        color: white;
+    }
+
+    .quantity-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .quantity-input {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: none;
+        border-left: 1px solid var(--light-gray);
+        border-right: 1px solid var(--light-gray);
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .item-price-unit {
+        color: var(--gray);
+        font-size: 0.9rem;
+    }
+
+    .order-summary-section {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .order-summary-card {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        color: black;
+    }
+
+    .order-details {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .order-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    .order-line:not(:last-child) {
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .free-shipping-badge {
+        background: var(--success);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        margin-left: 8px;
+    }
+
+    .shipping-notice {
+        background: #e7f7ef;
+        color: var(--success);
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 10px 0;
+    }
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary);
+        padding-top: 15px;
+        border-top: 2px solid var(--light-gray);
+        margin-top: 10px;
+    }
+
+    .checkout-btn-primary {
+        background: var(--success);
+        color: white;
+        padding: 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: var(--transition);
+        width: 100%;
+    }
+
+    .checkout-btn-primary:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+
+    .continue-shopping-btn {
+        background: var(--accent);
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: var(--transition);
+        width: 100%;
+    }
+
+    .continue-shopping-btn:hover {
+        background: #3051e8;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive Cart Styles */
+    @media (max-width: 992px) {
+        .cart-layout {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .order-summary-section {
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .cart-stats {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .cart-actions-top {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .danger-button {
+            justify-content: center;
+        }
+
+        .cart-header {
+            padding: 30px 0 15px;
+        }
+
+        .empty-cart-enhanced {
+            padding: 60px 15px;
+            margin: 20px 0;
+        }
+
+        .empty-cart-enhanced i {
+            font-size: 4rem;
+        }
+
+        .empty-cart-enhanced h2 {
+            font-size: 1.7rem;
+        }
+
+        .cart-item-enhanced {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cart-item-img {
+            width: 100%;
+            height: 200px;
+        }
+
+        .cart-item-header {
+            flex-direction: column;
+            gap: 10px;
+            color: black;
+        }
+
+        .cart-item-actions-enhanced {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cart-count-badge {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .danger-button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        .cart-items-section,
+        .order-summary-section {
+            padding: 20px;
+        }
+
+        .empty-cart-enhanced {
+            padding: 40px 15px;
+        }
+
+        .empty-cart-enhanced i {
+            font-size: 3rem;
+        }
+
+        .empty-cart-enhanced h2 {
+            font-size: 1.5rem;
+        }
+
+        .empty-cart-enhanced p {
+            font-size: 1rem;
+        }
+
+        .checkout-btn-primary,
+        .continue-shopping-btn {
+            padding: 14px;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .cart-stats {
+            padding: 15px;
+        }
+
+        .cart-actions-top {
+            gap: 10px;
+        }
+
+        .cart-item-enhanced {
+            padding: 15px;
+        }
+
+        .quantity-control-enhanced {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

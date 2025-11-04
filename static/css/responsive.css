@@ -1,0 +1,469 @@
+/* Enhanced Responsive Styles */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1140px;
+        padding: 0 15px;
+    }
+    
+    .search-bar {
+        flex: 0 0 45%;
+    }
+    
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+    
+    .search-bar {
+        flex: 0 0 50%;
+    }
+    
+    .header-top {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+    }
+    
+    .products {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .nav-links {
+        gap: 20px;
+        padding-bottom: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 720px;
+        padding: 0 15px;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px 0;
+    }
+    
+    .search-bar {
+        flex: 0 0 100%;
+        width: 100%;
+        order: 3;
+    }
+    
+    .header-actions {
+        gap: 20px;
+    }
+    
+    .header-action span {
+        display: none;
+    }
+    
+    .header-action i {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+    }
+    
+    .nav-links {
+        gap: 15px;
+        font-size: 0.9rem;
+    }
+    
+    .hero {
+        padding: 60px 0;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+        margin-bottom: 25px;
+    }
+    
+    .cta-button {
+        padding: 12px 30px;
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        margin: 40px 0 30px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .category-img {
+        height: 140px;
+    }
+    
+    .category-name {
+        padding: 15px;
+        font-size: 1rem;
+    }
+    
+    .products {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .product-img {
+        height: 200px;
+    }
+    
+    .anime-title {
+        font-size: 1.8rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .footer-column {
+        text-align: center;
+    }
+    
+    .footer-column h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+    
+    .newsletter-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .newsletter-form input {
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    
+    .newsletter-form button {
+        border-radius: 4px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .header-actions {
+        gap: 15px;
+    }
+    
+    .user-profile {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .user-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-links {
+        gap: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .hero {
+        padding: 50px 0;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero p {
+        font-size: 0.95rem;
+    }
+    
+    .cta-button {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.7rem;
+        margin: 30px 0 25px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .category-img {
+        height: 120px;
+    }
+    
+    .category-name {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+    
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .product-card {
+        border-radius: 8px;
+    }
+    
+    .product-img {
+        height: 160px;
+    }
+    
+    .product-info {
+        padding: 15px;
+    }
+    
+    .product-title {
+        font-size: 1rem;
+    }
+    
+    .product-price {
+        font-size: 1.1rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .add-to-cart {
+        margin-right: 0;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .wishlist {
+        width: 100%;
+        height: 40px;
+        border-radius: 6px;
+    }
+    
+    .view-details {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .anime-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .anime-title {
+        font-size: 1.5rem;
+    }
+    
+    .anime-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .footer-bottom {
+        font-size: 0.8rem;
+    }
+    
+    /* Mobile menu styles */
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--secondary);
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-links li {
+        margin-bottom: 10px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+    .categories {
+        grid-template-columns: 1fr;
+    }
+    
+    .products {
+        grid-template-columns: 1fr;
+    }
+    
+    .category-img {
+        height: 150px;
+    }
+    
+    .product-img {
+        height: 200px;
+    }
+    
+    .header-action {
+        padding: 5px;
+    }
+    
+    .cart-count, .wishlist-count {
+        width: 18px;
+        height: 18px;
+        font-size: 0.6rem;
+    }
+}
+
+/* Tablet landscape fixes */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    .products {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
+/* High-resolution displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://cdn.wallpapersafari.com/18/0/lhqsMH.jpg');
+    }
+}
+
+/* Print styles */
+@media print {
+    .header-actions,
+    .nav-links,
+    .cta-button,
+    .product-actions,
+    .footer {
+        display: none;
+    }
+    
+    .hero {
+        background: none;
+        color: black;
+        padding: 20px 0;
+    }
+    
+    .container {
+        max-width: none;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --light: #2d3748;
+        --dark: #f7fafc;
+        --light-gray: #4a5568;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .category-card:hover,
+    .product-card:hover {
+        transform: none;
+    }
+    
+    .header-action:hover {
+        background: transparent;
+    }
+    
+    .nav-links a:hover {
+        background: transparent;
+        color: inherit;
+    }
+    
+    /* Increase tap targets for mobile */
+    .header-action {
+        padding: 10px;
+    }
+    
+    .nav-links a {
+        padding: 10px 15px;
+    }
+    
+    .category-card,
+    .product-card {
+        cursor: pointer;
+    }
+}
