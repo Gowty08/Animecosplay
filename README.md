@@ -18,6 +18,7 @@ This project demonstrates a full web stack with product management, cart functio
 
 ## Project Structure
 
+``` bash
 .
 ├── app.py
 ├── data
@@ -48,6 +49,7 @@ This project demonstrates a full web stack with product management, cart functio
     └── wishlist.html
 
 5 directories, 22 files
+```
 
 ---
 
