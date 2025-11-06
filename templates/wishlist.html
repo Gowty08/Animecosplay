@@ -12,8 +12,25 @@
         const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
         const [wishlist, setWishlist] = React.useState(window.WishlistManager?.getWishlist() || []);
         const [loading, setLoading] = React.useState(true);
+        const [productsData, setProductsData] = React.useState(window.productsData || null);
 
         React.useEffect(() => {
+            // Load products data if not already available
+            if (!productsData && window.productsData) {
+                setProductsData(window.productsData);
+            } else if (!productsData) {
+                // Fallback: load products data
+                fetch('/data/products.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        setProductsData(data);
+                        window.productsData = data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading products data:', error);
+                    });
+            }
+
             // Simulate loading
             setTimeout(() => setLoading(false), 500);
             
@@ -26,7 +43,28 @@
                     window.location.href = '/';
                 }
             }
-        }, [currentUser]);
+        }, [currentUser, productsData]);
+
+        // Function to get full product details from wishlist items
+        const getFullProductDetails = (wishlistItems) => {
+            if (!productsData || !productsData.categories) return wishlistItems;
+            
+            const allProducts = productsData.categories.flatMap(category => category.products);
+            
+            return wishlistItems.map(wishlistItem => {
+                // Find the full product details from the products data
+                const fullProduct = allProducts.find(p => p.id === wishlistItem.id);
+                if (fullProduct) {
+                    return {
+                        ...wishlistItem,
+                        ...fullProduct // Merge full product details
+                    };
+                }
+                return wishlistItem;
+            });
+        };
+
+        const fullWishlist = getFullProductDetails(wishlist);
 
         const handleRemoveItem = (productId) => {
             const updatedWishlist = window.WishlistManager.removeFromWishlist(productId);
@@ -48,7 +86,7 @@
         };
 
         const handleMoveAllToCart = () => {
-            wishlist.forEach(product => {
+            fullWishlist.forEach(product => {
                 window.CartManager.addToCart(product);
             });
             showToast('All items moved to cart!', 'success');
@@ -174,10 +212,15 @@
                 return stars;
             };
 
+            // Get the correct image URL - handle both imageUrl and image fields
+            const getProductImage = (product) => {
+                return product.imageUrl || product.image;
+            };
+
             return React.createElement('div', { className: 'product-card wishlist-product-card fade-in' },
                 React.createElement('div', { 
                     className: 'product-img', 
-                    style: { backgroundImage: `url(${product.image})` } 
+                    style: { backgroundImage: `url(${getProductImage(product)})` } 
                 },
                     product.badge && React.createElement('div', { 
                         className: `product-badge ${product.badge.toLowerCase().replace(/ /g, '-')}` 
@@ -239,7 +282,7 @@
                     )
                 ),
                 
-                wishlist.length === 0 ? 
+                fullWishlist.length === 0 ? 
                     React.createElement('div', { className: 'empty-wishlist' },
                         React.createElement('i', { className: 'fas fa-heart-broken' }),
                         React.createElement('h2', null, 'Your wishlist is empty'),
@@ -258,7 +301,7 @@
                         React.createElement('div', { className: 'wishlist-stats' },
                             React.createElement('div', { className: 'wishlist-count-badge' },
                                 React.createElement('i', { className: 'fas fa-heart' }),
-                                React.createElement('span', null, `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'}`)
+                                React.createElement('span', null, `${fullWishlist.length} ${fullWishlist.length === 1 ? 'item' : 'items'}`)
                             ),
                             React.createElement('div', { className: 'wishlist-actions-top' },
                                 React.createElement('button', { 
@@ -278,7 +321,7 @@
                             )
                         ),
                         React.createElement('div', { className: 'products wishlist-products' },
-                            wishlist.map(product => 
+                            fullWishlist.map(product => 
                                 React.createElement(ProductCard, {
                                     key: product.id,
                                     product,

@@ -223,7 +223,11 @@
                                         },
                                             React.createElement('div', { 
                                                 className: 'cart-item-img', 
-                                                style: { backgroundImage: `url(${item.image})` } 
+                                                style: { 
+                                                    backgroundImage: `url(${item.image || item.imageUrl})`,
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center'
+                                                } 
                                             }),
                                             React.createElement('div', { className: 'cart-item-details-enhanced' },
                                                 React.createElement('div', { className: 'cart-item-header' },

@@ -24,4 +24,14 @@
     
     {% block scripts %}{% endblock %}
 </body>
+<script>
+fetch('/data/products.json')
+    .then(response => response.json())
+    .then(data => {
+        window.productsData = data;
+    })
+    .catch(error => {
+        console.error('Error loading products data:', error);
+    });
+</script>
 </html>

@@ -11,7 +11,8 @@
         const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
         const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
         const [wishlist, setWishlist] = React.useState(window.WishlistManager?.getWishlist() || []);
-        const [products, setProducts] = React.useState({});
+        const [categories, setCategories] = React.useState([]);
+        const [featuredProducts, setFeaturedProducts] = React.useState([]);
         const [loading, setLoading] = React.useState(true);
 
         React.useEffect(() => {
@@ -20,11 +21,18 @@
 
         const loadProducts = async () => {
             try {
-                const productsData = await window.ProductAPI?.fetchAllProducts();
-                setProducts(productsData || {});
+                // Load categories
+                const categoriesData = await window.ProductAPI?.fetchCategories();
+                setCategories(categoriesData || []);
+                
+                // Load featured products
+                const featuredData = await window.ProductAPI?.fetchFeaturedProducts();
+                setFeaturedProducts(featuredData || []);
+                
             } catch (error) {
                 console.error('Error loading products:', error);
-                setProducts({});
+                setCategories([]);
+                setFeaturedProducts([]);
             } finally {
                 setLoading(false);
             }
@@ -97,20 +105,10 @@
         const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
         const wishlistCount = wishlist.length;
 
-        // Generate categories from products data
-        const categories = Object.keys(products).map(key => {
-            const category = products[key];
-            return {
-                key: key,
-                name: category.title,
-                displayName: category.title.replace(' Costumes', '') // Remove "Costumes" for cleaner display
-            };
-        });
-
         // Header Component
         const Header = () => {
-            const handleCategoryClick = (categoryKey) => {
-                const element = document.getElementById(`anime-${categoryKey}`);
+            const handleCategoryClick = (categoryId) => {
+                const element = document.getElementById(`anime-${categoryId}`);
                 if (element) {
                     element.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -169,11 +167,11 @@
                                 }, 'Home')
                             ),
                             categories.map(category => 
-                                React.createElement('li', { key: category.key },
+                                React.createElement('li', { key: category.id },
                                     React.createElement('a', { 
                                         href: '#', 
-                                        onClick: (e) => { e.preventDefault(); handleCategoryClick(category.key); }
-                                    }, category.displayName)
+                                        onClick: (e) => { e.preventDefault(); handleCategoryClick(category.id); }
+                                    }, category.name)
                                 )
                             )
                         )
@@ -225,7 +223,7 @@
             return React.createElement('div', { className: 'product-card fade-in' },
                 React.createElement('div', { 
                     className: 'product-img', 
-                    style: { backgroundImage: `url(${product.image})` } 
+                    style: { backgroundImage: `url(${product.image || product.imageUrl})` } 
                 },
                     product.badge && React.createElement('div', { 
                         className: `product-badge ${product.badge.toLowerCase().replace(/ /g, '-')}` 
@@ -270,11 +268,20 @@
             );
         }
 
-        // Get featured products
-        const featuredProducts = Object.values(products)
-            .flatMap(anime => anime.products || [])
-            .filter(product => product.featured)
-            .slice(0, 8);
+        // Category images mapping
+        const categoryImages = {
+            "naruto": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+            "attack-on-titan": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+            "one-piece": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+            "demon-slayer": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+            "my-hero-academia": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+            "tokyo-ghoul": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+            "death-note": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+            "dragon-ball": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+            "sailor-moon": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+            "fullmetal-alchemist": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+            "solo-leveling": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg"
+        };
 
         return React.createElement('div', null,
             React.createElement(Header),
@@ -283,12 +290,11 @@
                 React.createElement('h2', { className: 'section-title' }, 'Shop By Anime'),
                 React.createElement('div', { className: 'categories' },
                     categories.map(category => {
-                        const categoryData = products[category.key];
                         return React.createElement('div', { 
-                            key: category.key,
+                            key: category.id,
                             className: 'category-card',
                             onClick: () => {
-                                const element = document.getElementById(`anime-${category.key}`);
+                                const element = document.getElementById(`anime-${category.id}`);
                                 if (element) {
                                     element.scrollIntoView({ behavior: 'smooth' });
                                 }
@@ -296,11 +302,11 @@
                         },
                             React.createElement('div', { 
                                 className: 'category-img', 
-                                style: { backgroundImage: `url(${categoryData?.products[0]?.image || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'})` } 
+                                style: { backgroundImage: `url(${categoryImages[category.id] || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'})` } 
                             }),
-                            React.createElement('div', { className: 'category-name' }, category.displayName),
+                            // React.createElement('div', { className: 'category-name' }, category.name),
                             React.createElement('div', { className: 'category-overlay' },
-                                React.createElement('span', null, `View ${category.displayName} Costumes`)
+                                React.createElement('span', null, `View ${category.name} Costumes`)
                             )
                         );
                     })
@@ -322,16 +328,15 @@
                 )
             ),
             categories.map(category => {
-                const anime = products[category.key];
-                if (!anime || !anime.products || anime.products.length === 0) return null;
+                if (!category.products || category.products.length === 0) return null;
                 
                 return React.createElement('section', { 
-                    key: category.key,
+                    key: category.id,
                     className: 'container anime-section',
-                    id: `anime-${category.key}`
+                    id: `anime-${category.id}`
                 },
                     React.createElement('div', { className: 'anime-header' },
-                        React.createElement('h2', { className: 'anime-title' }, anime.title),
+                        React.createElement('h2', { className: 'anime-title' }, category.name),
                         React.createElement('a', { href: '#', className: 'view-all' },
                             'View All ',
                             React.createElement('i', { className: 'fas fa-arrow-right' })
@@ -340,9 +345,9 @@
                     React.createElement('p', { 
                         className: 'text-center mb-0',
                         style: { fontSize: '1.1rem', color: '#6c757d', marginBottom: '30px' }
-                    }, anime.description),
+                    }, `Dress up as your favorite characters from ${category.name}!`),
                     React.createElement('div', { className: 'products' },
-                        anime.products.map(product => 
+                        category.products.map(product => 
                             React.createElement(ProductCard, {
                                 key: product.id,
                                 product,
@@ -373,10 +378,10 @@
                             React.createElement('h3', null, 'Shop'),
                             React.createElement('ul', { className: 'footer-links' },
                                 categories.slice(0, 5).map(category =>
-                                    React.createElement('li', { key: category.key },
+                                    React.createElement('li', { key: category.id },
                                         React.createElement('a', { href: '#' },
                                             React.createElement('i', { className: 'fas fa-chevron-right' }),
-                                            `${category.displayName} Costumes`
+                                            `${category.name} Costumes`
                                         )
                                     )
                                 )

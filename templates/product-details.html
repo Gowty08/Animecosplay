@@ -17,11 +17,26 @@
         const [quantity, setQuantity] = React.useState(1);
         const [selectedImage, setSelectedImage] = React.useState('');
         const [currentUser, setCurrentUser] = React.useState(AuthService.currentUser);
-        const product = {{ product | tojson | safe }};
+        
+        // Get product from the global products data structure
+        const getProductFromData = () => {
+            const productId = "{{ product_id | default('') }}";
+            if (!productId) return null;
+
+            // Search through all categories to find the product
+            const allProducts = window.productsData?.categories?.flatMap(category => category.products) || [];
+            return allProducts.find(p => p.id === productId);
+        };
+
+        const product = getProductFromData();
 
         React.useEffect(() => {
-            if (product && product.image) {
-                setSelectedImage(product.image);
+            if (product) {
+                // Use imageUrl if available, otherwise use image
+                const mainImage = product.imageUrl || product.image;
+                if (mainImage) {
+                    setSelectedImage(mainImage);
+                }
             }
         }, [product]);
 
@@ -48,8 +63,11 @@
             window.location.href = '/checkout';
         };
 
+        // Get the main image - prioritize imageUrl, fall back to image
+        const mainImage = product.imageUrl || product.image;
+        
         const productImages = [
-            product.image,
+            mainImage,
             "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1632493563319-6c5be7025ecc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
@@ -90,6 +108,11 @@
                             React.createElement('span', null, `${product.rating} (${product.reviews} Reviews)`)
                         ),
                         React.createElement('p', { className: 'product-details-description' }, product.description),
+                        
+                        // Display badge if available
+                        product.badge && React.createElement('div', { 
+                            className: `product-badge ${product.badge.toLowerCase().replace(' ', '-')}` 
+                        }, product.badge),
                         
                         React.createElement('div', { className: 'product-meta' },
                             React.createElement('div', { className: 'meta-item' },

@@ -517,8 +517,13 @@
                             React.createElement('div', { className: 'order-items-list' },
                                 cartItems.map(item =>
                                     React.createElement('div', { key: item.id, className: 'order-summary-item' },
-                                        React.createElement('div', { className: 'item-image', 
-                                            style: { backgroundImage: `url(${item.image})` } 
+                                        React.createElement('div', { 
+                                            className: 'item-image', 
+                                            style: { 
+                                                backgroundImage: `url(${item.image || item.imageUrl})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center'
+                                            } 
                                         }),
                                         React.createElement('div', { className: 'item-details' },
                                             React.createElement('div', { className: 'item-name' }, item.name),

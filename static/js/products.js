@@ -3,30 +3,109 @@ window.ProductAPI = {
     fetchAllProducts: async function() {
         try {
             const response = await fetch('/api/products');
-            return await response.json();
+            const data = await response.json();
+            
+            // Convert the new structure to flat products array for backward compatibility
+            if (data.categories) {
+                const allProducts = [];
+                data.categories.forEach(category => {
+                    category.products.forEach(product => {
+                        allProducts.push({
+                            ...product,
+                            // Ensure consistent image property name
+                            image: product.image || product.imageUrl
+                        });
+                    });
+                });
+                return allProducts;
+            }
+            return data;
         } catch (error) {
             console.error('Error fetching products:', error);
-            return {};
+            return [];
         }
     },
     
     fetchProductsByCategory: async function(category) {
         try {
-            const response = await fetch(`/api/products/${category}`);
-            return await response.json();
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            
+            if (data.categories) {
+                const categoryData = data.categories.find(cat => cat.id === category);
+                if (categoryData) {
+                    return categoryData.products.map(product => ({
+                        ...product,
+                        image: product.image || product.imageUrl
+                    }));
+                }
+            }
+            return [];
         } catch (error) {
             console.error('Error fetching products by category:', error);
-            return {};
+            return [];
         }
     },
     
     fetchProduct: async function(productId) {
         try {
-            const response = await fetch(`/api/product/${productId}`);
-            return await response.json();
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            
+            if (data.categories) {
+                for (let category of data.categories) {
+                    const product = category.products.find(p => p.id === productId);
+                    if (product) {
+                        return {
+                            ...product,
+                            image: product.image || product.imageUrl
+                        };
+                    }
+                }
+            }
+            return null;
         } catch (error) {
             console.error('Error fetching product:', error);
             return null;
+        }
+    },
+    
+    // New method to fetch categories
+    fetchCategories: async function() {
+        try {
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            return data.categories || [];
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            return [];
+        }
+    },
+    
+    // New method to fetch featured products
+    fetchFeaturedProducts: async function() {
+        try {
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            
+            if (data.categories) {
+                const featuredProducts = [];
+                data.categories.forEach(category => {
+                    category.products.forEach(product => {
+                        if (product.featured) {
+                            featuredProducts.push({
+                                ...product,
+                                image: product.image || product.imageUrl
+                            });
+                        }
+                    });
+                });
+                return featuredProducts;
+            }
+            return [];
+        } catch (error) {
+            console.error('Error fetching featured products:', error);
+            return [];
         }
     }
 };
@@ -56,6 +135,12 @@ window.ProductUtils = {
     
     formatPrice: function(price) {
         return `₹${price.toLocaleString()}`;
+    },
+    
+    // New utility to get category name by ID
+    getCategoryName: function(categories, categoryId) {
+        const category = categories.find(cat => cat.id === categoryId);
+        return category ? category.name : 'Unknown Category';
     }
 };
 

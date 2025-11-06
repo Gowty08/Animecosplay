@@ -55,19 +55,34 @@
                         date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
                         status: 'delivered',
                         items: [
-                            { id: 1, name: 'Naruto Uzumaki Costume', price: 2499, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' },
-                            { id: 2, name: 'Kunai Weapon Set', price: 899, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }
+                            { 
+                                id: 'n1', 
+                                name: 'Naruto Uzumaki Costume', 
+                                price: 59.99, 
+                                image: 'https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg' 
+                            },
+                            { 
+                                id: 'n9', 
+                                name: 'Kunai Set', 
+                                price: 19.99, 
+                                image: 'https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg' 
+                            }
                         ],
-                        total: 3398
+                        total: 79.98
                     },
                     {
                         id: 'AC2024002',
                         date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
                         status: 'shipped',
                         items: [
-                            { id: 3, name: 'Sasuke Uchiha Costume', price: 2799, image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80' }
+                            { 
+                                id: 'aot1', 
+                                name: 'Survey Corps Jacket', 
+                                price: 64.99, 
+                                image: 'https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg' 
+                            }
                         ],
-                        total: 2799
+                        total: 64.99
                     }
                 ];
                 setOrders(mockOrders);
@@ -215,6 +230,43 @@
                 React.createElement('button', { 
                     className: `security-action-btn ${isDanger ? 'danger' : ''}` 
                 }, buttonText)
+            );
+        };
+
+        // Product Card Component for Wishlist
+        const WishlistProductCard = ({ product, onViewDetails }) => {
+            const handleViewDetails = () => {
+                window.location.href = `/product/${product.id}`;
+            };
+
+            return React.createElement('div', { 
+                key: product.id, 
+                className: 'product-card',
+                style: { cursor: 'pointer' },
+                onClick: handleViewDetails
+            },
+                React.createElement('div', { 
+                    className: 'product-img', 
+                    style: { 
+                        backgroundImage: `url(${product.image || product.imageUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    } 
+                }),
+                React.createElement('div', { className: 'product-info' },
+                    React.createElement('div', { className: 'product-title' }, product.name),
+                    React.createElement('div', { className: 'product-price' }, `₹${product.price.toLocaleString()}`),
+                    React.createElement('button', { 
+                        className: 'view-details',
+                        onClick: (e) => {
+                            e.stopPropagation();
+                            handleViewDetails();
+                        }
+                    },
+                        React.createElement('i', { className: 'fas fa-eye' }),
+                        ' View Product'
+                    )
+                )
             );
         };
 
@@ -448,7 +500,11 @@
                                                     React.createElement('div', { key: item.id, className: 'order-item-enhanced' },
                                                         React.createElement('div', {
                                                             className: 'order-item-img',
-                                                            style: { backgroundImage: `url(${item.image})` }
+                                                            style: { 
+                                                                backgroundImage: `url(${item.image || item.imageUrl})`,
+                                                                backgroundSize: 'cover',
+                                                                backgroundPosition: 'center'
+                                                            }
                                                         }),
                                                         React.createElement('div', { className: 'order-item-details' },
                                                             React.createElement('div', { className: 'order-item-name' }, item.name),
@@ -502,20 +558,11 @@
                                     ),
                                     React.createElement('div', { className: 'products' },
                                         wishlistItems.slice(0, 6).map(product =>
-                                            React.createElement('div', { key: product.id, className: 'product-card' },
-                                                React.createElement('div', { 
-                                                    className: 'product-img', 
-                                                    style: { backgroundImage: `url(${product.image})` } 
-                                                }),
-                                                React.createElement('div', { className: 'product-info' },
-                                                    React.createElement('div', { className: 'product-title' }, product.name),
-                                                    React.createElement('div', { className: 'product-price' }, `₹${product.price.toLocaleString()}`),
-                                                    React.createElement('button', { className: 'view-details' },
-                                                        React.createElement('i', { className: 'fas fa-eye' }),
-                                                        ' View Product'
-                                                    )
-                                                )
-                                            )
+                                            React.createElement(WishlistProductCard, {
+                                                key: product.id,
+                                                product: product,
+                                                onViewDetails: () => window.location.href = `/product/${product.id}`
+                                            })
                                         )
                                     ),
                                     wishlistItems.length > 6 &&
@@ -589,6 +636,7 @@
     ReactDOM.render(React.createElement(AccountApp), document.getElementById('account-app'));
 </script>
 
+<!-- The CSS styles remain exactly the same as in your original file -->
 <style>
     /* Enhanced Account Page Styles */
     .account-page-enhanced {

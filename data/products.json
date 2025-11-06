@@ -1,248 +1,1943 @@
 {
-  "one-piece": {
-    "title": "One Piece Costumes",
-    "description": "Dress up as your favorite pirates from the Grand Line!",
-    "products": [
-      {
-        "id": 1,
-        "name": "Monkey D. Luffy Costume",
-        "price": 2499,
-        "rating": 4.8,
-        "reviews": 342,
-        "image": "https://m.media-amazon.com/images/I/61iXeNizOGL._AC_UY1100_.jpg",
-        "badge": "Best Seller",
-        "description": "Complete Luffy costume with authentic straw hat, red vest, and blue shorts. Perfect for any pirate adventure!",
-        "category": "one-piece",
-        "sizes": ["S", "M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 2,
-        "name": "Roronoa Zoro Swordsman Outfit",
-        "price": 2899,
-        "rating": 4.7,
-        "reviews": 215,
-        "image": "https://geekmonkey.in/cdn/shop/files/83_01ecf235-4f07-46b5-a143-e3308a85fee2.jpg?v=1711413874",
-        "badge": "Popular",
-        "description": "Zoro's iconic green haramaki with three sword replica set. Become the world's greatest swordsman!",
-        "category": "one-piece",
-        "sizes": ["M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 3,
-        "name": "Sanji Black Leg Cook Uniform",
-        "price": 2699,
-        "rating": 4.6,
-        "reviews": 187,
-        "image": "https://images-cdn.ubuy.co.in/66f0e5bc23eaba641e51cba3-anime-costume-chef-sanji-cosplay-black.jpg",
-        "badge": "New",
-        "description": "Sanji's elegant black suit with blonde wig and signature eyebrow. Cook up some trouble in style!",
-        "category": "one-piece",
-        "sizes": ["S", "M", "L", "XL"],
-        "inStock": true,
-        "featured": false
-      },
-      {
-        "id": 4,
-        "name": "Nami Navigator Costume",
-        "price": 2399,
-        "rating": 4.5,
-        "reviews": 156,
-        "image": "https://onepiece.b-cdn.net/wp-content/uploads/2021/12/Anime-Nami-Cosplay-Costumes-Set-Dress-Accessories-Suit-Adult-Unisex-Prop.jpg",
-        "badge": "Hot",
-        "description": "Nami's orange bikini top and shorts with weather staff replica. Navigate your way to the best costume!",
-        "category": "one-piece",
-        "sizes": ["XS", "S", "M"],
-        "inStock": true,
-        "featured": true
-      }
-    ]
-  },
-  "naruto": {
-    "title": "Naruto Costumes",
-    "description": "Become a ninja from the Hidden Leaf Village!",
-    "products": [
-      {
-        "id": 11,
-        "name": "Naruto Uzumaki Sage Mode",
-        "price": 2799,
-        "rating": 4.9,
-        "reviews": 298,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/51HZv%2BkAPEL.jpg",
-        "badge": "Best Seller",
-        "description": "Naruto's iconic orange jumpsuit with Konoha headband and sage mode accessories. Believe it!",
-        "category": "naruto",
-        "sizes": ["S", "M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 12,
-        "name": "Sasuke Uchiha Akatsuki Cloak",
-        "price": 3199,
-        "rating": 4.8,
-        "reviews": 234,
-        "image": "https://images-cdn.ubuy.co.in/634f3c5b2f66e254180d1302-fokicos-naruto-akatsuki-cloak-unisex.jpg",
-        "badge": "Premium",
-        "description": "Sasuke's Akatsuki cloak with sharingan contacts and sword. Avenger style perfected!",
-        "category": "naruto",
-        "sizes": ["S", "M", "L"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 13,
-        "name": "Kakashi Hatake Jonin Uniform",
-        "price": 2999,
-        "rating": 4.7,
-        "reviews": 189,
-        "image": "https://narutoshop.fr/wp-content/uploads/2024/07/description-image-4-27.jpeg",
-        "badge": "Popular",
-        "description": "Kakashi's jonin uniform with mask, sharingan eye, and headband. Copy ninja style!",
-        "category": "naruto",
-        "sizes": ["M", "L", "XL"],
-        "inStock": true,
-        "featured": false
-      }
-    ]
-  },
-  "attack-on-titan": {
-    "title": "Attack on Titan Costumes",
-    "description": "Join the Survey Corps and fight against the Titans!",
-    "products": [
-      {
-        "id": 21,
-        "name": "Levi Ackerman Uniform",
-        "price": 3499,
-        "rating": 4.9,
-        "reviews": 267,
-        "image": "https://i.pinimg.com/736x/cb/d2/c5/cbd2c54f6e7a60658ad1896201b97218.jpg",
-        "badge": "Best Seller",
-        "description": "Levi's Survey Corps uniform with ODM gear replica and cape. Humanity's strongest soldier!",
-        "category": "attack-on-titan",
-        "sizes": ["S", "M", "L"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 22,
-        "name": "Eren Yeager Cosplay Costume",
-        "price": 3299,
-        "rating": 4.7,
-        "reviews": 198,
-        "image": "https://img.drz.lazcdn.com/static/bd/p/34aa6c685eefa648da6ba26ae1140c2f.jpg_960x960q80.jpg_.webp",
-        "badge": "New",
-        "description": "Eren's final season uniform with determined expression wig. Fight for freedom!",
-        "category": "attack-on-titan",
-        "sizes": ["M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      }
-    ]
-  },
-  "demon-slayer": {
-    "title": "Demon Slayer Costumes",
-    "description": "Join the Demon Slayer Corps and master Breathing Techniques!",
-    "products": [
-      {
-        "id": 31,
-        "name": "Tanjiro Kamado Uniform",
-        "price": 2999,
-        "rating": 4.8,
-        "reviews": 223,
-        "image": "https://i.pinimg.com/736x/ab/63/d8/ab63d80056418c01d7c52cf3aefae0f2.jpg",
-        "badge": "Popular",
-        "description": "Tanjiro's checkered haori with nichirin sword replica. Water Breathing ready!",
-        "category": "demon-slayer",
-        "sizes": ["S", "M", "L"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 32,
-        "name": "Nezuko Kamado Demon Form",
-        "price": 2699,
-        "rating": 4.6,
-        "reviews": 176,
-        "image": "https://images-cdn.ubuy.co.in/634b42d34f58be3a4c078c13-fallinoce-with-wig-demon-slayer-cosplay.jpg",
-        "badge": "Hot",
-        "description": "Nezuko's kimono with bamboo muzzle and demon contacts. Protect your family!",
-        "category": "demon-slayer",
-        "sizes": ["XS", "S", "M"],
-        "inStock": true,
-        "featured": false
-      }
-    ]
-  },
-  "my-hero-academia": {
-    "title": "My Hero Academia Costumes",
-    "description": "Become a hero from UA High School!",
-    "products": [
-      {
-        "id": 41,
-        "name": "Izuku Midoriya Hero Costume",
-        "price": 3199,
-        "rating": 4.7,
-        "reviews": 245,
-        "image": "https://m.media-amazon.com/images/I/61YdIa9d2yL._AC_UY1100_.jpg",
-        "badge": "New",
-        "description": "Deku's green hero costume with mask and accessories. Plus Ultra!",
-        "category": "my-hero-academia",
-        "sizes": ["S", "M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 42,
-        "name": "Katsuki Bakugo Cosplay Costume",
-        "price": 3399,
-        "rating": 4.8,
-        "reviews": 198,
-        "image": "https://www.ubuy.co.in/productimg/?image=aHR0cHM6Ly9pbWFnZXMtY2RuLnVidXkucGUvNjUzZjdjNDNhOWY1OTkyYjQ0NTIyYzgzLW15LWhlcm8tYWNhZGVtaWEtYmFrdWdvLWthdHN1a2ktY29tYmF0cy5qcGc.jpg",
-        "badge": "Premium",
-        "description": "Bakugo's explosive hero costume with grenade gauntlets. The future number one hero!",
-        "category": "my-hero-academia",
-        "sizes": ["M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      }
-    ]
-  },
-  "jujutsu-kaisen": {
-    "title": "Jujutsu Kaisen Costumes",
-    "description": "Master cursed energy and become a Jujutsu Sorcerer!",
-    "products": [
-      {
-        "id": 51,
-        "name": "Yuji Itadori Jujutsu Costume",
-        "price": 2899,
-        "rating": 4.6,
-        "reviews": 167,
-        "image": "https://images-cdn.ubuy.co.in/66144090a438e067d2423627-jujutsu-kaisen-s-yuji-itadori-anime.jpg",
-        "badge": "Popular",
-        "description": "Yuji's Jujutsu High uniform with pink hair. Eat this finger and become the vessel!",
-        "category": "jujutsu-kaisen",
-        "sizes": ["S", "M", "L"],
-        "inStock": true,
-        "featured": true
-      },
-      {
-        "id": 52,
-        "name": "Gojo Satoru Blindfold Style",
-        "price": 3599,
-        "rating": 4.9,
-        "reviews": 289,
-        "image": "https://m.media-amazon.com/images/I/61DWH1h3zdL._AC_UY1100_.jpg",
-        "badge": "Best Seller",
-        "description": "Gojo's iconic blindfold look with white hair and Jujutsu High uniform. The strongest sorcerer!",
-        "category": "jujutsu-kaisen",
-        "sizes": ["M", "L", "XL"],
-        "inStock": true,
-        "featured": true
-      }
-    ]
-  }
+  "categories": [
+    {
+      "id": "naruto",
+      "name": "Naruto",
+      "products": [
+        {
+          "id": "n1",
+          "name": "Naruto Uzumaki Costume",
+          "price": 59.99,
+          "description": "Complete Naruto Shippuden outfit with headband",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.8,
+          "reviews": 142,
+          "badge": "Popular",
+          "category": "naruto",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "n2",
+          "name": "Akatsuki Cloak",
+          "price": 49.99,
+          "description": "High-quality Akatsuki organization cloak with clouds",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.9,
+          "reviews": 203,
+          "badge": "Best Seller",
+          "category": "naruto",
+          "sizes": [
+            "M",
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "n3",
+          "name": "Kakashi Mask",
+          "price": 14.99,
+          "description": "Kakashi Hatake's iconic face mask",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.6,
+          "reviews": 89,
+          "badge": "New",
+          "category": "naruto",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n4",
+          "name": "Sasuke Uchiha Costume",
+          "price": 54.99,
+          "description": "Complete Sasuke outfit with Uchiha symbol",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.7,
+          "reviews": 118,
+          "badge": "Popular",
+          "category": "naruto",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n5",
+          "name": "Ninja Headband",
+          "price": 12.99,
+          "description": "Hidden Leaf Village ninja headband",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.5,
+          "reviews": 267,
+          "badge": "Best Seller",
+          "category": "naruto",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "n6",
+          "name": "Hinata Hyuga Costume",
+          "price": 49.99,
+          "description": "Complete Hinata ninja outfit",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.8,
+          "reviews": 94,
+          "badge": "Popular",
+          "category": "naruto",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n7",
+          "name": "ANBU Mask",
+          "price": 24.99,
+          "description": "ANBU Black Ops mask",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.4,
+          "reviews": 76,
+          "badge": "New",
+          "category": "naruto",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n8",
+          "name": "Sakura Haruno Costume",
+          "price": 49.99,
+          "description": "Complete Sakura ninja outfit",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.6,
+          "reviews": 81,
+          "badge": "Popular",
+          "category": "naruto",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n9",
+          "name": "Kunai Set",
+          "price": 19.99,
+          "description": "Set of 3 ninja kunai props",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.3,
+          "reviews": 155,
+          "badge": "Best Seller",
+          "category": "naruto",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "n10",
+          "name": "Gaara Gourd",
+          "price": 34.99,
+          "description": "Gaara's sand gourd prop",
+          "imageUrl": "https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg",
+          "rating": 4.7,
+          "reviews": 63,
+          "badge": "New",
+          "category": "naruto",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "attack-on-titan",
+      "name": "Attack on Titan",
+      "products": [
+        {
+          "id": "aot1",
+          "name": "Survey Corps Jacket",
+          "price": 64.99,
+          "description": "Official Survey Corps uniform jacket",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.8,
+          "reviews": 178,
+          "badge": "Best Seller",
+          "category": "attack-on-titan",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "aot2",
+          "name": "3D Maneuver Gear",
+          "price": 89.99,
+          "description": "Replica ODM gear with straps",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.9,
+          "reviews": 234,
+          "badge": "Featured",
+          "category": "attack-on-titan",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "aot3",
+          "name": "Wings of Freedom Cape",
+          "price": 29.99,
+          "description": "Survey Corps cape with emblem",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.6,
+          "reviews": 92,
+          "badge": "Popular",
+          "category": "attack-on-titan",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "aot4",
+          "name": "Eren Yeager Costume",
+          "price": 59.99,
+          "description": "Complete Eren training corps outfit",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.7,
+          "reviews": 156,
+          "badge": "Best Seller",
+          "category": "attack-on-titan",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "aot5",
+          "name": "Mikasa Scarf",
+          "price": 19.99,
+          "description": "Mikasa's iconic red scarf",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.5,
+          "reviews": 201,
+          "badge": "Popular",
+          "category": "attack-on-titan",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "aot6",
+          "name": "Levi Costume",
+          "price": 69.99,
+          "description": "Captain Levi's full uniform",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.9,
+          "reviews": 189,
+          "badge": "Featured",
+          "category": "attack-on-titan",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "aot7",
+          "name": "Military Police Jacket",
+          "price": 54.99,
+          "description": "Military Police Brigade uniform jacket",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.4,
+          "reviews": 67,
+          "badge": "New",
+          "category": "attack-on-titan",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "aot8",
+          "name": "Thunder Spears",
+          "price": 44.99,
+          "description": "Pair of prop thunder spears",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.6,
+          "reviews": 113,
+          "badge": "Popular",
+          "category": "attack-on-titan",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "aot9",
+          "name": "Scout Regiment Boots",
+          "price": 49.99,
+          "description": "Military-style brown boots",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.3,
+          "reviews": 88,
+          "badge": "New",
+          "category": "attack-on-titan",
+          "sizes": [
+            "8",
+            "9",
+            "10",
+            "11"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "aot10",
+          "name": "Wall Rose Emblem",
+          "price": 9.99,
+          "description": "Wall Rose military patch",
+          "image": "https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg",
+          "rating": 4.2,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "attack-on-titan",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "one-piece",
+      "name": "One Piece",
+      "products": [
+        {
+          "id": "op1",
+          "name": "Luffy Straw Hat",
+          "price": 29.99,
+          "description": "Monkey D. Luffy's iconic straw hat",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.9,
+          "reviews": 312,
+          "badge": "Best Seller",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "op2",
+          "name": "Zoro Swords Set",
+          "price": 89.99,
+          "description": "Roronoa Zoro's three sword set",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.8,
+          "reviews": 187,
+          "badge": "Featured",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "op3",
+          "name": "Nami Climatact",
+          "price": 39.99,
+          "description": "Nami's weather manipulation staff",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.6,
+          "reviews": 134,
+          "badge": "Popular",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "op4",
+          "name": "Sanji Suit",
+          "price": 79.99,
+          "description": "Black suit with tie and dress shoes",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.7,
+          "reviews": 98,
+          "badge": "New",
+          "category": "one-piece",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "op5",
+          "name": "Chopper Hat",
+          "price": 24.99,
+          "description": "Tony Tony Chopper's pink hat",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.5,
+          "reviews": 223,
+          "badge": "Best Seller",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "op6",
+          "name": "Law's Nodachi",
+          "price": 59.99,
+          "description": "Trafalgar Law's sword replica",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.8,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "op7",
+          "name": "Ace Hat",
+          "price": 34.99,
+          "description": "Portgas D. Ace's orange hat",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.7,
+          "reviews": 178,
+          "badge": "Featured",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "op8",
+          "name": "Doflamingo Glasses",
+          "price": 19.99,
+          "description": "Signature pink sunglasses",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.4,
+          "reviews": 89,
+          "badge": "New",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "op9",
+          "name": "Marine Coat",
+          "price": 69.99,
+          "description": "Marine justice coat with epaulettes",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.6,
+          "reviews": 112,
+          "badge": "Popular",
+          "category": "one-piece",
+          "sizes": [
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "op10",
+          "name": "Pirate Flag",
+          "price": 24.99,
+          "description": "Straw Hat Pirates Jolly Roger",
+          "image": "https://comicvine.gamespot.com/a/uploads/scale_small/11117/111178336/7080202-1635462455-unkno.png",
+          "rating": 4.3,
+          "reviews": 267,
+          "badge": "Best Seller",
+          "category": "one-piece",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "demon-slayer",
+      "name": "Demon Slayer",
+      "products": [
+        {
+          "id": "ds1",
+          "name": "Tanjiro Costume",
+          "price": 69.99,
+          "description": "Complete Demon Slayer uniform with haori",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.9,
+          "reviews": 278,
+          "badge": "Best Seller",
+          "category": "demon-slayer",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "ds2",
+          "name": "Nezuko Box",
+          "price": 49.99,
+          "description": "Wooden box carrier prop",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.7,
+          "reviews": 165,
+          "badge": "Popular",
+          "category": "demon-slayer",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds3",
+          "name": "Zenitsu Costume",
+          "price": 64.99,
+          "description": "Yellow and orange Demon Slayer uniform",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.6,
+          "reviews": 142,
+          "badge": "New",
+          "category": "demon-slayer",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds4",
+          "name": "Nichirin Sword",
+          "price": 79.99,
+          "description": "Color-changing Nichirin blade",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.8,
+          "reviews": 203,
+          "badge": "Featured",
+          "category": "demon-slayer",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "ds5",
+          "name": "Inosuke Mask",
+          "price": 39.99,
+          "description": "Boar head mask with fur",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.5,
+          "reviews": 189,
+          "badge": "Best Seller",
+          "category": "demon-slayer",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds6",
+          "name": "Rengoku Haori",
+          "price": 44.99,
+          "description": "Flame Hashira pattern haori",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.9,
+          "reviews": 234,
+          "badge": "Featured",
+          "category": "demon-slayer",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "ds7",
+          "name": "Demon Slayer Corps Uniform",
+          "price": 54.99,
+          "description": "Standard issue uniform",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.4,
+          "reviews": 98,
+          "badge": "Popular",
+          "category": "demon-slayer",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds8",
+          "name": "Kanao Butterfly Hairpin",
+          "price": 14.99,
+          "description": "Decorative butterfly hairpin",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.3,
+          "reviews": 112,
+          "badge": "New",
+          "category": "demon-slayer",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds9",
+          "name": "Giyu Water Pattern Haori",
+          "price": 44.99,
+          "description": "Water Hashira pattern haori",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.7,
+          "reviews": 156,
+          "badge": "Popular",
+          "category": "demon-slayer",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "ds10",
+          "name": "Demon Slayer Socks",
+          "price": 9.99,
+          "description": "Traditional tabi socks",
+          "image": "https://m.media-amazon.com/images/I/71EJ6ivzmuS._AC_UF894,1000_QL80_.jpg",
+          "rating": 4.2,
+          "reviews": 87,
+          "badge": "New",
+          "category": "demon-slayer",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "my-hero-academia",
+      "name": "My Hero Academia",
+      "products": [
+        {
+          "id": "mha1",
+          "name": "Deku Costume",
+          "price": 64.99,
+          "description": "Green hero costume with mask",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.8,
+          "reviews": 192,
+          "badge": "Best Seller",
+          "category": "my-hero-academia",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "mha2",
+          "name": "All Might Costume",
+          "price": 79.99,
+          "description": "Silver Age hero costume",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.9,
+          "reviews": 245,
+          "badge": "Featured",
+          "category": "my-hero-academia",
+          "sizes": [
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "mha3",
+          "name": "UA School Uniform",
+          "price": 49.99,
+          "description": "Grey school uniform with tie",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.6,
+          "reviews": 178,
+          "badge": "Popular",
+          "category": "my-hero-academia",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "mha4",
+          "name": "Bakugo Gauntlets",
+          "price": 44.99,
+          "description": "Explosion gauntlet props",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.7,
+          "reviews": 134,
+          "badge": "New",
+          "category": "my-hero-academia",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "mha5",
+          "name": "Todoroki Costume",
+          "price": 69.99,
+          "description": "Half-cold half-hot hero costume",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.8,
+          "reviews": 167,
+          "badge": "Best Seller",
+          "category": "my-hero-academia",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "mha6",
+          "name": "Ochaco Costume",
+          "price": 59.99,
+          "description": "Pink and black hero costume",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.5,
+          "reviews": 123,
+          "badge": "Popular",
+          "category": "my-hero-academia",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "mha7",
+          "name": "Aizawa Goggles",
+          "price": 29.99,
+          "description": "Yellow protective goggles",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.4,
+          "reviews": 98,
+          "badge": "New",
+          "category": "my-hero-academia",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "mha8",
+          "name": "Stain Costume",
+          "price": 74.99,
+          "description": "Hero Killer costume with bandana",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.6,
+          "reviews": 87,
+          "badge": "Featured",
+          "category": "my-hero-academia",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "mha9",
+          "name": "Hawks Wings",
+          "price": 89.99,
+          "description": "Detachable red wing props",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.7,
+          "reviews": 112,
+          "badge": "New",
+          "category": "my-hero-academia",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "mha10",
+          "name": "Dabi Jacket",
+          "price": 54.99,
+          "description": "Black villain jacket with patches",
+          "image": "https://m.media-amazon.com/images/I/61D9h46CNiL._AC_UF1000,1000_QL80_.jpg",
+          "rating": 4.5,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "my-hero-academia",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "tokyo-ghoul",
+      "name": "Tokyo Ghoul",
+      "products": [
+        {
+          "id": "tg1",
+          "name": "Kaneki Mask",
+          "price": 34.99,
+          "description": "Leather eye patch mask",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.8,
+          "reviews": 167,
+          "badge": "Best Seller",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "tg2",
+          "name": "CCG Investigator Coat",
+          "price": 59.99,
+          "description": "White investigator's coat",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.6,
+          "reviews": 98,
+          "badge": "Popular",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg3",
+          "name": "Touka Mask",
+          "price": 29.99,
+          "description": "Rabbit design mask",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.5,
+          "reviews": 134,
+          "badge": "New",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg4",
+          "name": "Quinque Prop",
+          "price": 69.99,
+          "description": "CCG weapon prop",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.7,
+          "reviews": 112,
+          "badge": "Featured",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "tg5",
+          "name": "Anteiku Uniform",
+          "price": 44.99,
+          "description": "Coffee shop worker uniform",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.4,
+          "reviews": 76,
+          "badge": "Popular",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg6",
+          "name": "Uta Mask",
+          "price": 39.99,
+          "description": "No Face mask prop",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.6,
+          "reviews": 89,
+          "badge": "New",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg7",
+          "name": "Juuzou Suspenders",
+          "price": 19.99,
+          "description": "Red suspenders with clips",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.3,
+          "reviews": 67,
+          "badge": "Popular",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg8",
+          "name": "Tsukiyama Suit",
+          "price": 84.99,
+          "description": "Purple formal suit",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.7,
+          "reviews": 54,
+          "badge": "Featured",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "tg9",
+          "name": "Kagune Props",
+          "price": 49.99,
+          "description": "Attachable kagune tentacles",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.5,
+          "reviews": 123,
+          "badge": "New",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "tg10",
+          "name": "Eyepatch",
+          "price": 9.99,
+          "description": "Medical eye patch",
+          "image": "https://geekygirlwritesblog.wordpress.com/wp-content/uploads/2017/01/tokyo_ghoul_5787.jpg",
+          "rating": 4.2,
+          "reviews": 189,
+          "badge": "Best Seller",
+          "category": "tokyo-ghoul",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "death-note",
+      "name": "Death Note",
+      "products": [
+        {
+          "id": "dn1",
+          "name": "Death Note Replica",
+          "price": 24.99,
+          "description": "Notebook with rules",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.9,
+          "reviews": 278,
+          "badge": "Best Seller",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "dn2",
+          "name": "L Costume",
+          "price": 49.99,
+          "description": "White shirt and blue jeans",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.7,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "death-note",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn3",
+          "name": "Misa Costume",
+          "price": 59.99,
+          "description": "Gothic Lolita dress",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.6,
+          "reviews": 112,
+          "badge": "New",
+          "category": "death-note",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn4",
+          "name": "Light Yagami Uniform",
+          "price": 54.99,
+          "description": "School uniform set",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.8,
+          "reviews": 167,
+          "badge": "Featured",
+          "category": "death-note",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "dn5",
+          "name": "Ryuk Costume",
+          "price": 89.99,
+          "description": "Shinigami full costume",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.5,
+          "reviews": 98,
+          "badge": "Popular",
+          "category": "death-note",
+          "sizes": [
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn6",
+          "name": "Task Force Badge",
+          "price": 14.99,
+          "description": "Police investigation badge",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.4,
+          "reviews": 203,
+          "badge": "Best Seller",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn7",
+          "name": "Near's Dice Set",
+          "price": 19.99,
+          "description": "White dice collection",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.3,
+          "reviews": 87,
+          "badge": "New",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn8",
+          "name": "Mello's Chocolate Bar",
+          "price": 9.99,
+          "description": "Prop chocolate bar",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.2,
+          "reviews": 134,
+          "badge": "Popular",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "dn9",
+          "name": "Rem Mask",
+          "price": 34.99,
+          "description": "White Shinigami mask",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.6,
+          "reviews": 76,
+          "badge": "Featured",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "dn10",
+          "name": "Death Note Watch",
+          "price": 29.99,
+          "description": "Light's wristwatch replica",
+          "image": "https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg",
+          "rating": 4.5,
+          "reviews": 156,
+          "badge": "New",
+          "category": "death-note",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "dragon-ball",
+      "name": "Dragon Ball",
+      "products": [
+        {
+          "id": "db1",
+          "name": "Goku Gi",
+          "price": 54.99,
+          "description": "Orange training uniform",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.8,
+          "reviews": 234,
+          "badge": "Best Seller",
+          "category": "dragon-ball",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "db2",
+          "name": "Saiyan Armor",
+          "price": 79.99,
+          "description": "Vegeta style battle armor",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.7,
+          "reviews": 167,
+          "badge": "Featured",
+          "category": "dragon-ball",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "db3",
+          "name": "Dragon Radar",
+          "price": 29.99,
+          "description": "Prop dragon ball locator",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.5,
+          "reviews": 189,
+          "badge": "Popular",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db4",
+          "name": "Piccolo Cape",
+          "price": 39.99,
+          "description": "Weighted training cape",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.6,
+          "reviews": 98,
+          "badge": "New",
+          "category": "dragon-ball",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db5",
+          "name": "Scouter",
+          "price": 24.99,
+          "description": "Power level detector prop",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.4,
+          "reviews": 145,
+          "badge": "Best Seller",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db6",
+          "name": "Dragon Balls Set",
+          "price": 49.99,
+          "description": "7 star ball collection",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.9,
+          "reviews": 278,
+          "badge": "Featured",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "db7",
+          "name": "Master Roshi Staff",
+          "price": 34.99,
+          "description": "Wooden walking staff",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.3,
+          "reviews": 76,
+          "badge": "New",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db8",
+          "name": "Future Trunks Jacket",
+          "price": 64.99,
+          "description": "Blue Capsule Corp jacket",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.7,
+          "reviews": 134,
+          "badge": "Popular",
+          "category": "dragon-ball",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db9",
+          "name": "Power Pole",
+          "price": 44.99,
+          "description": "Extendable staff prop",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.6,
+          "reviews": 112,
+          "badge": "New",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "db10",
+          "name": "Turtle School Shell",
+          "price": 59.99,
+          "description": "Training weight shell",
+          "image": "https://storage.googleapis.com/pod_public/750/260203.jpg",
+          "rating": 4.5,
+          "reviews": 89,
+          "badge": "Popular",
+          "category": "dragon-ball",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "sailor-moon",
+      "name": "Sailor Moon",
+      "products": [
+        {
+          "id": "sm1",
+          "name": "Sailor Moon Costume",
+          "price": 69.99,
+          "description": "Complete sailor scout uniform",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.8,
+          "reviews": 198,
+          "badge": "Best Seller",
+          "category": "sailor-moon",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sm2",
+          "name": "Moon Stick",
+          "price": 34.99,
+          "description": "Light-up moon wand",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.7,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "sailor-moon",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm3",
+          "name": "Luna Plush",
+          "price": 24.99,
+          "description": "Black cat plush toy",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.9,
+          "reviews": 267,
+          "badge": "Best Seller",
+          "category": "sailor-moon",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sm4",
+          "name": "Transformation Brooch",
+          "price": 29.99,
+          "description": "Light-up costume brooch",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.6,
+          "reviews": 112,
+          "badge": "New",
+          "category": "sailor-moon",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm5",
+          "name": "Sailor Mars Costume",
+          "price": 64.99,
+          "description": "Red sailor scout uniform",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.7,
+          "reviews": 134,
+          "badge": "Popular",
+          "category": "sailor-moon",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm6",
+          "name": "Tiara Prop",
+          "price": 19.99,
+          "description": "Golden tiara accessory",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.5,
+          "reviews": 178,
+          "badge": "Featured",
+          "category": "sailor-moon",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sm7",
+          "name": "Crystal Star Compact",
+          "price": 39.99,
+          "description": "Light-up transformation compact",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.8,
+          "reviews": 156,
+          "badge": "New",
+          "category": "sailor-moon",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm8",
+          "name": "Tuxedo Mask Set",
+          "price": 79.99,
+          "description": "Complete mask and cape set",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.6,
+          "reviews": 98,
+          "badge": "Popular",
+          "category": "sailor-moon",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm9",
+          "name": "Moon Boots",
+          "price": 49.99,
+          "description": "Red and white boots",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.4,
+          "reviews": 87,
+          "badge": "New",
+          "category": "sailor-moon",
+          "sizes": [
+            "6",
+            "7",
+            "8",
+            "9"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sm10",
+          "name": "Sailor Venus Costume",
+          "price": 64.99,
+          "description": "Orange sailor scout uniform",
+          "image": "https://images-cdn.ubuy.co.in/633fd4c217f1e7515425a44c-sailor-moon-season-1-part-2-dvd.jpg",
+          "rating": 4.7,
+          "reviews": 123,
+          "badge": "Featured",
+          "category": "sailor-moon",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": true
+        }
+      ]
+    },
+    {
+      "id": "fullmetal-alchemist",
+      "name": "Fullmetal Alchemist",
+      "products": [
+        {
+          "id": "fma1",
+          "name": "State Alchemist Coat",
+          "price": 69.99,
+          "description": "Military uniform coat",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.8,
+          "reviews": 167,
+          "badge": "Best Seller",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "fma2",
+          "name": "Edward's Automail",
+          "price": 89.99,
+          "description": "Mechanical arm prop",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.7,
+          "reviews": 134,
+          "badge": "Featured",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "fma3",
+          "name": "State Alchemist Watch",
+          "price": 44.99,
+          "description": "Silver pocket watch",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.6,
+          "reviews": 189,
+          "badge": "Popular",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma4",
+          "name": "Alphonse Helmet",
+          "price": 54.99,
+          "description": "Armor head piece",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.5,
+          "reviews": 98,
+          "badge": "New",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma5",
+          "name": "Roy Mustang Gloves",
+          "price": 29.99,
+          "description": "Flame alchemy gloves",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.7,
+          "reviews": 145,
+          "badge": "Best Seller",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma6",
+          "name": "Philosopher's Stone",
+          "price": 19.99,
+          "description": "Red crystal prop",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.4,
+          "reviews": 112,
+          "badge": "Popular",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma7",
+          "name": "Armstrong Sparkles",
+          "price": 9.99,
+          "description": "Glitter effect pack",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.3,
+          "reviews": 87,
+          "badge": "New",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma8",
+          "name": "Winry Tools",
+          "price": 34.99,
+          "description": "Automail mechanic tool set",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.6,
+          "reviews": 76,
+          "badge": "Featured",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "fma9",
+          "name": "Transmutation Circle Mat",
+          "price": 24.99,
+          "description": "Circular floor mat design",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.5,
+          "reviews": 134,
+          "badge": "Popular",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "fma10",
+          "name": "Military Boots",
+          "price": 49.99,
+          "description": "Black combat boots",
+          "image": "https://vignette.wikia.nocookie.net/fma/images/e/e9/Fmab-poster.png/revision/latest?cb=20131124145205",
+          "rating": 4.4,
+          "reviews": 98,
+          "badge": "New",
+          "category": "fullmetal-alchemist",
+          "sizes": [
+            "8",
+            "9",
+            "10",
+            "11"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    },
+    {
+      "id": "solo-leveling",
+      "name": "Solo Leveling",
+      "products": [
+        {
+          "id": "sl1",
+          "name": "Sung Jin-Woo Shadow Monarch Armor",
+          "price": 129.99,
+          "description": "Complete Shadow Monarch black armor set with cape",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.9,
+          "reviews": 287,
+          "badge": "Best Seller",
+          "category": "solo-leveling",
+          "sizes": [
+            "M",
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sl2",
+          "name": "Hunter Association Uniform",
+          "price": 59.99,
+          "description": "Official Hunter Association black uniform",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.7,
+          "reviews": 156,
+          "badge": "Popular",
+          "category": "solo-leveling",
+          "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sl3",
+          "name": "Daggers of Kamish",
+          "price": 79.99,
+          "description": "Twin legendary daggers replica set",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.8,
+          "reviews": 134,
+          "badge": "Featured",
+          "category": "solo-leveling",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sl4",
+          "name": "Cha Hae-In Knight Armor",
+          "price": 89.99,
+          "description": "Female knight armor with sword",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.6,
+          "reviews": 98,
+          "badge": "New",
+          "category": "solo-leveling",
+          "sizes": [
+            "XS",
+            "S",
+            "M"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sl5",
+          "name": "Shadow Soldier Mask",
+          "price": 34.99,
+          "description": "Black shadow soldier helmet mask",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.5,
+          "reviews": 167,
+          "badge": "Popular",
+          "category": "solo-leveling",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sl6",
+          "name": "Igris Blood Red Armor",
+          "price": 149.99,
+          "description": "Igris complete crimson armor set",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.8,
+          "reviews": 89,
+          "badge": "Featured",
+          "category": "solo-leveling",
+          "sizes": [
+            "L",
+            "XL",
+            "XXL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sl7",
+          "name": "System Interface Gloves",
+          "price": 29.99,
+          "description": "Glowing system interface gloves",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.4,
+          "reviews": 112,
+          "badge": "New",
+          "category": "solo-leveling",
+          "sizes": [
+            "S",
+            "M",
+            "L"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sl8",
+          "name": "Thomas Andre Titan Suit",
+          "price": 169.99,
+          "description": "Guild Master Titan battle armor",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.7,
+          "reviews": 76,
+          "badge": "Featured",
+          "category": "solo-leveling",
+          "sizes": [
+            "XL",
+            "XXL",
+            "XXXL"
+          ],
+          "inStock": true,
+          "featured": true
+        },
+        {
+          "id": "sl9",
+          "name": "Dungeon Portal Mat",
+          "price": 44.99,
+          "description": "Glowing blue portal circle mat",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.3,
+          "reviews": 145,
+          "badge": "Popular",
+          "category": "solo-leveling",
+          "sizes": [
+            "One Size"
+          ],
+          "inStock": true,
+          "featured": false
+        },
+        {
+          "id": "sl10",
+          "name": "Shadow Monarch Cape",
+          "price": 54.99,
+          "description": "Black regal cape with silver trim",
+          "image": "https://i.pinimg.com/736x/68/f9/81/68f98176832dd0d1b365ef6bd883d494.jpg",
+          "rating": 4.6,
+          "reviews": 198,
+          "badge": "Best Seller",
+          "category": "solo-leveling",
+          "sizes": [
+            "M",
+            "L",
+            "XL"
+          ],
+          "inStock": true,
+          "featured": false
+        }
+      ]
+    }
+  ]
 }
