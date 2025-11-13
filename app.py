@@ -53,6 +53,11 @@ def account():
 def login():
     return render_template('login.html')
 
+
+@app.route('/orders')
+def orders():
+    return render_template('orders.html')
+
 @app.route('/api/products')
 def api_products():
     products_data = load_products()
@@ -73,6 +78,7 @@ def api_products_by_category(category):
         return jsonify(category_data)
     else:
         return jsonify({'error': 'Category not found'}), 404
+
 
 @app.route('/api/product/<product_id>')
 def api_product(product_id):
@@ -106,4 +112,4 @@ def api_featured_products():
     return jsonify(featured_products)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5001)), debug=True)

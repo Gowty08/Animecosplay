@@ -61,6 +61,10 @@
             window.location.href = '/';
         };
 
+        const handleViewOrders = () => {
+            window.location.href = '/orders';
+        };
+
         const handleClearCart = () => {
             if (confirm('Are you sure you want to clear your entire cart?')) {
                 window.CartManager.clearCart();
@@ -192,6 +196,14 @@
                         }, 
                             React.createElement('i', { className: 'fas fa-store' }),
                             ' Explore Products'
+                        ),
+                        React.createElement('button', { 
+                            className: 'view-orders-btn', 
+                            onClick: handleViewOrders,
+                            style: { marginTop: '15px' }
+                        }, 
+                            React.createElement('i', { className: 'fas fa-shopping-bag' }),
+                            ' View My Orders'
                         )
                     ) :
                     React.createElement('div', { className: 'cart-content' },
@@ -319,6 +331,13 @@
                                         ' Proceed to Checkout'
                                     ),
                                     React.createElement('button', { 
+                                        className: 'view-orders-btn',
+                                        onClick: handleViewOrders
+                                    },
+                                        React.createElement('i', { className: 'fas fa-shopping-bag' }), 
+                                        ' View My Orders'
+                                    ),
+                                    React.createElement('button', { 
                                         className: 'continue-shopping-btn',
                                         onClick: handleContinueShopping
                                     },
@@ -396,6 +415,25 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .view-orders-btn {
+        background: var(--primary);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+    }
+
+    .view-orders-btn:hover {
+        background: #e02e5a;
+        transform: translateY(-2px);
     }
 
     .empty-cart-enhanced h2 {
@@ -819,7 +857,8 @@
         }
 
         .checkout-btn-primary,
-        .continue-shopping-btn {
+        .continue-shopping-btn,
+        .view-orders-btn {
             padding: 14px;
             font-size: 1rem;
         }

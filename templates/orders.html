@@ -1,0 +1,845 @@
+{% extends "base.html" %}
+
+{% block title %}AnimeCosplay - My Orders{% endblock %}
+
+{% block content %}
+<div id="orders-app"></div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+    const OrdersApp = () => {
+        const [currentUser, setCurrentUser] = React.useState(window.AuthService?.currentUser || null);
+        const [orders, setOrders] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
+        const [filter, setFilter] = React.useState('all');
+
+        React.useEffect(() => {
+            // Simulate loading
+            setTimeout(() => {
+                if (!currentUser) {
+                    const proceed = confirm('Please login to view your orders. Would you like to login now?');
+                    if (proceed) {
+                        window.location.href = '/login';
+                    } else {
+                        window.location.href = '/';
+                    }
+                    return;
+                }
+
+                // Load user's actual orders from AuthService
+                const userOrders = currentUser.orders || [];
+                setOrders(userOrders);
+                setLoading(false);
+            }, 800);
+        }, [currentUser]);
+
+        const handleCancelOrder = (orderId) => {
+            if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+                // Update order status in localStorage
+                const updatedOrders = orders.map(order => 
+                    order.id === orderId ? { ...order, status: 'cancelled' } : order
+                );
+                
+                setOrders(updatedOrders);
+                
+                // Update in AuthService
+                const userIndex = window.AuthService.users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    window.AuthService.users[userIndex].orders = updatedOrders;
+                    localStorage.setItem('animeCosplayUsers', JSON.stringify(window.AuthService.users));
+                    
+                    // Update current user
+                    if (window.AuthService.currentUser && window.AuthService.currentUser.id === currentUser.id) {
+                        window.AuthService.currentUser.orders = updatedOrders;
+                        localStorage.setItem('animeCosplayCurrentUser', JSON.stringify(window.AuthService.currentUser));
+                        setCurrentUser(window.AuthService.currentUser);
+                    }
+                }
+                
+                showToast('Order cancelled successfully!', 'success');
+            }
+        };
+
+        const handleReorder = (order) => {
+            // Add all items from the order to cart
+            order.items.forEach(item => {
+                const product = {
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    image: item.image,
+                    category: item.category
+                };
+                window.CartManager.addToCart(product, item.size || 'M', item.quantity || 1);
+            });
+            
+            showToast('Items added to cart!', 'success');
+            setTimeout(() => {
+                window.location.href = '/cart';
+            }, 1500);
+        };
+
+        const showToast = (message, type = '') => {
+            alert(`${type ? type + ': ' : ''}${message}`);
+        };
+
+        const filteredOrders = orders.filter(order => {
+            if (filter === 'all') return true;
+            return order.status === filter;
+        });
+
+        const getStatusBadge = (status) => {
+            const statusConfig = {
+                pending: { class: 'status-pending', icon: 'fa-clock', text: 'Pending' },
+                confirmed: { class: 'status-confirmed', icon: 'fa-check', text: 'Confirmed' },
+                shipped: { class: 'status-shipped', icon: 'fa-shipping-fast', text: 'Shipped' },
+                delivered: { class: 'status-delivered', icon: 'fa-check-circle', text: 'Delivered' },
+                cancelled: { class: 'status-cancelled', icon: 'fa-times-circle', text: 'Cancelled' }
+            };
+
+            const config = statusConfig[status] || statusConfig.pending;
+
+            return React.createElement('div', { className: `order-status-badge ${config.class}` },
+                React.createElement('i', { className: `fas ${config.icon}` }),
+                config.text
+            );
+        };
+
+        const getOrderTotal = (order) => {
+            return order.items.reduce((total, item) => total + (item.price * (item.quantity || 1)), 0);
+        };
+
+        const formatDate = (dateString) => {
+            return new Date(dateString).toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        };
+
+        // Header Component
+        const Header = () => {
+            const [cartItems, setCartItems] = React.useState(window.CartManager?.getCart() || []);
+            const wishlistItems = window.WishlistManager?.getWishlist() || [];
+
+            const handleLoginClick = () => {
+                window.location.href = '/login';
+            };
+
+            const handleCartClick = () => {
+                window.location.href = '/cart';
+            };
+
+            const handleWishlistClick = () => {
+                window.location.href = '/wishlist';
+            };
+
+            const handleAccountClick = () => {
+                window.location.href = '/account';
+            };
+
+            const handleHomeClick = () => {
+                window.location.href = '/';
+            };
+
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const wishlistCount = wishlistItems.length;
+
+            return React.createElement('header', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'header-top' },
+                        React.createElement('div', { className: 'logo', onClick: handleHomeClick, style: { cursor: 'pointer' } },
+                            React.createElement('i', { className: 'fas fa-mask' }),
+                            React.createElement('span', null, 'AnimeCosplay India')
+                        ),
+                        React.createElement('div', { className: 'search-bar' },
+                            React.createElement('input', { 
+                                type: 'text', 
+                                placeholder: 'Search for costumes, accessories...' 
+                            }),
+                            React.createElement('button', null,
+                                React.createElement('i', { className: 'fas fa-search' })
+                            )
+                        ),
+                        React.createElement('div', { className: 'header-actions' },
+                            currentUser ? 
+                                React.createElement('div', { className: 'user-profile' },
+                                    React.createElement('div', { className: 'header-action', onClick: handleAccountClick },
+                                        React.createElement('i', { className: 'fas fa-user' }),
+                                        React.createElement('span', null, currentUser.name.split(' ')[0])
+                                    )
+                                ) :
+                                React.createElement('div', { className: 'header-action', onClick: handleLoginClick },
+                                    React.createElement('i', { className: 'fas fa-user' }),
+                                    React.createElement('span', null, 'Login')
+                                ),
+                            React.createElement('div', { className: 'header-action wishlist-icon', onClick: handleWishlistClick },
+                                React.createElement('i', { className: 'fas fa-heart' }),
+                                React.createElement('span', null, 'Wishlist'),
+                                wishlistCount > 0 && React.createElement('div', { className: 'wishlist-count' }, wishlistCount)
+                            ),
+                            React.createElement('div', { className: 'header-action cart-icon', onClick: handleCartClick },
+                                React.createElement('i', { className: 'fas fa-shopping-cart' }),
+                                React.createElement('span', null, 'Cart'),
+                                cartCount > 0 && React.createElement('div', { className: 'cart-count' }, cartCount)
+                            )
+                        )
+                    )
+                )
+            );
+        };
+
+        if (loading) {
+            return React.createElement('div', { className: 'orders-page' },
+                React.createElement(Header),
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'loading' },
+                        React.createElement('div', { className: 'spinner' }),
+                        React.createElement('p', null, 'Loading your orders...')
+                    )
+                )
+            );
+        }
+
+        if (!currentUser) {
+            return React.createElement('div', { className: 'orders-page' },
+                React.createElement(Header),
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'loading' },
+                        React.createElement('div', { className: 'spinner' })
+                    )
+                )
+            );
+        }
+
+        return React.createElement('div', { className: 'orders-page' },
+            React.createElement(Header),
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'orders-header' },
+                    React.createElement('a', { 
+                        href: '/', 
+                        className: 'back-button'
+                    },
+                        React.createElement('i', { className: 'fas fa-arrow-left' }),
+                        'Continue Shopping'
+                    ),
+                    React.createElement('div', { className: 'header-content' },
+                        React.createElement('h1', { className: 'page-title' }, 
+                            React.createElement('i', { className: 'fas fa-shopping-bag', style: { color: 'var(--primary)', marginRight: '15px' } }),
+                            'My Orders'
+                        ),
+                        React.createElement('p', { className: 'page-subtitle' }, 'Track and manage all your orders in one place')
+                    )
+                ),
+
+                React.createElement('div', { className: 'orders-container' },
+                    React.createElement('div', { className: 'orders-sidebar' },
+                        React.createElement('div', { className: 'orders-stats' },
+                            React.createElement('div', { className: 'stat-card' },
+                                React.createElement('div', { className: 'stat-number' }, orders.length),
+                                React.createElement('div', { className: 'stat-label' }, 'Total Orders')
+                            ),
+                            React.createElement('div', { className: 'stat-card' },
+                                React.createElement('div', { className: 'stat-number' }, orders.filter(o => o.status === 'delivered').length),
+                                React.createElement('div', { className: 'stat-label' }, 'Delivered')
+                            )
+                        ),
+                        React.createElement('div', { className: 'filter-section' },
+                            React.createElement('h3', null, 'Filter Orders'),
+                            React.createElement('div', { className: 'filter-options' },
+                                ['all', 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(status => 
+                                    React.createElement('button', {
+                                        key: status,
+                                        className: `filter-btn ${filter === status ? 'active' : ''}`,
+                                        onClick: () => setFilter(status)
+                                    },
+                                        status.charAt(0).toUpperCase() + status.slice(1),
+                                        status !== 'all' && React.createElement('span', { className: 'filter-count' }, 
+                                            orders.filter(o => o.status === status).length
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ),
+
+                    React.createElement('div', { className: 'orders-content' },
+                        filteredOrders.length > 0 ? 
+                            React.createElement('div', { className: 'orders-list' },
+                                filteredOrders.map(order =>
+                                    React.createElement('div', { key: order.id, className: 'order-card' },
+                                        React.createElement('div', { className: 'order-header' },
+                                            React.createElement('div', { className: 'order-info' },
+                                                React.createElement('div', { className: 'order-id' }, `Order #${order.id}`),
+                                                React.createElement('div', { className: 'order-date' },
+                                                    React.createElement('i', { className: 'fas fa-calendar' }),
+                                                    formatDate(order.date)
+                                                )
+                                            ),
+                                            getStatusBadge(order.status)
+                                        ),
+                                        React.createElement('div', { className: 'order-items' },
+                                            order.items.map(item =>
+                                                React.createElement('div', { key: `${item.id}-${item.size}`, className: 'order-item' },
+                                                    React.createElement('div', {
+                                                        className: 'order-item-img',
+                                                        style: { 
+                                                            backgroundImage: `url(${item.image})`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: 'center'
+                                                        }
+                                                    }),
+                                                    React.createElement('div', { className: 'order-item-details' },
+                                                        React.createElement('div', { className: 'order-item-name' }, item.name),
+                                                        React.createElement('div', { className: 'order-item-meta' },
+                                                            React.createElement('span', null, `Size: ${item.size || 'M'}`),
+                                                            React.createElement('span', null, `Qty: ${item.quantity || 1}`)
+                                                        ),
+                                                        React.createElement('div', { className: 'order-item-price' }, `₹${item.price.toLocaleString()}`)
+                                                    )
+                                                )
+                                            )
+                                        ),
+                                        React.createElement('div', { className: 'order-footer' },
+                                            React.createElement('div', { className: 'order-total' },
+                                                React.createElement('span', null, 'Total Amount:'),
+                                                React.createElement('span', null, `₹${getOrderTotal(order).toFixed(0)}`)
+                                            ),
+                                            React.createElement('div', { className: 'order-actions' },
+                                                (order.status === 'pending' || order.status === 'confirmed') && 
+                                                    React.createElement('button', { 
+                                                        className: 'order-action-btn cancel-btn',
+                                                        onClick: () => handleCancelOrder(order.id)
+                                                    },
+                                                        React.createElement('i', { className: 'fas fa-times' }),
+                                                        ' Cancel Order'
+                                                    ),
+                                                order.status === 'delivered' && 
+                                                    React.createElement('button', { 
+                                                        className: 'order-action-btn primary-btn',
+                                                        onClick: () => handleReorder(order)
+                                                    },
+                                                        React.createElement('i', { className: 'fas fa-redo' }),
+                                                        ' Reorder'
+                                                    ),
+                                                React.createElement('button', { className: 'order-action-btn' },
+                                                    React.createElement('i', { className: 'fas fa-eye' }),
+                                                    ' View Details'
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            ) :
+                            React.createElement('div', { className: 'empty-state' },
+                                React.createElement('i', { className: 'fas fa-shopping-bag' }),
+                                React.createElement('h3', null, 'No Orders Found'),
+                                React.createElement('p', null, 
+                                    filter === 'all' 
+                                        ? 'You haven\'t placed any orders yet. Start exploring our anime collection!'
+                                        : `No ${filter} orders found.`
+                                ),
+                                filter === 'all' && 
+                                    React.createElement('a', { href: '/', className: 'cta-button' }, 
+                                        React.createElement('i', { className: 'fas fa-store' }),
+                                        ' Start Shopping'
+                                    )
+                            )
+                    )
+                )
+            )
+        );
+    };
+
+    ReactDOM.render(React.createElement(OrdersApp), document.getElementById('orders-app'));
+</script>
+
+<style>
+    /* Orders Page Styles */
+    .orders-page {
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .orders-header {
+        padding: 40px 0 20px;
+        border-bottom: 2px solid var(--light-gray);
+        margin-bottom: 30px;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: var(--transition);
+    }
+
+    .back-button:hover {
+        gap: 12px;
+        color: var(--accent);
+    }
+
+    .header-content {
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        color: var(--secondary);
+        margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+        color: var(--gray);
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .orders-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .orders-sidebar {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .orders-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, var(--secondary), var(--accent));
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .filter-section h3 {
+        margin-bottom: 15px;
+        color: var(--secondary);
+        font-size: 1.2rem;
+    }
+
+    .filter-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-btn {
+        background: transparent;
+        border: 1px solid var(--light-gray);
+        padding: 12px 15px;
+        border-radius: 8px;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition);
+        color: black;
+    }
+
+    .filter-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .filter-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .filter-count {
+        background: rgba(169, 168, 168, 0.2);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .filter-btn.active .filter-count {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .orders-content {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .order-card {
+        border: 1px solid var(--light-gray);
+        border-radius: 10px;
+        padding: 25px;
+        transition: var(--transition);
+    }
+
+    .order-card:hover {
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(255, 62, 108, 0.1);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+
+    .order-info {
+        flex: 1;
+    }
+
+    .order-id {
+        font-weight: 600;
+        color: var(--secondary);
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+    }
+
+    .order-date {
+        color: var(--gray);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.9rem;
+    }
+
+    .order-status-badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: var(--warning);
+    }
+
+    .status-confirmed {
+        background: #e3f2fd;
+        color: var(--accent);
+    }
+
+    .status-shipped {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-delivered {
+        background: #e7f7ef;
+        color: var(--success);
+    }
+
+    .status-cancelled {
+        background: #f8d7da;
+        color: var(--danger);
+    }
+
+    .order-items {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .order-item {
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        background: rgb(253, 245, 245);
+        border-radius: 8px;
+    }
+
+    .order-item-img {
+        width: 80px;
+        height: 80px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .order-item-details {
+        flex: 1;
+    }
+
+    .order-item-name {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        color: black;
+    }
+
+    .order-item-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        color: var(--gray);
+    }
+
+    .order-item-price {
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid var(--light-gray);
+    }
+
+    .order-total {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--primary);
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .order-action-btn {
+        background: var(--light-gray);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+    }
+
+    .order-action-btn:hover {
+        background: #ddd;
+        color: black;
+    }
+
+    .order-action-btn.primary-btn {
+        background: var(--primary);
+        color: white;
+    }
+
+    .order-action-btn.primary-btn:hover {
+        background: #e02e5a;
+    }
+
+    .order-action-btn.cancel-btn {
+        background: var(--danger);
+        color: white;
+    }
+
+    .order-action-btn.cancel-btn:hover {
+        background: #c82333;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--gray);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--light-gray);
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        color: var(--secondary);
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-button {
+        background: var(--primary);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .cta-button:hover {
+        background: #e02e5a;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Loading State */
+    .loading {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--light-gray);
+        border-left: 4px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .orders-container {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .orders-sidebar {
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .orders-header {
+            padding: 30px 0 15px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .orders-content {
+            padding: 20px;
+        }
+
+        .order-header {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-footer {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .order-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .orders-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .orders-header {
+            padding: 20px 0 10px;
+        }
+
+        .empty-state {
+            padding: 40px 15px;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+        }
+
+        .order-card {
+            padding: 20px;
+        }
+
+        .order-item {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .order-item-img {
+            margin: 0 auto;
+        }
+
+        .order-actions {
+            flex-direction: column;
+        }
+
+        .order-action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

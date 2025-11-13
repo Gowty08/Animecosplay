@@ -21,7 +21,6 @@
             pincode: ''
         });
         const [loading, setLoading] = React.useState(true);
-        const [orders, setOrders] = React.useState([]);
         const [wishlistItems, setWishlistItems] = React.useState([]);
 
         React.useEffect(() => {
@@ -47,45 +46,6 @@
                     state: currentUser?.state || '',
                     pincode: currentUser?.pincode || ''
                 });
-
-                // Load mock orders (in real app, this would be from API)
-                const mockOrders = [
-                    {
-                        id: 'AC2024001',
-                        date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-                        status: 'delivered',
-                        items: [
-                            { 
-                                id: 'n1', 
-                                name: 'Naruto Uzumaki Costume', 
-                                price: 59.99, 
-                                image: 'https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg' 
-                            },
-                            { 
-                                id: 'n9', 
-                                name: 'Kunai Set', 
-                                price: 19.99, 
-                                image: 'https://i.pinimg.com/736x/82/69/3e/82693ee38e59d0858d7aff9c721a5644.jpg' 
-                            }
-                        ],
-                        total: 79.98
-                    },
-                    {
-                        id: 'AC2024002',
-                        date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-                        status: 'shipped',
-                        items: [
-                            { 
-                                id: 'aot1', 
-                                name: 'Survey Corps Jacket', 
-                                price: 64.99, 
-                                image: 'https://images.justwatch.com/poster/306747132/s718/attack-on-titan.jpg' 
-                            }
-                        ],
-                        total: 64.99
-                    }
-                ];
-                setOrders(mockOrders);
 
                 // Load wishlist items
                 const wishlist = window.WishlistManager?.getWishlist() || [];
@@ -151,6 +111,10 @@
                 window.location.href = '/';
             };
 
+            const handleOrdersClick = () => {
+                window.location.href = '/orders';
+            };
+
             const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
             const wishlistCount = wishlistItems.length;
 
@@ -177,6 +141,10 @@
                                         React.createElement('i', { className: 'fas fa-user' }),
                                         React.createElement('span', null, currentUser.name.split(' ')[0])
                                     ),
+                                    React.createElement('div', { className: 'header-action', onClick: handleOrdersClick },
+                                        React.createElement('i', { className: 'fas fa-shopping-bag' }),
+                                        React.createElement('span', null, 'Orders')
+                                    ),
                                     React.createElement('div', { className: 'header-action', onClick: handleLogout },
                                         React.createElement('i', { className: 'fas fa-sign-out-alt' }),
                                         React.createElement('span', null, 'Logout')
@@ -199,23 +167,6 @@
                         )
                     )
                 )
-            );
-        };
-
-        // Order Status Badge Component
-        const OrderStatusBadge = ({ status }) => {
-            const statusConfig = {
-                delivered: { class: 'status-delivered', icon: 'fa-check-circle', text: 'Delivered' },
-                shipped: { class: 'status-shipped', icon: 'fa-shipping-fast', text: 'Shipped' },
-                processing: { class: 'status-processing', icon: 'fa-cog', text: 'Processing' },
-                cancelled: { class: 'status-cancelled', icon: 'fa-times-circle', text: 'Cancelled' }
-            };
-
-            const config = statusConfig[status] || statusConfig.processing;
-
-            return React.createElement('div', { className: `order-status ${config.class}` },
-                React.createElement('i', { className: `fas ${config.icon}` }),
-                config.text
             );
         };
 
@@ -312,7 +263,6 @@
                         React.createElement('ul', { className: 'account-menu-enhanced' },
                             [
                                 { id: 'profile', icon: 'fa-user', label: 'Profile', count: null },
-                                { id: 'orders', icon: 'fa-shopping-bag', label: 'Orders', count: orders.length },
                                 { id: 'wishlist', icon: 'fa-heart', label: 'Wishlist', count: wishlistItems.length },
                                 { id: 'addresses', icon: 'fa-map-marker-alt', label: 'Addresses', count: null },
                                 { id: 'security', icon: 'fa-shield-alt', label: 'Security', count: null }
@@ -470,78 +420,6 @@
                                     )
                                 )
                             )
-                        ),
-
-                        activeTab === 'orders' && React.createElement('div', { className: 'account-section-enhanced' },
-                            React.createElement('div', { className: 'section-header' },
-                                React.createElement('h2', { className: 'section-title-enhanced' }, 'Order History'),
-                                React.createElement('p', null, 'Track and manage your recent orders')
-                            ),
-                            orders.length > 0 ? 
-                                React.createElement('div', { className: 'order-history-enhanced' },
-                                    orders.map(order =>
-                                        React.createElement('div', { key: order.id, className: 'order-card-enhanced' },
-                                            React.createElement('div', { className: 'order-header-enhanced' },
-                                                React.createElement('div', { className: 'order-info' },
-                                                    React.createElement('div', { className: 'order-id' }, `Order #${order.id}`),
-                                                    React.createElement('div', { className: 'order-date' },
-                                                        React.createElement('i', { className: 'fas fa-calendar' }),
-                                                        order.date.toLocaleDateString('en-IN', {
-                                                            day: 'numeric',
-                                                            month: 'long',
-                                                            year: 'numeric'
-                                                        })
-                                                    )
-                                                ),
-                                                React.createElement(OrderStatusBadge, { status: order.status })
-                                            ),
-                                            React.createElement('div', { className: 'order-items-enhanced' },
-                                                order.items.map(item =>
-                                                    React.createElement('div', { key: item.id, className: 'order-item-enhanced' },
-                                                        React.createElement('div', {
-                                                            className: 'order-item-img',
-                                                            style: { 
-                                                                backgroundImage: `url(${item.image || item.imageUrl})`,
-                                                                backgroundSize: 'cover',
-                                                                backgroundPosition: 'center'
-                                                            }
-                                                        }),
-                                                        React.createElement('div', { className: 'order-item-details' },
-                                                            React.createElement('div', { className: 'order-item-name' }, item.name),
-                                                            React.createElement('div', { className: 'order-item-price' }, `₹${item.price.toLocaleString()}`)
-                                                        )
-                                                    )
-                                                )
-                                            ),
-                                            React.createElement('div', { className: 'order-footer-enhanced' },
-                                                React.createElement('div', { className: 'order-total-enhanced' },
-                                                    React.createElement('span', null, 'Total Amount:'),
-                                                    React.createElement('span', null, `₹${order.total.toFixed(0)}`)
-                                                ),
-                                                React.createElement('div', { className: 'order-actions' },
-                                                    React.createElement('button', { className: 'order-action-btn' },
-                                                        React.createElement('i', { className: 'fas fa-eye' }),
-                                                        ' View Details'
-                                                    ),
-                                                    order.status === 'delivered' && 
-                                                        React.createElement('button', { className: 'order-action-btn primary' },
-                                                            React.createElement('i', { className: 'fas fa-redo' }),
-                                                            ' Reorder'
-                                                        )
-                                                )
-                                            )
-                                        )
-                                    )
-                                ) :
-                                React.createElement('div', { className: 'empty-state' },
-                                    React.createElement('i', { className: 'fas fa-shopping-bag' }),
-                                    React.createElement('h3', null, 'No Orders Yet'),
-                                    React.createElement('p', null, 'You haven\'t placed any orders yet. Start exploring our anime collection!'),
-                                    React.createElement('a', { href: '/', className: 'cta-button' }, 
-                                        React.createElement('i', { className: 'fas fa-store' }),
-                                        ' Start Shopping'
-                                    )
-                                )
                         ),
 
                         activeTab === 'wishlist' && React.createElement('div', { className: 'account-section-enhanced' },
@@ -1381,7 +1259,6 @@
         }
     }
 
-    /* Animation */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
